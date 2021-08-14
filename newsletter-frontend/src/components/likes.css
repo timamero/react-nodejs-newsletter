@@ -1,0 +1,25 @@
+.likesContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.likesContainer .likesIcon {
+  cursor: pointer;
+  height: 20px;
+  margin: 0 0.5rem;
+  transition: all 0.2s linear;
+}
+
+.likesContainer .likesIcon:hover {
+  cursor: pointer;
+  height: 20px;
+  fill: var(--light-red);
+}
+
+.likesIcon.noLikes {
+  fill: var(--dark);
+}
+
+.likesIcon.hasLikes {
+  fill: var(--red);
+}

@@ -1,0 +1,40 @@
+.navWrapper {
+  padding: 1rem;
+}
+
+.navWrapper.main {
+  background-color: transparent;
+}
+
+.navWrapper.author {
+  background-color: var(--light-gray);
+}
+
+.navWrapper ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.navWrapper li {
+  margin: 0 1rem;
+}
+
+.navWrapper a {
+  padding: 0.25rem;
+  text-decoration: none;
+  border-radius: 0.25rem;
+  transition: all 0.2s linear;
+}
+
+.navWrapper.main a:hover {
+  background-color: var(--light-purple);
+}
+
+.navWrapper.author a {
+  color: var(--dark)
+}
+
+.navWrapper.author a:hover {
+  background-color: var(--light-orange);
+}

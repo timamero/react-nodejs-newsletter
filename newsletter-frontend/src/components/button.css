@@ -1,0 +1,32 @@
+.btn {
+  cursor: pointer;
+  width: 200px;
+  height: 2rem;
+  outline: none;
+  border-radius: 0.25rem;
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  color: var(--dark);
+  transition: all 0.2s linear;
+}
+
+.btn.primary {
+  background-color: transparent;
+  border: 2px solid var(--dark);
+}
+
+.btn.primary:hover {
+  background-color: var(--dark);
+  color: var(--light-orange);
+}
+
+.btn.danger {
+  background-color: var(--dark-red);
+  border: none;
+  color: var(--white)
+}
+
+.btn.danger:hover {
+  background-color: var(--light-gray);
+  color: var(--dark-red);
+}

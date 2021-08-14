@@ -1,0 +1,40 @@
+.card {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 1rem 0.5rem;
+  display: grid;
+  grid-template-rows: repeat(3, auto);
+  row-gap: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.card a {
+  text-decoration-color: transparent;
+  color: var(--dark)
+}
+
+.card a:hover {
+  text-decoration-color: var(--gray);
+  color: var(--gray)
+}
+
+.card h2 {
+  width: max-content;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.card p {
+  font-weight: 300;
+}
+
+.card.primary {
+  background-color: var(--white-2);
+  box-shadow: 1px 2px 5px var(--gray);
+}
+
+.card.dashed {
+  background-color: var(--light-gray);
+  border: 1px dashed var(--gray);
+}

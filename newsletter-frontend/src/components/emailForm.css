@@ -1,0 +1,37 @@
+.emailForm {
+  margin: auto;
+}
+
+.emailForm input {
+  font-family: 'Lato', sans-serif;
+  padding: 1rem;
+}
+
+.emailForm input[type=email] {
+  width: 180px;
+  border-top: 1px solid var(--dark);
+  border-left: 1px solid var(--dark);
+  border-bottom: 1px solid var(--dark);
+  border-right: none;
+  outline: none;
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+
+.emailForm input[type=submit] {
+  cursor: pointer;
+  background-color: var(--dark);
+  color: var(--white);
+  border-top: 1px solid var(--dark);
+  border-right: 1px solid var(--dark);
+  border-bottom: 1px solid var(--dark);
+  border-left: 1px solid transparent;
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+  transition: all 0.2s linear;
+}
+
+.emailForm input[type=submit]:hover {
+  background-color: var(--dark-purple);
+  border-left: 1px solid var(--dark-purple);
+}

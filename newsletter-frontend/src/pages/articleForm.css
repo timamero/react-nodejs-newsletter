@@ -1,0 +1,58 @@
+.dateMessage {
+  margin: 1rem auto;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.articleForm{
+  display: grid;
+  row-gap: 1rem;
+}
+
+.articleForm .fieldWrapper {
+  display: grid; 
+  grid-template-columns: 25% auto;
+  column-gap: 0.25rem;
+  align-items: center;
+}
+
+.articleForm .fieldWrapper label {
+  width: 100%;
+  text-align: right;
+}
+
+.articleForm .fieldWrapper input, 
+.articleForm .contentWrapper textarea {
+  padding: 0.2rem;
+  outline: none;
+  border: 2px solid var(--dark);
+  border-radius: 0.25rem;
+  background-color: var(--light-gray);
+  font-family: 'Lato', sans-serif;
+}
+
+.articleForm .fieldWrapper input {
+  max-width: 300px;
+  border-radius: 0.25rem;
+}
+
+.articleForm .contentWrapper {
+  width: 100%;
+  display: grid;
+  grid-template-rows: auto 90vh;
+  justify-content: stretch;
+}
+
+.articleForm .contentWrapper label {
+  text-align: center;
+}
+
+.articleForm .contentWrapper textarea {
+  width: 100%;
+  margin: 0;
+}
+
+.btnContainer {
+  display: grid;
+  row-gap: 0.5rem;
+}
