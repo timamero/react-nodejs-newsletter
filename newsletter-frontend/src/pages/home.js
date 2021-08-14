@@ -57,7 +57,11 @@ const Home = ({articles, handleSubscribeSubmit, handleLikeClick}) => {
             )}
           </Grid>
           <Grid className="centered">
-            <EmailForm id="subscribeEmail" handleEmailSubmit={handleSubscribeSubmit} />
+            <EmailForm 
+              id="subscribeEmail" 
+              handleEmailSubmit={handleSubscribeSubmit} 
+              submitValue="Subscribe"
+            />
           </Grid>   
         </Grid>     
     </Container>     

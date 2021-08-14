@@ -18,6 +18,8 @@
   border-bottom-left-radius: 0.25rem;
 }
 
+
+
 .emailForm input[type=submit] {
   cursor: pointer;
   background-color: var(--dark);
@@ -34,4 +36,10 @@
 .emailForm input[type=submit]:hover {
   background-color: var(--dark-purple);
   border-left: 1px solid var(--dark-purple);
+}
+
+@media screen and (max-width: 480px) {
+  .emailForm input{
+    padding: 0.5rem;
+  }
 }
