@@ -2,9 +2,13 @@ import React from "react"
 import Container from "../components/container"
 import Grid from "../components/grid"
 import Likes from "../components/likes"
+import Button from "../components/button"
 import './article.css'
+import { Link } from "react-router-dom"
+import { useHistory } from "react-router"
 
-const Article = ({handleLikeClick, ...props}) => {
+const Article = ({handleLikeClick, handleUnpublishClick, ...props}) => {
+  const history = useHistory()
   const article = props.location.state.article
   const dateOptions = { 
     year: 'numeric', 
@@ -31,8 +35,22 @@ const Article = ({handleLikeClick, ...props}) => {
         </p>
         <Likes article={article} handleLikeClick={handleLikeClick} />
       </Grid>
+      <Grid>
+        <p className="articleContent">{article.content}</p>
+        <Link to={{
+          pathname: `/update/${article.slug}`,
+          state: {article}
+          }}>
+          <Button>Edit</Button> 
+        </Link>
+        <Button 
+          handleBtnClick={handleUnpublishClick(article.id, history)}
+          // value={article.id}
+        >
+          Unpublish
+        </Button>
+      </Grid>
       
-      <p className="articleContent">{article.content}</p>
     </Container>
   )
 }

@@ -50,6 +50,19 @@ const articles = [
     isPublished: false,
     isEmailed: false,
     likes: 0
+  },
+  {
+    id: 5,
+    title: "Lorem ipsum dolor sit amet 5",
+    slug: "lorem-ipsum-dolor-sit-amet-5",
+    creationDate: new Date("March 20, 2021"),
+    lastUpdateDate: new Date("March 25, 2021"),
+    publishDate: new Date("March 25, 2021"),
+    authors: ["Olivia L"],
+    content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla efficitur interdum ipsum ac malesuada. Nunc pellentesque ligula mauris, id fringilla lectus mollis id. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aliquam faucibus arcu lacus, ac auctor justo suscipit vel. Morbi eget enim lorem. Praesent elementum magna in pharetra fringilla. Nam aliquam, risus nec sagittis iaculis, mi enim dapibus eros, sed finibus nunc quam et mauris. Duis bibendum ex quis feugiat vulputate. Cras tincidunt aliquam turpis, non pellentesque massa. Quisque luctus et nisl id venenatis. Ut tempor, lacus ac pharetra lacinia, odio libero accumsan lacus.",
+    isPublished: true,
+    isEmailed: true,
+    likes: 10
   }
 ]
 

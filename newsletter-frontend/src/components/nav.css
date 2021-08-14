@@ -27,14 +27,21 @@
   transition: all 0.2s linear;
 }
 
+.navWrapper.main a {
+  background-color: var(--lightest-gray);
+  /* border: 1px solid var(--light-gray); */
+}
+
 .navWrapper.main a:hover {
   background-color: var(--light-purple);
 }
 
 .navWrapper.author a {
+  border: 1px dashed var(--dark);
   color: var(--dark)
 }
 
 .navWrapper.author a:hover {
   background-color: var(--light-orange);
+  /* border: 1px solid var(--light-gray); */
 }

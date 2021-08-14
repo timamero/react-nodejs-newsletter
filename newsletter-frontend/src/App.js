@@ -46,29 +46,53 @@ const App = () => {
     setEmailList(emailServices.getAll()) // Don't need to get email data when connection to database is added
   }, [])
 
-  const handleSaveSubmit = (publish, id, title, authors, content, history) => {
+  const handleSaveSubmit = (action, id, title, authors, content, history) => {
+    // action choices:
+    //  save - save changes
+    //  publish - save and publish, first time to be published
+    //  republish - save and republish, not the first time to be published
+
     return (event) => {
       event.preventDefault()
+
       const article = id ? articles.find(article => article.id === id) : null
       const authorList = authors.split(',').map(author => author.replace(/^\s|\s$/g, ''))
-    
+
       const articleObject = {
         id: id ? article.id : articles.length + 1,
         title: title,
         slug: title.toLowerCase().split(' ').join('-'),
         creationDate: id ? article.creationDate : new Date(),
         lastUpdateDate: id ? new Date() : null,
-        publishDate: publish ? new Date() : id ? article.publishDate : null,
+        publishDate: action === 'publish' || action === 'republish' 
+          ? new Date() : id 
+          ? article.publishDate : null,
         authors: authorList,
         content: content,
-        isPublished: publish ? true : id ? article.isPublished : false,
+        isPublished: action === 'publish' 
+          ? true : id
+          ? article.isPublished : false,
         isEmailed: id ? article.isPublished : false,
         likes: id ? article.likes : 0
       }
 
       if (id) {
-        if (publish) {
-          if (window.confirm(`Are you sure you want to publish and mail the article: '${title}'?`)) {
+        if (action === 'save' && !article.isPublished) {
+          setArticles(articles.map(article => {
+            if (article.id !== id) {
+              return article
+            }
+            return articleObject
+          }))
+          history.push('/drafts')
+        } else {
+          const message = action === 'save'
+            ? `Are you sure you want to make changes to the article: '${title}'?`
+            : action === 'publish'
+            ? `Are you sure you want to publish and mail the article: '${title}'?`
+            : action !== 'republish'
+            && `Are you sure you want to publish the article: '${title}'?`
+          if (window.confirm(message)) {
             setArticles(articles.map(article => {
               if (article.id !== id) {
                 return article
@@ -77,14 +101,33 @@ const App = () => {
             }))
             history.push('/')
           }
-        } else {
-          history.push('/drafts')
-        } 
+        }  
       } else {
+        // Add new article to articles
         setArticles(articles.concat(articleObject))
         history.push('/drafts')
       }      
     }
+  }
+
+  const handleUnpublishClick = (id, history) => {
+    return () => {
+      const article = articles.find(article => article.id === id)
+      const articleUpdated = {
+        ...article,
+        isPublished: false
+      }
+
+      if (window.confirm('Are you sure you want to unpublish this article?')) {
+        setArticles(articles.map(article => {
+          if (article.id !== id) {
+            return article
+          }
+          return articleUpdated
+        }))
+        history.push('/drafts')
+      }   
+    }  
   }
 
   const handleDeleteClick = (id, title, history) => {
@@ -95,8 +138,6 @@ const App = () => {
       }
     } 
   }
-
-  console.log(articles)
 
   const handleSubscribeSubmit = (event) => {
     console.log('handle submit from app')
@@ -121,8 +162,6 @@ const App = () => {
     }
   }
 
-  console.log(emailList)
-
   const handleLikeClick = (id) => {
     setArticles(articles.map(article => {
       if (article.id !== id) {
@@ -136,7 +175,6 @@ const App = () => {
     }))
   }
 
-
   return (
     <Router>
       <Nav links={authorLinks} type="author"/>
@@ -145,7 +183,11 @@ const App = () => {
         <Route
           exact
           path={`/article/:slug`}
-          render={(props) => <Article handleLikeClick={handleLikeClick} {...props}/>}
+          render={(props) => 
+            <Article 
+              handleLikeClick={handleLikeClick}
+              handleUnpublishClick={handleUnpublishClick} 
+              {...props}/>}
         />
         <Route
           exact

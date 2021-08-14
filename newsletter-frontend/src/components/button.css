@@ -21,12 +21,12 @@
 }
 
 .btn.danger {
-  background-color: var(--dark-red);
   border: none;
-  color: var(--white)
+  background-color: var(--light-gray);
+  color: var(--dark-red);
 }
 
 .btn.danger:hover {
-  background-color: var(--light-gray);
-  color: var(--dark-red);
+  background-color: var(--dark-red);
+  color: var(--white);
 }

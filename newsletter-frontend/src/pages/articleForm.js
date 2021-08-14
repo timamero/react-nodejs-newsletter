@@ -19,6 +19,8 @@ const ArticleForm = ({handleSaveSubmit, handleDeleteClick, handleSaveAndPublishC
   const [ id, setId ] = useState('')
   const [ creationDate, setCreationDate ] = useState(null)
   const [ lastUpdateDate, setLastUpdateDate ] = useState(null)
+  const [ publishDate, setPublishDate ] = useState(null)
+  const [ isPublished, setIsPublished ] = useState(false)
 
   useEffect(() => {
     if (props.location) {
@@ -35,14 +37,13 @@ const ArticleForm = ({handleSaveSubmit, handleDeleteClick, handleSaveAndPublishC
       setContent(props.location.state.article.content)
       setCreationDate(props.location.state.article.creationDate)
       setLastUpdateDate(props.location.state.article.lastUpdateDate)
+      setPublishDate(props.location.state.article.publishDate)
+      setIsPublished(props.location.state.article.isPublished)
     } else {
       // When navigating from /update/:id to /create, need to clear form data
-      setId('')
       setTitle('')
       setAuthors('')
       setContent('')
-      setCreationDate(null)
-      setLastUpdateDate(null)
     }
   }, [props.location])
   
@@ -74,7 +75,8 @@ const ArticleForm = ({handleSaveSubmit, handleDeleteClick, handleSaveAndPublishC
       
       <form 
         className="articleForm"
-        onSubmit={handleSaveSubmit(false, id, title, authors, content, history)}>
+        onSubmit={handleSaveSubmit("save", id, title, authors, content, history)}
+        >
         <div className="fieldWrapper">
           <label>Title:</label>
           <input value={title} onChange={handleTitleChange} required/>
@@ -95,22 +97,26 @@ const ArticleForm = ({handleSaveSubmit, handleDeleteClick, handleSaveAndPublishC
 
         <div className="btnContainer">
           <Button btnType="primary" type="submit">Save</Button>
+          {props.location && !isPublished
+            && <Button 
+              handleBtnClick={!publishDate
+                ? handleSaveSubmit("publish", id, title, authors, content, history)
+                : handleSaveSubmit("republish", id, title, authors, content, history)
+              } 
+              btnType="primary" 
+              type="button"
+              >
+                Save and Publish
+              </Button>
+          }
           {props.location 
-          && <Button 
-            handleBtnClick={handleSaveSubmit(true, id, title, authors, content, history)} 
-            btnType="primary" 
-            type="button"
-            >
-              Save and Publish
-            </Button>}
-          {props.location 
-          && <Button 
-            handleBtnClick={handleDeleteClick(id, title, history)} 
-            btnType="danger" 
-            type="button"
-            >
-              Delete
-            </Button>}
+            && <Button 
+              handleBtnClick={handleDeleteClick(id, title, history)} 
+              btnType="danger" 
+              type="button"
+              >
+                Delete
+              </Button>}
         </div>
       </form>
     </Container>
