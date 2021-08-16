@@ -54,7 +54,6 @@ const App = () => {
 
     return (event) => {
       event.preventDefault()
-
       const article = id ? articles.find(article => article.id === id) : null
       const authorList = authors.split(',').map(author => author.replace(/^\s|\s$/g, ''))
 
@@ -69,7 +68,7 @@ const App = () => {
           ? article.publishDate : null,
         authors: authorList,
         content: content,
-        isPublished: action === 'publish' 
+        isPublished: action === 'publish' || action === 'republish'
           ? true : id
           ? article.isPublished : false,
         isEmailed: id ? article.isPublished : false,
@@ -90,7 +89,7 @@ const App = () => {
             ? `Are you sure you want to make changes to the article: '${title}'?`
             : action === 'publish'
             ? `Are you sure you want to publish and mail the article: '${title}'?`
-            : action !== 'republish'
+            : action === 'republish'
             && `Are you sure you want to publish the article: '${title}'?`
           if (window.confirm(message)) {
             setArticles(articles.map(article => {
@@ -205,11 +204,6 @@ const App = () => {
         <Route path="/create">
           <ArticleForm handleSaveSubmit={handleSaveSubmit}/>
         </Route>
-        {/* <Route path="/unsubscribe">
-          <Unsubscribe 
-            handleUnsubscribeSubmit={handleUnsubscribeSubmit}
-          />
-        </Route> */}
         <Route exact path="/unsubscribe">
           <Unsubscribe
             handleUnsubscribeSubmit={handleUnsubscribeSubmit}

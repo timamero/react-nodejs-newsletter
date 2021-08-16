@@ -24,7 +24,7 @@ const ArticleForm = ({handleSaveSubmit, handleDeleteClick, handleSaveAndPublishC
 
   useEffect(() => {
     if (props.location) {
-      console.log('in useEffect if')
+
       setId(props.location.state.article.id)
       setTitle(props.location.state.article.title)
 
