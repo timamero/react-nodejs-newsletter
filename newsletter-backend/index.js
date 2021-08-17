@@ -2,6 +2,8 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 
+app.use(express.json())
+
 let articles = [
   {
     id: 1,
@@ -83,6 +85,53 @@ let emails = [
 
 app.get('/api/articles', (request, response) => {
   response.json(articles)
+})
+
+app.get('/api/articles/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const article = articles.find(article => article.id === id)
+  
+  if (article) {
+    response.json(article)
+  } else {
+    response.status(404).end()
+  } 
+})
+
+const generateId = () => {
+  const maxId = articles.length > 0
+    ? Math.max(...articles.map(a => a.id))
+    : 0
+  return maxId + 1
+}
+
+app.post('/api/articles', (request, response) => {
+  const body = request.body
+  
+  const article = {
+    id: generateId(),
+    title: body.title,
+    slug: body.title.toLowerCase().split(' ').join('-'),
+    creationDate: new Date(),
+    lastUpdateDate: null,
+    publishDate: null,
+    authors: body.authors,
+    content: body.content,
+    isPublished: false,
+    isEmailed: false,
+    likes: 0
+  }
+  
+  articles = articles.concat(article)
+
+  response.json(article)
+})
+
+app.delete('/api/articles/:id', (request, response) => {
+  const id = Number(request.params.id)
+  article = articles.filter(article => article.id !== id)
+
+  response.status(204).end()
 })
 
 app.get('/api/emails', (request, response) => {
