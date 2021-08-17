@@ -1,5 +1,6 @@
 require('dotenv').config()
-const http = require('http')
+const express = require('express')
+const app = express()
 
 let articles = [
   {
@@ -69,7 +70,7 @@ let articles = [
   }
 ]
 
-let email = [
+let emails = [
   {
     id: 1,
     email: "roy@example.com"
@@ -80,10 +81,12 @@ let email = [
   }
 ]
 
+app.get('/api/articles', (request, response) => {
+  response.json(articles)
+})
 
-const app = http.createServer((request, response) => {
-  response.writeHead(200, { 'Content-Type': 'application/json'})
-  response.end(JSON.stringify(articles))
+app.get('/api/emails', (request, response) => {
+  response.json(emails)
 })
 
 const PORT = process.env.PORT
