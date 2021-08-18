@@ -42,7 +42,8 @@ const App = () => {
 
   useEffect(() => {
     // Get all the articles
-    setArticles(articleServices.getAll())
+    articleServices.getAll()
+      .then(initialArticles => setArticles(initialArticles))
     setEmailList(emailServices.getAll()) // Don't need to get email data when connection to database is added
   }, [])
 

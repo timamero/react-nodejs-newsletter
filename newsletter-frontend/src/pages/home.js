@@ -9,10 +9,10 @@ import { Link } from "react-router-dom";
 
 const Home = ({articles, handleSubscribeSubmit, handleLikeClick}) => {
   const sortedArticles = articles.sort((a, b) => {
-    if (a.publishDate < b.publishDate) {
+    if (new Date(a.publishDate) < new Date(b.publishDate)) {
       return 1
     }
-    if (a.publishDate > b.publishDate) {
+    if (new Date(a.publishDate) > new Date(b.publishDate)) {
       return -1
     }
     return 0
@@ -22,6 +22,8 @@ const Home = ({articles, handleSubscribeSubmit, handleLikeClick}) => {
     year: 'numeric', 
     month: 'long', 
     day: 'numeric'}
+  //article.publishDate.toLocaleDateString('en-us', dateOptions)
+  
   const numOfArticles = articles.filter(article => article.isPublished).length
 
   return (
@@ -39,7 +41,7 @@ const Home = ({articles, handleSubscribeSubmit, handleLikeClick}) => {
                         }}>
                         <h2>{article.title}</h2>
                       </Link>
-                      <p>{article.publishDate.toLocaleDateString('en-us', dateOptions)}</p>
+                      <p>{new Date(article.publishDate).toLocaleDateString('en-us', dateOptions)}</p>
                       <p>Author{article.authors.length > 1 ? 's' : ''}: {' '}
                         {article.authors.map((author, index) => {
                           if (index === article.authors.length - 1) {
