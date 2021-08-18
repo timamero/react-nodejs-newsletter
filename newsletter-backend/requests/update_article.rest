@@ -1,0 +1,13 @@
+PUT http://localhost:3001/api/articles/1
+Content-Type: application/json
+
+{
+  "title": "Lorem ipsum dolor sit amet 1 Updated",
+  "creationDate": "{{$datetime '2020-01-01'}}",
+  "publishDate": "null",
+  "authors": "Oli",
+  "content": "# Lorem ipsum dolor sit amet",
+  "isPublished": "false",
+  "isEmailed": "false",
+  "likes": "1"
+}

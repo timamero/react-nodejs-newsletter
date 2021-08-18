@@ -157,6 +157,33 @@ articlesRouter.post('/', (request, response) => {
   response.json(article)
 })
 
+articlesRouter.put('/:id', (request, response) => {
+  const body = request.body
+  
+  const updatedArticle = {
+    title: body.title,
+    slug: body.title.toLowerCase().split(' ').join('-'),
+    creationDate: body.creationDate,
+    lastUpdateDate: new Date(),
+    publishDate: body.publishDate,
+    authors: body.authors,
+    content: body.content,
+    isPublished: body.isPublished,
+    isEmailed: body.isEmailed,
+    likes: body.likes
+  }
+  
+  articles = articles.map(article => {
+    if (article.id !== request.params.id) {
+      return article
+    } else {
+      return updatedArticle
+    }
+  })
+
+  response.json(updatedArticle)
+})
+
 articlesRouter.delete('/:id', (request, response) => {
   const id = Number(request.params.id)
   article = articles.filter(article => article.id !== id)
