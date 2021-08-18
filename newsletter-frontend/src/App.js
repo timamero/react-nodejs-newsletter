@@ -58,51 +58,34 @@ const App = () => {
       const article = id ? articles.find(article => article.id === id) : null
       const authorList = authors.split(',').map(author => author.replace(/^\s|\s$/g, ''))
 
-      // const articleObject = {
-      //   id: id ? article.id : articles.length + 1,
-      //   title: title,
-      //   slug: title.toLowerCase().split(' ').join('-'),
-      //   creationDate: id ? article.creationDate : new Date(),
-      //   lastUpdateDate: id ? new Date() : null,
-      //   publishDate: action === 'publish' || action === 'republish' 
-      //     ? new Date() : id 
-      //     ? article.publishDate : null,
-      //   authors: authorList,
-      //   content: content,
-      //   isPublished: action === 'publish' || action === 'republish'
-      //     ? true : id
-      //     ? article.isPublished : false,
-      //   isEmailed: id ? article.isPublished : false,
-      //   likes: id ? article.likes : 0
-      // }
-
       if (id) {
         const articleObject = {
-          id: id ? article.id : articles.length + 1,
           title: title,
-          slug: title.toLowerCase().split(' ').join('-'),
-          creationDate: id ? article.creationDate : new Date(),
-          lastUpdateDate: id ? new Date() : null,
+          creationDate: article.creationDate,
+          lastUpdateDate: new Date(),
           publishDate: action === 'publish' || action === 'republish' 
-            ? new Date() : id 
-            ? article.publishDate : null,
+            ? new Date() : article.publishDate,
           authors: authorList,
           content: content,
           isPublished: action === 'publish' || action === 'republish'
-            ? true : id
-            ? article.isPublished : false,
-          isEmailed: id ? article.isPublished : false,
-          likes: id ? article.likes : 0
+            ? true : article.isPublished,
+          isEmailed: article.isPublished,
+          likes: article.likes
         }
 
         if (action === 'save' && !article.isPublished) {
-          setArticles(articles.map(article => {
-            if (article.id !== id) {
-              return article
-            }
-            return articleObject
-          }))
+          articleServices.update(id, articleObject)
+            .then(returnedArticle => {
+              setArticles(articles.map(article => {
+                if (article.id !== id) {
+                  return article
+                }
+                return returnedArticle
+              }))
+            })
+          
           history.push('/drafts')
+
         } else {
           const message = action === 'save'
             ? `Are you sure you want to make changes to the article: '${title}'?`
@@ -111,24 +94,28 @@ const App = () => {
             : action === 'republish'
             && `Are you sure you want to publish the article: '${title}'?`
           if (window.confirm(message)) {
-            setArticles(articles.map(article => {
-              if (article.id !== id) {
-                return article
-              }
-              return articleObject
-            }))
+            articleServices.update(id, articleObject)
+              .then(returnedArticle => {
+                setArticles(articles.map(article => {
+                  if (article.id !== id) {
+                    return article
+                  }
+                  return returnedArticle
+                }))
+              })
+
             history.push('/')
           }
         }  
+        
       } else {
         // Add new article to articles
         const articleObject = {
-          id: id ? article.id : articles.length + 1,
           title: title,
           authors: authorList,
           content: content,
         }
-        
+
         articleServices.create(articleObject)
           .then(returnedArticle => {
             setArticles(articles.concat(returnedArticle))

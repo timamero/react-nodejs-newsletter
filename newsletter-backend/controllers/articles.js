@@ -161,6 +161,7 @@ articlesRouter.put('/:id', (request, response) => {
   const body = request.body
   
   const updatedArticle = {
+    id: Number(request.params.id),
     title: body.title,
     slug: body.title.toLowerCase().split(' ').join('-'),
     creationDate: body.creationDate,
