@@ -193,16 +193,22 @@ const App = () => {
   }
 
   const handleLikeClick = (id) => {
-    setArticles(articles.map(article => {
-      if (article.id !== id) {
-        return article
-      }
-      const articleObject = {
+    const article = articles.find(article => article.id === id)
+    const articleUpdated = {
         ...article,
         likes: article.likes + 1
       }
-      return articleObject
-    }))
+    
+    articleServices.update(id, articleUpdated)
+      .then(returnedArticle => {
+        setArticles(articles.map(article => {
+          if (article.id !== id) {
+            return article
+          }
+          return returnedArticle
+        }))
+      })
+    
   }
 
   return (

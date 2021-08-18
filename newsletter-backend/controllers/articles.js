@@ -173,7 +173,7 @@ articlesRouter.put('/:id', (request, response) => {
     isEmailed: body.isEmailed,
     likes: body.likes
   }
-  
+
   articles = articles.map(article => {
     if (article.id !== request.params.id) {
       return article
