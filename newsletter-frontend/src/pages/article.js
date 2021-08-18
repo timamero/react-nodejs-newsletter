@@ -22,8 +22,8 @@ const Article = ({handleLikeClick, handleUnpublishClick, ...props}) => {
 
       <Grid rowGap="0.5rem" numOfItems="3">
         {article.isPublished 
-          ? <p>{article.publishDate.toLocaleDateString('en-us', dateOptions)}</p>
-          : <p>Created on {article.creationDate.toLocaleDateString('en-us', dateOptions)}</p>}
+          ? <p>{new Date(article.publishDate).toLocaleDateString('en-us', dateOptions)}</p>
+          : <p>Created on {new Date(article.creationDate).toLocaleDateString('en-us', dateOptions)}</p>}
         <p>Author{article.authors.length > 1 ? 's' : ''}: {' '}
           {article.authors.map((author, index) => {
             if (index === article.authors.length - 1) {
@@ -45,7 +45,6 @@ const Article = ({handleLikeClick, handleUnpublishClick, ...props}) => {
         </Link>
         <Button 
           handleBtnClick={handleUnpublishClick(article.id, history)}
-          // value={article.id}
         >
           Unpublish
         </Button>

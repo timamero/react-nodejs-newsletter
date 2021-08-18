@@ -29,7 +29,7 @@ const Drafts = ({articles}) => {
               return (
                   <Card key={article.id} type="dashed">
                     <h2>{article.title}</h2>
-                    <p>Created on {article.creationDate.toLocaleDateString('en-us', dateOptions)}</p>
+                    <p>Created on {new Date(article.creationDate).toLocaleDateString('en-us', dateOptions)}</p>
                     <p>Author{article.authors.length > 1 ? 's' : ''}: {' '}
                       {article.authors.map((author, index) => {
                         if (index === article.authors.length - 1) {

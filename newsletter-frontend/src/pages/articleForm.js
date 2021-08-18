@@ -67,9 +67,9 @@ const ArticleForm = ({handleSaveSubmit, handleDeleteClick, handleSaveAndPublishC
       }
 
       {lastUpdateDate
-        ? <p className="dateMessage">Last updated on {`${lastUpdateDate.toLocaleDateString('en-us', dateOptions)}`}</p>
+        ? <p className="dateMessage">Last updated on {`${new Date(lastUpdateDate).toLocaleDateString('en-us', dateOptions)}`}</p>
         : creationDate
-        ? <p className="dateMessage">Created on {`${creationDate.toLocaleDateString('en-us', dateOptions)}`}</p>
+        ? <p className="dateMessage">Created on {`${new Date(creationDate).toLocaleDateString('en-us', dateOptions)}`}</p>
         : null
       }
       
