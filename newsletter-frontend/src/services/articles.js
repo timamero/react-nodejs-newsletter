@@ -17,10 +17,15 @@ const update = (id, newObject) => {
   return request.then(response => response.data)
 }
 
+const deleteObj = (id) => {
+  return axios.delete(`${baseUrl}/${id}`)
+}
+
 const articleServices = {
   getAll,
   create,
-  update
+  update,
+  deleteObj
 }
 
 export default articleServices

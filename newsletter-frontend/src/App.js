@@ -107,7 +107,7 @@ const App = () => {
             history.push('/')
           }
         }  
-        
+
       } else {
         // Add new article to articles
         const articleObject = {
@@ -136,12 +136,16 @@ const App = () => {
       }
 
       if (window.confirm('Are you sure you want to unpublish this article?')) {
-        setArticles(articles.map(article => {
-          if (article.id !== id) {
-            return article
-          }
-          return articleUpdated
-        }))
+        articleServices.update(article.id, articleUpdated)
+          .then(returnedArticle => {
+            setArticles(articles.map(article => {
+              if (article.id !== id) {
+                return article
+              }
+              return returnedArticle
+            }))
+          })
+        
         history.push('/drafts')
       }   
     }  
@@ -150,8 +154,17 @@ const App = () => {
   const handleDeleteClick = (id, title, history) => {
     return () => {
       if (window.confirm(`Are you sure you want to delete the article: '${title}'?`)) {
-        setArticles(articles.filter(article => article.id !== id))
-        history.push('/drafts')
+        const isPublished = articles.find(article => article.id === id).isPublished
+        articleServices.deleteObj(id)
+          .then(response => setArticles(articles.filter(article => article.id !== id)))
+        
+        if (isPublished) {
+          // If deleted article was published, go back to Home page
+          history.push('/')
+        } else {
+          // If deleted article is unpublished, go back to Drafts page
+          history.push('/drafts')
+        }
       }
     } 
   }
