@@ -1,9 +1,11 @@
 require('dotenv').config()
 const express = require('express')
 const app = express()
+const cors = require('cors')
 const articlesRouter = require('./controllers/articles')
 const emailsRouter = require('./controllers/emails')
 
+app.use(cors())
 app.use(express.json())
 
 app.use('/api/articles', articlesRouter)
