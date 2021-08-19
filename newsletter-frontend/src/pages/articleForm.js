@@ -59,6 +59,10 @@ const ArticleForm = ({handleSaveSubmit, handleDeleteClick, handleSaveAndPublishC
     setContent(event.target.value)
   }
 
+  const handleCancelClick = () => {
+    history.goBack()
+  }
+
   return (
     <Container>
       {!props.location
@@ -109,6 +113,13 @@ const ArticleForm = ({handleSaveSubmit, handleDeleteClick, handleSaveAndPublishC
                 Save and Publish
               </Button>
           }
+          <Button 
+            btnType="primary" 
+            type="button"
+            handleBtnClick={handleCancelClick}
+          >
+            Cancel
+          </Button>
           {props.location 
             && <Button 
               handleBtnClick={handleDeleteClick(id, title, history)} 
