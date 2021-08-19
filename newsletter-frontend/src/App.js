@@ -173,23 +173,21 @@ const App = () => {
   const handleSubscribeSubmit = (event) => {
     event.preventDefault()
     const emailObject = {
-      id: emailList.length + 1,
       email: event.target.elements.subscribeEmail.value
     }
-    setEmailList(emailList.concat(emailObject))
+    emailServices.create(emailObject)
+    
     window.alert('Thank you for subscribing!')
   }
 
   const handleUnsubscribeSubmit = (event) => {
     event.preventDefault()
-    console.log('handle unsubscribe submit from app')
+
     const emailToDelete = event.target.elements.unsubscribeEmail.value
-    if (emailList.map(email => email.email).includes(emailToDelete)) {
-      setEmailList(emailList.filter(email => email.email !== emailToDelete))
-      window.alert('You have unsubscribed to the newsletter.')
-    } else {
-      window.alert('That email does not exist or it was already deleted.')
-    }
+
+    emailServices.deleteObj(emailToDelete.replace(/[@\\.]/g,'-'))
+      .then(result => window.alert('You have unsubscribed to the newsletter.'))
+      .catch(error => window.alert('That email does not exist or it was already deleted.'))
   }
 
   const handleLikeClick = (id) => {

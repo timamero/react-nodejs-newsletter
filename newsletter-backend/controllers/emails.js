@@ -35,9 +35,16 @@ emailsRouter.post('/', (request, response) => {
   response.json(email)
 })
 
-emailsRouter.delete('/:id', (request, response) => {
-  const id = Number(request.params.id)
-  emails = emails.filter(email => email.id !== id)
+emailsRouter.delete('/:email', (request, response) => {
+  const regex = /[@\\.]/g
+  const email = request.params.email
+  const emailObject = emails.find(e => e.email.replace(regex, '-') === email)
+  
+  if (!emailObject) {
+    return response.status(404).end()
+  }
+  
+  emails = emails.filter(e => e.email.replace(regex,'-') !== email)
 
   response.status(204).end()
 })
