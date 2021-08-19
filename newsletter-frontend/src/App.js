@@ -44,9 +44,10 @@ const App = () => {
     // Get all the articles
     articleServices.getAll()
       .then(initialArticles => setArticles(initialArticles))
-    setEmailList(emailServices.getAll()) // Don't need to get email data when connection to database is added
+    emailServices.getAll()
+      .then(initialEmails => setEmailList(initialEmails)) // Don't need to get email data when connection to database is added
   }, [])
-
+  console.log('emailList', emailList)
   const handleSaveSubmit = (action, id, title, authors, content, history) => {
     // action choices:
     //  save - save changes
@@ -109,7 +110,7 @@ const App = () => {
         }  
 
       } else {
-        // Add new article to articles
+        // Add new article
         const articleObject = {
           title: title,
           authors: authorList,
@@ -170,7 +171,6 @@ const App = () => {
   }
 
   const handleSubscribeSubmit = (event) => {
-    console.log('handle submit from app')
     event.preventDefault()
     const emailObject = {
       id: emailList.length + 1,
