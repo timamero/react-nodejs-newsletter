@@ -12,7 +12,6 @@ import Unsubscribe from './pages/unsubscribe';
 
 const App = () => {
   const [ articles, setArticles] = useState([])
-  const [ emailList, setEmailList ] = useState([])
 
   const mainLinks = [
     {
@@ -44,10 +43,8 @@ const App = () => {
     // Get all the articles
     articleServices.getAll()
       .then(initialArticles => setArticles(initialArticles))
-    emailServices.getAll()
-      .then(initialEmails => setEmailList(initialEmails)) // Don't need to get email data when connection to database is added
   }, [])
-  console.log('emailList', emailList)
+
   const handleSaveSubmit = (action, id, title, authors, content, history) => {
     // action choices:
     //  save - save changes
@@ -176,7 +173,7 @@ const App = () => {
       email: event.target.elements.subscribeEmail.value
     }
     emailServices.create(emailObject)
-    
+
     window.alert('Thank you for subscribing!')
   }
 
