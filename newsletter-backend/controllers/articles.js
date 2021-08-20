@@ -9,9 +9,7 @@ let articles = [
     lastUpdateDate: new Date("January 10, 2020"),
     publishDate: new Date("January 15, 2020"),
     authors: ["Jeremy H"],
-    content: `# Lorem ipsum dolor sit amet
-
-      ## Lorem ipsum dolor sit amet
+    content: `## Lorem ipsum dolor sit amet
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
 
       ## Lorem ipsum dolor sit amet
@@ -31,9 +29,7 @@ let articles = [
     lastUpdateDate: new Date("February 11, 2021"),
     publishDate: new Date("February 15, 2021"),
     authors: ["Christine M", "Jeremy H"],
-    content: `# Lorem ipsum dolor sit amet
-
-      ## Lorem ipsum dolor sit amet
+    content: `## Lorem ipsum dolor sit amet
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
 
       ## Lorem ipsum dolor sit amet
@@ -53,9 +49,7 @@ let articles = [
     lastUpdateDate: new Date("April 10, 2021"),
     publishDate: null,
     authors: ["Christine M"],
-    content: `# Lorem ipsum dolor sit amet
-
-      ## Lorem ipsum dolor sit amet
+    content: `## Lorem ipsum dolor sit amet
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
 
       ## Lorem ipsum dolor sit amet
@@ -75,9 +69,7 @@ let articles = [
     lastUpdateDate: new Date("July 1, 2021"),
     publishDate: null,
     authors: ["Christine M"],
-    content: `# Lorem ipsum dolor sit amet
-
-      ## Lorem ipsum dolor sit amet
+    content: `## Lorem ipsum dolor sit amet
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
 
       ## Lorem ipsum dolor sit amet
@@ -97,9 +89,7 @@ let articles = [
     lastUpdateDate: new Date("March 25, 2021"),
     publishDate: new Date("March 25, 2021"),
     authors: ["Olivia L"],
-    content: `# Lorem ipsum dolor sit amet
-
-      ## Lorem ipsum dolor sit amet
+    content: `## Lorem ipsum dolor sit amet
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
 
       ## Lorem ipsum dolor sit amet
@@ -117,7 +107,7 @@ articlesRouter.get('/', (request, response) => {
   response.json(articles)
 })
 
-articlesRouter.get('/:id', (request, response) => {
+articlesRouter.get('/edit/:id', (request, response) => {
   const id = Number(request.params.id)
   const article = articles.find(article => article.id === id)
   

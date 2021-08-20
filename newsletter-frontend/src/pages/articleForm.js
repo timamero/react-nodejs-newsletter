@@ -33,12 +33,11 @@ const ArticleForm = ({handleSaveSubmit, handleDeleteClick, handleSaveAndPublishC
 
   useEffect(() => {
     if (props.location) {
-      articleServices.getOne(props.location.state.article.id)
+      articleServices.getOneEdit(props.location.state.article.id)
         .then(returnedArticle => {
           console.log('returnedArticle', returnedArticle)
           setArticle(returnedArticle)
           setTitle(returnedArticle.title)
-          // setAuthors(returnedArticle.authors)
           setContent(returnedArticle.content)
           if (returnedArticle.authors.length > 1) {
             setAuthors(returnedArticle.authors.join(', '))
@@ -46,20 +45,6 @@ const ArticleForm = ({handleSaveSubmit, handleDeleteClick, handleSaveAndPublishC
             setAuthors(returnedArticle.authors.join(''))
           }
         })
-      // setId(props.location.state.article.id)
-      // setTitle(props.location.state.article.title)
-
-      // if (props.location.state.article.authors.length > 1) {
-      //   setAuthors(props.location.state.article.authors.join(', '))
-      // } else {
-      //   setAuthors(props.location.state.article.authors.join(''))
-      // }
-
-      // setContent(props.location.state.article.content)
-      // setCreationDate(props.location.state.article.creationDate)
-      // setLastUpdateDate(props.location.state.article.lastUpdateDate)
-      // setPublishDate(props.location.state.article.publishDate)
-      // setIsPublished(props.location.state.article.isPublished)
 
     } else {
       // When navigating from /update/:id to /create, need to clear form data

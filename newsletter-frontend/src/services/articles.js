@@ -7,8 +7,8 @@ const getAll = () => {
   return request.then(response => response.data)
 }
 
-const getOne = (id) => {
-  const request = axios.get(`${baseUrl}/${id}`)
+const getOneEdit = (id) => {
+  const request = axios.get(`${baseUrl}/edit/${id}`)
   return request.then(response => response.data)
 }
 
@@ -28,7 +28,7 @@ const deleteObj = (id) => {
 
 const articleServices = {
   getAll,
-  getOne,
+  getOneEdit,
   create,
   update,
   deleteObj
