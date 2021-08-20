@@ -24,11 +24,15 @@ const Article = ({handleLikeClick, handleUnpublishClick, ...props}) => {
   }, [props.location.state.article.id])
 
   if (article) {
+    const createMarkup = () => {
+      return {__html: article.content}
+    }
+
     return (
       <Container>
         <h1>{article.title}</h1>
 
-        <Grid rowGap="0.5rem" numOfItems="3">
+        <Grid rowGap="0.5rem" numOfItems="3" className="centered">
           {article.isPublished 
             ? <p>{new Date(article.publishDate).toLocaleDateString('en-us', dateOptions)}</p>
             : <p>Created on {new Date(article.creationDate).toLocaleDateString('en-us', dateOptions)}</p>}
@@ -44,7 +48,8 @@ const Article = ({handleLikeClick, handleUnpublishClick, ...props}) => {
           <Likes article={article} handleLikeClick={handleLikeClick} />
         </Grid>
         <Grid>
-          <p className="articleContent">{article.content}</p>
+          
+          <div className="articleContent" dangerouslySetInnerHTML={createMarkup()} />
           <Link to={{
             pathname: `/update/${article.slug}`,
             state: {article}

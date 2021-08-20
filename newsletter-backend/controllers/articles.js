@@ -1,4 +1,12 @@
 const articlesRouter = require('express').Router()
+const showdown = require('showdown')
+
+const converter = new showdown.Converter()
+converter.setFlavor('github');
+converter.setOption('simpleLineBreaks', 'true');
+converter.setOption('noHeaderId', 'true');
+converter.setOption('headerLevelStart', '2');
+
 
 let articles = [
   {
@@ -10,13 +18,31 @@ let articles = [
     publishDate: new Date("January 15, 2020"),
     authors: ["Jeremy H"],
     content: `## Lorem ipsum dolor sit amet
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+*Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros.*
+<br>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit [sample link](www.google.com). Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+<br>
+  * Bullet 1
+  * Bullet 2
+  * Bullet 3
 
-      ## Lorem ipsum dolor sit amet
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
-
-      ## Lorem ipsum dolor sit amet
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.`,
+<br> 
+## Lorem ipsum dolor sit amet
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+<br>
+1. Item 1
+2. Item 2
+3. Item 3  
+  
+<br>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+<br>
+## Lorem ipsum dolor sit amet
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+<br>
+- [x] checked list item
+- [ ] unchecked list item
+`,
     isPublished: true,
     isEmailed: true,
     likes: 5
@@ -30,13 +56,31 @@ let articles = [
     publishDate: new Date("February 15, 2021"),
     authors: ["Christine M", "Jeremy H"],
     content: `## Lorem ipsum dolor sit amet
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+*Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros.*
+<br>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit [sample link](www.google.com). Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+<br>
+  * Bullet 1
+  * Bullet 2
+  * Bullet 3
 
-      ## Lorem ipsum dolor sit amet
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
-
-      ## Lorem ipsum dolor sit amet
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.`,
+<br> 
+## Lorem ipsum dolor sit amet
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+<br>
+1. Item 1
+2. Item 2
+3. Item 3  
+  
+<br>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+<br>
+## Lorem ipsum dolor sit amet
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+<br>
+- [x] checked list item
+- [ ] unchecked list item
+`,
     isPublished: true,
     isEmailed: true,
     likes: 1
@@ -50,13 +94,31 @@ let articles = [
     publishDate: null,
     authors: ["Christine M"],
     content: `## Lorem ipsum dolor sit amet
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+*Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros.*
+<br>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit [sample link](www.google.com). Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+<br>
+  * Bullet 1
+  * Bullet 2
+  * Bullet 3
 
-      ## Lorem ipsum dolor sit amet
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
-
-      ## Lorem ipsum dolor sit amet
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.`,
+<br> 
+## Lorem ipsum dolor sit amet
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+<br>
+1. Item 1
+2. Item 2
+3. Item 3  
+  
+<br>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+<br>
+## Lorem ipsum dolor sit amet
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+<br>
+- [x] checked list item
+- [ ] unchecked list item
+`,
     isPublished: false,
     isEmailed: false,
     likes: 0
@@ -70,13 +132,31 @@ let articles = [
     publishDate: null,
     authors: ["Christine M"],
     content: `## Lorem ipsum dolor sit amet
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+*Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros.*
+<br>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit [sample link](www.google.com). Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+<br>
+  * Bullet 1
+  * Bullet 2
+  * Bullet 3
 
-      ## Lorem ipsum dolor sit amet
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
-
-      ## Lorem ipsum dolor sit amet
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.`,
+<br> 
+## Lorem ipsum dolor sit amet
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+<br>
+1. Item 1
+2. Item 2
+3. Item 3  
+  
+<br>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+<br>
+## Lorem ipsum dolor sit amet
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+<br>
+- [x] checked list item
+- [ ] unchecked list item
+`,
     isPublished: false,
     isEmailed: false,
     likes: 0
@@ -90,13 +170,31 @@ let articles = [
     publishDate: new Date("March 25, 2021"),
     authors: ["Olivia L"],
     content: `## Lorem ipsum dolor sit amet
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+*Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros.*
+<br>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit [sample link](www.google.com). Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+<br>
+  * Bullet 1
+  * Bullet 2
+  * Bullet 3
 
-      ## Lorem ipsum dolor sit amet
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
-
-      ## Lorem ipsum dolor sit amet
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.`,
+<br> 
+## Lorem ipsum dolor sit amet
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+<br>
+1. Item 1
+2. Item 2
+3. Item 3  
+  
+<br>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+<br>
+## Lorem ipsum dolor sit amet
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
+<br>
+- [x] checked list item
+- [ ] unchecked list item
+`,
     isPublished: true,
     isEmailed: true,
     likes: 10
@@ -111,8 +209,13 @@ articlesRouter.get('/:id', (request, response) => {
   const id = Number(request.params.id)
   const article = articles.find(article => article.id === id)
 
+  const articleWithContentConverted = {
+    ...article,
+    content: converter.makeHtml(article.content)
+  }
+
   if (article) {
-    response.json(article)
+    response.json(articleWithContentConverted)
   } else {
     response.status(404).end()
   } 

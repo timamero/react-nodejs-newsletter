@@ -103,7 +103,7 @@ const App = () => {
                 }))
               })
 
-            history.push('/')
+            history.goBack(-1)
           }
         }  
 
