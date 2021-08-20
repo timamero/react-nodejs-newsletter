@@ -107,6 +107,17 @@ articlesRouter.get('/', (request, response) => {
   response.json(articles)
 })
 
+articlesRouter.get('/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const article = articles.find(article => article.id === id)
+
+  if (article) {
+    response.json(article)
+  } else {
+    response.status(404).end()
+  } 
+})
+
 articlesRouter.get('/edit/:id', (request, response) => {
   const id = Number(request.params.id)
   const article = articles.find(article => article.id === id)
