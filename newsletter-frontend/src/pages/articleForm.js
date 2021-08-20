@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import articleServices from "../services/articles"
 import Container from "../components/container"
 import Button from "../components/button"
 import './articleForm.css'
@@ -16,37 +17,60 @@ const ArticleForm = ({handleSaveSubmit, handleDeleteClick, handleSaveAndPublishC
   const [ title, setTitle ] = useState('')
   const [ authors, setAuthors] = useState('')
   const [ content, setContent] = useState('')
-  const [ id, setId ] = useState('')
-  const [ creationDate, setCreationDate ] = useState(null)
-  const [ lastUpdateDate, setLastUpdateDate ] = useState(null)
-  const [ publishDate, setPublishDate ] = useState(null)
-  const [ isPublished, setIsPublished ] = useState(false)
+  // const [ id, setId ] = useState('')
+  // const [ creationDate, setCreationDate ] = useState(null)
+  // const [ lastUpdateDate, setLastUpdateDate ] = useState(null)
+  // const [ publishDate, setPublishDate ] = useState(null)
+  // const [ isPublished, setIsPublished ] = useState(false)
+
+  const [ article, setArticle ] =useState({
+    id: null,
+    creationDate: null,
+    lastUpdateDate: null,
+    publishDate: null,
+    isPublished: false
+  })
 
   useEffect(() => {
     if (props.location) {
+      articleServices.getOne(props.location.state.article.id)
+        .then(returnedArticle => {
+          console.log('returnedArticle', returnedArticle)
+          setArticle(returnedArticle)
+          setTitle(returnedArticle.title)
+          // setAuthors(returnedArticle.authors)
+          setContent(returnedArticle.content)
+          if (returnedArticle.authors.length > 1) {
+            setAuthors(returnedArticle.authors.join(', '))
+          } else {
+            setAuthors(returnedArticle.authors.join(''))
+          }
+        })
+      // setId(props.location.state.article.id)
+      // setTitle(props.location.state.article.title)
 
-      setId(props.location.state.article.id)
-      setTitle(props.location.state.article.title)
+      // if (props.location.state.article.authors.length > 1) {
+      //   setAuthors(props.location.state.article.authors.join(', '))
+      // } else {
+      //   setAuthors(props.location.state.article.authors.join(''))
+      // }
 
-      if (props.location.state.article.authors.length > 1) {
-        setAuthors(props.location.state.article.authors.join(', '))
-      } else {
-        setAuthors(props.location.state.article.authors.join(''))
-      }
+      // setContent(props.location.state.article.content)
+      // setCreationDate(props.location.state.article.creationDate)
+      // setLastUpdateDate(props.location.state.article.lastUpdateDate)
+      // setPublishDate(props.location.state.article.publishDate)
+      // setIsPublished(props.location.state.article.isPublished)
 
-      setContent(props.location.state.article.content)
-      setCreationDate(props.location.state.article.creationDate)
-      setLastUpdateDate(props.location.state.article.lastUpdateDate)
-      setPublishDate(props.location.state.article.publishDate)
-      setIsPublished(props.location.state.article.isPublished)
     } else {
       // When navigating from /update/:id to /create, need to clear form data
       setTitle('')
       setAuthors('')
       setContent('')
     }
+
+    
   }, [props.location])
-  
+ 
   const handleTitleChange = (event) => {
     setTitle(event.target.value)
   }
@@ -70,16 +94,16 @@ const ArticleForm = ({handleSaveSubmit, handleDeleteClick, handleSaveAndPublishC
         :<h1>Update Article</h1>
       }
 
-      {lastUpdateDate
-        ? <p className="dateMessage">Last updated on {`${new Date(lastUpdateDate).toLocaleDateString('en-us', dateOptions)}`}</p>
-        : creationDate
-        ? <p className="dateMessage">Created on {`${new Date(creationDate).toLocaleDateString('en-us', dateOptions)}`}</p>
+      {article.lastUpdateDate
+        ? <p className="dateMessage">Last updated on {`${new Date(article.lastUpdateDate).toLocaleDateString('en-us', dateOptions)}`}</p>
+        : article.creationDate
+        ? <p className="dateMessage">Created on {`${new Date(article.creationDate).toLocaleDateString('en-us', dateOptions)}`}</p>
         : null
       }
       
       <form 
         className="articleForm"
-        onSubmit={handleSaveSubmit("save", id, title, authors, content, history)}
+        onSubmit={handleSaveSubmit("save", article.id, title, authors, content, history)}
         >
         <div className="fieldWrapper">
           <label>Title:</label>
@@ -101,11 +125,11 @@ const ArticleForm = ({handleSaveSubmit, handleDeleteClick, handleSaveAndPublishC
 
         <div className="btnContainer">
           <Button btnType="primary" type="submit">Save</Button>
-          {props.location && !isPublished
+          {props.location && !article.isPublished
             && <Button 
-              handleBtnClick={!publishDate
-                ? handleSaveSubmit("publish", id, title, authors, content, history)
-                : handleSaveSubmit("republish", id, title, authors, content, history)
+              handleBtnClick={!article.publishDate
+                ? handleSaveSubmit("publish", article.id, title, authors, content, history)
+                : handleSaveSubmit("republish", article.id, title, authors, content, history)
               } 
               btnType="primary" 
               type="button"
@@ -122,7 +146,7 @@ const ArticleForm = ({handleSaveSubmit, handleDeleteClick, handleSaveAndPublishC
           </Button>
           {props.location 
             && <Button 
-              handleBtnClick={handleDeleteClick(id, title, history)} 
+              handleBtnClick={handleDeleteClick(article.id, title, history)} 
               btnType="danger" 
               type="button"
               >

@@ -45,6 +45,7 @@ const App = () => {
       .then(initialArticles => setArticles(initialArticles))
   }, [])
 
+  //// problem with save action, not updating in database, check all other actions
   const handleSaveSubmit = (action, id, title, authors, content, history) => {
     // action choices:
     //  save - save changes
@@ -108,6 +109,7 @@ const App = () => {
 
       } else {
         // Add new article
+        console.log('saving new article')
         const articleObject = {
           title: title,
           authors: authorList,

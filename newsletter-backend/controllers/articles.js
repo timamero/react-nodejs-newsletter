@@ -137,7 +137,7 @@ const generateId = () => {
 
 articlesRouter.post('/', (request, response) => {
   const body = request.body
-  
+
   const article = {
     id: generateId(),
     title: body.title,
@@ -175,7 +175,7 @@ articlesRouter.put('/:id', (request, response) => {
   }
 
   articles = articles.map(article => {
-    if (article.id !== request.params.id) {
+    if (article.id !== Number(request.params.id)) {
       return article
     } else {
       return updatedArticle
