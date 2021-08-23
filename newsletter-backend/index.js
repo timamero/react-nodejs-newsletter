@@ -1,23 +1,9 @@
-require('dotenv').config()
-const express = require('express')
-const app = express()
-const cors = require('cors')
-const articlesRouter = require('./controllers/articles')
-const emailsRouter = require('./controllers/emails')
+const app = require('./app')
+const http = require('http')
 
-app.use(cors())
-app.use(express.json())
+const server = http.createServer(app)
 
-app.use('/api/articles', articlesRouter)
-app.use('/api/emails', emailsRouter)
+server.listen(process.env.PORT, () => {
+  console.log(`Server running on port ${process.env.PORT}`)
+})
 
-
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
-}
-
-app.use(unknownEndpoint)
-
-const PORT = process.env.PORT
-app.listen(PORT)
-console.log(`Server running on port ${PORT}`)

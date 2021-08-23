@@ -94,8 +94,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Pha
     publishDate: null,
     authors: ["Christine M"],
     content: `## Lorem ipsum dolor sit amet
-*Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros.*
-<br>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit [sample link](www.google.com). Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
 <br>
   * Bullet 1
@@ -170,8 +168,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros. Pha
     publishDate: new Date("March 25, 2021"),
     authors: ["Olivia L"],
     content: `## Lorem ipsum dolor sit amet
-*Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at varius eros.*
-<br>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit [sample link](www.google.com). Sed at varius eros. Phasellus vitae magna quis purus vestibulum lobortis. Aliquam vitae iaculis tortor. Nam hendrerit erat non augue elementum, vel hendrerit libero consequat. Sed tristique egestas enim, quis porttitor leo aliquet nec. Donec non fringilla tellus, id aliquam justo. Morbi nulla mi, consequat at dapibus et, laoreet non lorem. Proin efficitur purus nec velit sagittis, at facilisis enim tincidunt. Nulla et libero eu neque pellentesque fringilla. Sed ac leo nulla. Donec nec augue vel tellus tempor laoreet. Aenean velit tortor, tincidunt non ornare id, tincidunt eget justo. Proin fermentum dolor eget est mattis rhoncus. Suspendisse faucibus sollicitudin posuere. Nullam nisi nulla, sollicitudin eu rutrum aliquet, ornare sit amet nisi.
 <br>
   * Bullet 1
