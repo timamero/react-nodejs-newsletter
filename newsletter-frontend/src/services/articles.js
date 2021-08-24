@@ -5,12 +5,17 @@ const baseUrl = 'http://localhost:3001/api/articles'
 
 const getAll = () => {
   const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+  return request.then(response => {
+    console.log('getAll service - response.data', response.data)
+    return response.data
+  })
 }
 
 const getOne = (id) => {
   const request = axios.get(`${baseUrl}/${id}`)
-  return request.then(response => response.data)
+  return request.then(response => {
+    console.log('getOne service - response.data', response.data)
+    return response.data})
 }
 
 const getOneEdit = (id) => {

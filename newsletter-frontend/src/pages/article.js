@@ -11,7 +11,7 @@ import { useHistory } from "react-router"
 const Article = ({handleLikeClick, handleUnpublishClick, ...props}) => {
   const history = useHistory()
   const [ article, setArticle ] = useState(null)
-  // const article = props.location.state.article
+
   const dateOptions = { 
     year: 'numeric', 
     month: 'long', 
@@ -22,7 +22,11 @@ const Article = ({handleLikeClick, handleUnpublishClick, ...props}) => {
     articleServices.getOne(props.location.state.article.id)
       .then(returnedArticle => setArticle(returnedArticle))
   }, [props.location.state.article.id])
-
+  if (article) {
+    console.log('article', article)
+    console.log('authors', article.authors)
+  }
+  
   if (article) {
     const createMarkup = () => {
       return {__html: article.content}

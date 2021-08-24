@@ -17,11 +17,6 @@ const ArticleForm = ({handleSaveSubmit, handleDeleteClick, handleSaveAndPublishC
   const [ title, setTitle ] = useState('')
   const [ authors, setAuthors] = useState('')
   const [ content, setContent] = useState('')
-  // const [ id, setId ] = useState('')
-  // const [ creationDate, setCreationDate ] = useState(null)
-  // const [ lastUpdateDate, setLastUpdateDate ] = useState(null)
-  // const [ publishDate, setPublishDate ] = useState(null)
-  // const [ isPublished, setIsPublished ] = useState(false)
 
   const [ article, setArticle ] =useState({
     id: null,
@@ -35,7 +30,6 @@ const ArticleForm = ({handleSaveSubmit, handleDeleteClick, handleSaveAndPublishC
     if (props.location) {
       articleServices.getOneEdit(props.location.state.article.id)
         .then(returnedArticle => {
-          console.log('returnedArticle', returnedArticle)
           setArticle(returnedArticle)
           setTitle(returnedArticle.title)
           setContent(returnedArticle.content)

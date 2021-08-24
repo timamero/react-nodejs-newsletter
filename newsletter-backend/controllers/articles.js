@@ -17,13 +17,22 @@ articlesRouter.get('/:id', (request, response) => {
   const id = request.params.id
   
   const article = Article.findById(id).then(article => {
-    const articleWithContentConverted = {
-      ...article,
-      content: converter.makeHtml(article.content)
+    const formattedContentArticle = {
+      id: article._id.toString(),
+      title: article.title,
+      slug: article.slug,
+      creationDate: article.creationDate,
+      lastUpdateDate: article.lastUpdateDate,
+      publishDate: article.publishDate,
+      authors:article.authors,
+      content: converter.makeHtml(article.content),
+      isPublished: article.isPublished,
+      isEmailed: article.isEmailed,
+      likes: article.likes
     }
 
     if (article) {
-      response.json(articleWithContentConverted)
+      response.json(formattedContentArticle)
     } else {
       response.status(404).end()
     } 
@@ -32,7 +41,6 @@ articlesRouter.get('/:id', (request, response) => {
 
 articlesRouter.get('/edit/:id', (request, response) => {
   const id = request.params.id
-
   const article = Article.findById(id).then(article => {
     if (article) {
       response.json(article)
@@ -41,7 +49,6 @@ articlesRouter.get('/edit/:id', (request, response) => {
     } 
   }) 
 })
-
 
 articlesRouter.post('/', (request, response) => {
   const body = request.body
@@ -68,7 +75,6 @@ articlesRouter.put('/:id', (request, response) => {
   const body = request.body
   
   const updatedArticle = {
-    id: Number(request.params.id),
     title: body.title,
     slug: body.title.toLowerCase().split(' ').join('-'),
     creationDate: body.creationDate,
@@ -81,15 +87,18 @@ articlesRouter.put('/:id', (request, response) => {
     likes: body.likes
   }
 
-  articles = articles.map(article => {
-    if (article.id !== Number(request.params.id)) {
-      return article
-    } else {
-      return updatedArticle
-    }
-  })
+  // articles = articles.map(article => {
+  //   if (article.id !== Number(request.params.id)) {
+  //     return article
+  //   } else {
+  //     return updatedArticle
+  //   }
+  // })
 
-  response.json(updatedArticle)
+  Article.findByIdAndUpdate(request.params.id, updatedArticle, { new: true })
+    .then(returnedArticle => response.json(returnedArticle))
+
+  // response.json(updatedArticle)
 })
 
 articlesRouter.delete('/:id', (request, response) => {
