@@ -1,52 +1,23 @@
 const emailsRouter = require('express').Router()
-
-let emails = [
-  {
-    id: 1,
-    email: "roy@example.com"
-  },
-  {
-    id: 2,
-    email: "jess@example.com"
-  }
-]
+const Email = require('../models/email')
 
 emailsRouter.get('/', (request, response) => {
-  response.json(emails)
+  Email.find({}).then(emails => response.json(emails))
 })
-
-const generateId = () => {
-  const maxId = emails.length > 0
-    ? Math.max(...emails.map(e => e.id))
-    : 0
-  return maxId + 1
-}
 
 emailsRouter.post('/', (request, response) => {
   const body = request.body
 
-  const email = {
-    id: generateId(),
+  const email = new Email({
     email: body.email
-  }
+  })
 
-  emails = emails.concat(email)
-
-  response.json(email)
+  email.save().then(savedEmail => response.json(savedEmail))
 })
 
-emailsRouter.delete('/:email', (request, response) => {
-  const regex = /[@\\.]/g
-  const email = request.params.email
-  const emailObject = emails.find(e => e.email.replace(regex, '-') === email)
-  
-  if (!emailObject) {
-    return response.status(404).end()
-  }
-  
-  emails = emails.filter(e => e.email.replace(regex,'-') !== email)
-
-  response.status(204).end()
+emailsRouter.delete('/', (request, response) => {
+  Email.findOneAndRemove({ email: request.body.email})
+    .then(result => response.status(204).end())
 })
 
 module.exports = emailsRouter

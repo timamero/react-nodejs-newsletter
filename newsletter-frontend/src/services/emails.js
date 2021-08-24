@@ -12,7 +12,11 @@ const create = (newObject) => {
 }
 
 const deleteObj = (email) => {
-  return axios.delete(`${baseUrl}/${email}`)
+  return axios.delete(baseUrl, {
+    data: {
+      email: email
+    }
+  })
 }
 
 const emailServices = {

@@ -9,7 +9,6 @@ converter.setOption('noHeaderId', 'true');
 converter.setOption('headerLevelStart', '2');
 
 articlesRouter.get('/', (request, response) => {
-  
   Article.find({}).then(articles => response.json(articles))
 })
 

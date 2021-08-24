@@ -184,7 +184,7 @@ const App = () => {
 
     const emailToDelete = event.target.elements.unsubscribeEmail.value
 
-    emailServices.deleteObj(emailToDelete.replace(/[@\\.]/g,'-'))
+    emailServices.deleteObj(emailToDelete, emailToDelete.replace(/[@\\.]/g,'-'))
       .then(result => window.alert('You have unsubscribed to the newsletter.'))
       .catch(error => window.alert('That email does not exist or it was already deleted.'))
   }
