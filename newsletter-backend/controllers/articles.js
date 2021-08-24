@@ -87,25 +87,13 @@ articlesRouter.put('/:id', (request, response) => {
     likes: body.likes
   }
 
-  // articles = articles.map(article => {
-  //   if (article.id !== Number(request.params.id)) {
-  //     return article
-  //   } else {
-  //     return updatedArticle
-  //   }
-  // })
-
   Article.findByIdAndUpdate(request.params.id, updatedArticle, { new: true })
     .then(returnedArticle => response.json(returnedArticle))
-
-  // response.json(updatedArticle)
 })
 
 articlesRouter.delete('/:id', (request, response) => {
-  const id = Number(request.params.id)
-  article = articles.filter(article => article.id !== id)
-
-  response.status(204).end()
+  Article.findByIdAndRemove(request.params.id)
+    .then(result => response.status(204).end())
 })
 
 module.exports = articlesRouter
