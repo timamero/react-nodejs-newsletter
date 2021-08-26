@@ -8,37 +8,41 @@ converter.setOption('simpleLineBreaks', 'true');
 converter.setOption('noHeaderId', 'true');
 converter.setOption('headerLevelStart', '2');
 
-articlesRouter.get('/', (request, response) => {
-  Article.find({}).then(articles => response.json(articles))
+articlesRouter.get('/', (request, response, next) => {
+  Article.find({})
+    .then(articles => response.json(articles))
+    .catch(error => next(error))
 })
 
-articlesRouter.get('/:id', (request, response) => {
+articlesRouter.get('/:id', (request, response, next) => {
   const id = request.params.id
   
-  const article = Article.findById(id).then(article => {
-    const formattedContentArticle = {
-      id: article._id.toString(),
-      title: article.title,
-      slug: article.slug,
-      creationDate: article.creationDate,
-      lastUpdateDate: article.lastUpdateDate,
-      publishDate: article.publishDate,
-      authors:article.authors,
-      content: converter.makeHtml(article.content),
-      isPublished: article.isPublished,
-      isEmailed: article.isEmailed,
-      likes: article.likes
-    }
+  const article = Article.findById(id)
+    .then(article => {
+      const formattedContentArticle = {
+        id: article._id.toString(),
+        title: article.title,
+        slug: article.slug,
+        creationDate: article.creationDate,
+        lastUpdateDate: article.lastUpdateDate,
+        publishDate: article.publishDate,
+        authors:article.authors,
+        content: converter.makeHtml(article.content),
+        isPublished: article.isPublished,
+        isEmailed: article.isEmailed,
+        likes: article.likes
+      }
 
     if (article) {
       response.json(formattedContentArticle)
     } else {
       response.status(404).end()
-    } 
+    }
   })
+  .catch(error => next(error))
 })
 
-articlesRouter.get('/edit/:id', (request, response) => {
+articlesRouter.get('/edit/:id', (request, response, next) => {
   const id = request.params.id
   const article = Article.findById(id).then(article => {
     if (article) {
@@ -46,11 +50,30 @@ articlesRouter.get('/edit/:id', (request, response) => {
     } else {
       response.status(404).end()
     } 
-  }) 
+  })
+  .catch(error => next(error))
 })
 
-articlesRouter.post('/', (request, response) => {
+articlesRouter.post('/', (request, response, next) => {
   const body = request.body
+
+  if (!body.title) {
+    return response.status(400).json({
+      error: 'title missing'
+    })
+  }
+
+  if (body.authors.length === 0) {
+    return response.status(400).json({
+      error: 'authors missing'
+    })
+  }
+
+  if (!body.content) {
+    return response.status(400).json({
+      error: 'content missing'
+    })
+  }
 
   const article = new Article({
     title: body.title,
@@ -67,10 +90,11 @@ articlesRouter.post('/', (request, response) => {
   
   article.save()
     .then(savedArticle => response.json(savedArticle))
+    .catch(error => next(error))
 
 })
 
-articlesRouter.put('/:id', (request, response) => {
+articlesRouter.put('/:id', (request, response, next) => {
   const body = request.body
   
   const updatedArticle = {
@@ -88,11 +112,13 @@ articlesRouter.put('/:id', (request, response) => {
 
   Article.findByIdAndUpdate(request.params.id, updatedArticle, { new: true })
     .then(returnedArticle => response.json(returnedArticle))
+    .catch(error => next(error))
 })
 
 articlesRouter.delete('/:id', (request, response) => {
   Article.findByIdAndRemove(request.params.id)
     .then(result => response.status(204).end())
+    .catch(error => next(error))
 })
 
 module.exports = articlesRouter

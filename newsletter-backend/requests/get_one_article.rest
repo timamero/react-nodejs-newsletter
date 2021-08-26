@@ -2,3 +2,11 @@ GET http://localhost:3001/api/articles/612427a4324aeb09585af910
 
 ###
 GET http://localhost:3001/api/articles/edit/612427a4324aeb09585af910
+
+###
+# malformatted id
+GET http://localhost:3001/api/articles/1
+
+###
+# malformatted id
+GET http://localhost:3001/api/articles/edit/1

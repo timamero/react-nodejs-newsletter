@@ -23,5 +23,6 @@ app.use('/api/articles', articlesRouter)
 app.use('/api/emails', emailsRouter)
 
 app.use(middleware.unknownEndpoint)
+app.use(middleware.errorHandler)
 
 module.exports = app

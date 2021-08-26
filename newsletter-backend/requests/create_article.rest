@@ -2,7 +2,7 @@ POST http://localhost:3001/api/articles
 Content-Type: application/json
 
 {
-  "title": "Lorem ipsum dolor sit amet 1",
-  "authors": ["Jeremy H"],
+  "title": "Lorem ipsum dolor sit amet",
+  "authors": ["Alice P"],
   "content": "## Lorem ipsum dolor sit amet"
 }
