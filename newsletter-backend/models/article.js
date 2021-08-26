@@ -1,13 +1,27 @@
 const mongoose = require('mongoose')
 
 const articleSchema = new mongoose.Schema({
-    title: String,
+    title: {
+      type: String,
+      required: [true, '`Title` is required']
+    },
     slug: String,
     creationDate: Date,
     lastUpdateDate: Date,
     publishDate: Date,
-    authors: [String],
-    content: String,
+    authors: {
+      type: [String],
+      validate: {
+        validator: v => {
+          return v.length !== 0
+        },
+        message: () => '`Authors` is required'
+      }
+    },
+    content: {
+      type: String,
+      required: [true, '`Content` is required']
+    },
     isPublished: Boolean,
     isEmailed: Boolean,
     likes: Number

@@ -57,24 +57,6 @@ articlesRouter.get('/edit/:id', (request, response, next) => {
 articlesRouter.post('/', (request, response, next) => {
   const body = request.body
 
-  if (!body.title) {
-    return response.status(400).json({
-      error: 'title missing'
-    })
-  }
-
-  if (body.authors.length === 0) {
-    return response.status(400).json({
-      error: 'authors missing'
-    })
-  }
-
-  if (!body.content) {
-    return response.status(400).json({
-      error: 'content missing'
-    })
-  }
-
   const article = new Article({
     title: body.title,
     slug: body.title.toLowerCase().split(' ').join('-'),
