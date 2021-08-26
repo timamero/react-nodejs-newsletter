@@ -17,7 +17,12 @@ emailsRouter.post('/', (request, response) => {
 
 emailsRouter.delete('/', (request, response) => {
   Email.findOneAndRemove({ email: request.body.email})
-    .then(result => response.status(204).end())
+    .then(result => { 
+      if (!result) {
+        return response.status(400).end()
+      }
+      response.status(204).end()
+    })
 })
 
 module.exports = emailsRouter
