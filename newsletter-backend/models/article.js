@@ -1,9 +1,11 @@
 const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator')
 
 const articleSchema = new mongoose.Schema({
     title: {
       type: String,
-      required: [true, '`Title` is required']
+      required: [true, '`Title` is required'],
+      unique: true
     },
     slug: String,
     creationDate: Date,
@@ -26,6 +28,8 @@ const articleSchema = new mongoose.Schema({
     isEmailed: Boolean,
     likes: Number
 })
+
+articleSchema.plugin(uniqueValidator)
 
 // https://mongoosejs.com/docs/api.html#document_Document-toObject
 articleSchema.set('toJSON', {

@@ -1,8 +1,15 @@
 const mongoose = require('mongoose')
+const uniqueValidator = require('mongoose-unique-validator')
 
 const emailSchema = new mongoose.Schema({
-    email: String
+    email: {
+      type: String,
+      required: true,
+      unique: true
+    }
 })
+
+emailSchema.plugin(uniqueValidator)
 
 // https://mongoosejs.com/docs/api.html#document_Document-toObject
 emailSchema.set('toJSON', {
