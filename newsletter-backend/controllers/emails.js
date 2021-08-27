@@ -1,6 +1,7 @@
 const emailsRouter = require('express').Router()
 const Email = require('../models/email')
 const nodemailer = require('nodemailer')
+const welcomeMessage = require('../communication/welcome')
 
 emailsRouter.get('/', (request, response, next) => {
   Email.find({})
@@ -16,13 +17,13 @@ emailsRouter.post('/', (request, response, next) => {
   })
 
   email.save()
-    .then(savedEmail => response.json(savedEmail))
+    .then(savedEmail => {
+      response.json(savedEmail)
+      next()
+    })
     .catch(error => next(error))
 
-  next()
 }, (request,response) => {
-  console.log('start mail function')
-
   let transporter = nodemailer.createTransport({
     host: process.env.HOST,
     port: process.env.EMAIL_PORT,
@@ -39,9 +40,19 @@ emailsRouter.post('/', (request, response, next) => {
   // verify connection configuration
   transporter.verify((error, success) => {
     if (error) {
-      console.log(error)
+      console.log('Error:', error)
     } else {
-      console.log('Server is ready to take our messages')
+      console.log('Ready to send messages...')
+    }
+  })
+
+  welcomeMessage.to = request.body.email
+
+  transporter.sendMail(welcomeMessage, (err, info) => {
+    if (err) {
+      console.log('Error:', err)
+    } else {
+      console.log('Message sent')
     }
   })
 
