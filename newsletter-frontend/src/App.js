@@ -82,8 +82,8 @@ const App = () => {
                 return returnedArticle
               }))
             })
-          
-          history.push('/drafts')
+            .then(response => history.push('/drafts'))
+            .catch(error => window.alert('Title must be unique'))
 
         } else {
           const message = action === 'save'
@@ -103,13 +103,12 @@ const App = () => {
                 }))
               })
 
-            history.goBack(-1)
+            history.push('/')
           }
         }  
 
       } else {
         // Add new article
-        console.log('saving new article')
         const articleObject = {
           title: title,
           authors: authorList,
@@ -125,7 +124,7 @@ const App = () => {
       }      
     }
   }
-  console.log(articles)
+  // console.log(articles)
 
   const handleUnpublishClick = (id, history) => {
     return () => {
@@ -174,9 +173,10 @@ const App = () => {
     const emailObject = {
       email: event.target.elements.subscribeEmail.value
     }
-    emailServices.create(emailObject)
-
-    window.alert('Thank you for subscribing!')
+    emailServices
+      .create(emailObject)
+      .then(response => window.alert('Thank you for subscribing!'))
+      .catch(error => window.alert('You have already subscribed'))
   }
 
   const handleUnsubscribeSubmit = (event) => {

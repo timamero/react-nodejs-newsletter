@@ -78,7 +78,7 @@ articlesRouter.post('/', (request, response, next) => {
 
 articlesRouter.put('/:id', (request, response, next) => {
   const body = request.body
-  
+
   const updatedArticle = {
     title: body.title,
     slug: body.title.toLowerCase().split(' ').join('-'),

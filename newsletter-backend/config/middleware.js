@@ -11,7 +11,9 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).send({ error: 'malformatted id' })
   } else if (error.name === 'ValidationError') {
     return response.status(400).send({ error: `Validation Error: ${error.message}`})
-  }
+  } else if (error.name === 'MongoError') {
+    return response.status(400).send({ error: `Mongo Error: ${error.message}`})
+  } 
 
   next(error)
 }
