@@ -1,7 +1,6 @@
 const emailsRouter = require('express').Router()
 const Email = require('../models/email')
-const nodemailer = require('nodemailer')
-const welcomeMessage = require('../communication/welcome')
+const sendWelcomeMessage = require('../config/middleware').sendWelcomeMessage
 
 emailsRouter.get('/', (request, response, next) => {
   Email.find({})
@@ -22,41 +21,8 @@ emailsRouter.post('/', (request, response, next) => {
       next()
     })
     .catch(error => next(error))
-
-}, (request,response) => {
-  let transporter = nodemailer.createTransport({
-    host: process.env.HOST,
-    port: process.env.EMAIL_PORT,
-    secure: false,
-    auth: {
-      user: process.env.MAIL_USER,
-      pass: process.env.MAIL_PASSWORD,
-    },
-    tls: {
-      rejectUnauthorized: false
-    }
-  })
-
-  // verify connection configuration
-  transporter.verify((error, success) => {
-    if (error) {
-      console.log('Error:', error)
-    } else {
-      console.log('Ready to send messages...')
-    }
-  })
-
-  welcomeMessage.to = request.body.email
-
-  transporter.sendMail(welcomeMessage, (err, info) => {
-    if (err) {
-      console.log('Error:', err)
-    } else {
-      console.log('Message sent')
-    }
-  })
-
-})
+  }, sendWelcomeMessage
+)
 
 emailsRouter.delete('/', (request, response) => {
   Email.findOneAndRemove({ email: request.body.email})
