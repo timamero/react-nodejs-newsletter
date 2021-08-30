@@ -1,6 +1,6 @@
 const logger = require('../config/logger')
 const nodemailer = require('nodemailer')
-const welcomeMessage = require('../communication/welcome')
+const fs = require('fs')
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
@@ -21,7 +21,25 @@ const errorHandler = (error, request, response, next) => {
 }
 
 const sendWelcomeMessage = (request, response, next) => {
-  console.log('sendWelcomeMessageMiddleware')
+  const unsubscribeURL = 'http://localhost:3000/unsubscribe'
+  const from = 'welcome@newsletter.com'
+  const subject = 'Newsletter Subscription Confirmation'
+  const text = `Welcome to the newsletter  
+Thank you for subscribing!  
+Go to ${unsubscribeURL} to unsubscribe
+`
+  const htmlStream = fs.createReadStream(`${process.env.FILE_PATH}/communication/welcome.html`)
+  htmlStream.on('error', () => {
+    logger.error('htmlStream error')
+  });
+
+  const welcomeMessage = {
+    from: from,
+    subject: subject,
+    text: text,
+    html: htmlStream,
+  }
+  
   let transporter = nodemailer.createTransport({
     host: process.env.HOST,
     port: process.env.EMAIL_PORT,
@@ -38,9 +56,10 @@ const sendWelcomeMessage = (request, response, next) => {
   // verify connection configuration
   transporter.verify((error, success) => {
     if (error) {
-      console.log('Error:', error)
+      htmlStream.destroy()
+      logger.error('Error:', error)
     } else {
-      console.log('Ready to send messages...')
+      logger.info('Ready to send messages...')
     }
   })
 
@@ -48,10 +67,14 @@ const sendWelcomeMessage = (request, response, next) => {
 
   transporter.sendMail(welcomeMessage, (err, info) => {
     if (err) {
-      console.log('Error:', err)
+      logger.error('Error:', err)
     } else {
-      console.log('Message sent')
+      logger.info('Message sent')
     }
+  })
+
+  htmlStream.on('close', () => {
+    logger.info('htmlStream closed')
   })
 
 }
