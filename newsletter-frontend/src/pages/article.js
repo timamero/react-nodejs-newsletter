@@ -8,7 +8,7 @@ import './article.css'
 import { Link } from "react-router-dom"
 import { useHistory } from "react-router"
 
-const Article = ({handleLikeClick, handleUnpublishClick, ...props}) => {
+const Article = ({handleLikeClick, handleUnpublishClick, handleSendSubmit, ...props}) => {
   const history = useHistory()
   const [ article, setArticle ] = useState(null)
 
@@ -22,10 +22,6 @@ const Article = ({handleLikeClick, handleUnpublishClick, ...props}) => {
     articleServices.getOne(props.location.state.article.id)
       .then(returnedArticle => setArticle(returnedArticle))
   }, [props.location.state.article.id])
-  if (article) {
-    console.log('article', article)
-    console.log('authors', article.authors)
-  }
   
   if (article) {
     const createMarkup = () => {
@@ -60,6 +56,15 @@ const Article = ({handleLikeClick, handleUnpublishClick, ...props}) => {
             }}>
             <Button>Edit</Button> 
           </Link>
+          {props.location && !article.isEmailed
+            && <Button 
+              handleBtnClick={handleSendSubmit(article.id, article.title, history)} 
+              btnType="primary" 
+              type="button"
+              >
+                Email to all Subscribers
+              </Button>
+          }
           <Button 
             handleBtnClick={handleUnpublishClick(article.id, history)}
           >

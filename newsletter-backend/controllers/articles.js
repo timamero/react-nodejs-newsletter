@@ -1,6 +1,7 @@
 const articlesRouter = require('express').Router()
 const Article = require('../models/article')
 const showdown = require('showdown')
+const sendArticle = require('../config/middleware').sendArticle
 
 const converter = new showdown.Converter()
 converter.setFlavor('github');
@@ -93,9 +94,37 @@ articlesRouter.put('/:id', (request, response, next) => {
   }
 
   Article.findByIdAndUpdate(request.params.id, updatedArticle, { new: true })
-    .then(returnedArticle => response.json(returnedArticle))
+    .then(returnedArticle => {
+      response.json(returnedArticle)
+    })
     .catch(error => next(error))
 })
+
+articlesRouter.put('/send/:id', (request, response, next) => {
+  console.log('start put send')
+  const body = request.body
+  console.log('received article to send', body)
+
+  const updatedArticle = {
+    title: body.title,
+    slug: body.title.toLowerCase().split(' ').join('-'),
+    creationDate: body.creationDate,
+    lastUpdateDate: new Date(),
+    publishDate: body.publishDate,
+    authors: body.authors,
+    content: body.content,
+    isPublished: body.isPublished,
+    isEmailed: true,
+    likes: body.likes
+  }
+
+  Article.findByIdAndUpdate(request.params.id, updatedArticle, { new: true })
+    .then(returnedArticle => {
+      response.json(returnedArticle)
+      next()
+    })
+    .catch(error => next(error))
+}, sendArticle)
 
 articlesRouter.delete('/:id', (request, response) => {
   Article.findByIdAndRemove(request.params.id)

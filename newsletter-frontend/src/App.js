@@ -12,7 +12,7 @@ import Unsubscribe from './pages/unsubscribe';
 
 const App = () => {
   const [ articles, setArticles] = useState([])
-
+  console.log('articles', articles)
   const mainLinks = [
     {
       label: 'Home',
@@ -68,7 +68,7 @@ const App = () => {
           content: content,
           isPublished: action === 'publish' || action === 'republish'
             ? true : article.isPublished,
-          isEmailed: article.isPublished,
+          isEmailed: article.isEmailed,
           likes: article.likes
         }
 
@@ -102,8 +102,12 @@ const App = () => {
                   return returnedArticle
                 }))
               })
-
-            history.push('/')
+            if (action === 'save') {
+              history.goBack()
+            } else {
+              history.push('/')
+            }
+            
           }
         }  
 
@@ -208,6 +212,19 @@ const App = () => {
     
   }
 
+  const handleSendSubmit = (id, title, history) => {
+    return () => {
+      if (window.confirm(`This article will be sent to all subscribers and can only be done once for this article. Are you sure you want to send the article: ${title}?`)) {
+        const article = articles.find(article => article.id === id)
+        console.log('article to send', article)
+        articleServices.updateAndSend(id, article)
+          .then(result => window.alert('Email sent to all subscribers.'))
+          .catch(error => window.alert(`Error sending email: ${error}`))
+          history.go(0)
+      }
+    } 
+  }
+
   return (
     <Router>
       <Nav links={authorLinks} type="author"/>
@@ -219,7 +236,8 @@ const App = () => {
           render={(props) => 
             <Article 
               handleLikeClick={handleLikeClick}
-              handleUnpublishClick={handleUnpublishClick} 
+              handleUnpublishClick={handleUnpublishClick}
+              handleSendSubmit={handleSendSubmit} 
               {...props}/>}
         />
         <Route

@@ -6,7 +6,6 @@ const baseUrl = 'http://localhost:3001/api/articles'
 const getAll = () => {
   const request = axios.get(baseUrl)
   return request.then(response => {
-    console.log('getAll service - response.data', response.data)
     return response.data
   })
 }
@@ -14,7 +13,6 @@ const getAll = () => {
 const getOne = (id) => {
   const request = axios.get(`${baseUrl}/${id}`)
   return request.then(response => {
-    console.log('getOne service - response.data', response.data)
     return response.data})
 }
 
@@ -29,7 +27,14 @@ const create = (newObject) => {
 }
 
 const update = (id, newObject) => {
+  console.log('articleService - update')
   const request = axios.put(`${baseUrl}/${id}`, newObject)
+  return request.then(response => response.data)
+}
+
+const updateAndSend = (id, newObject) => {
+  console.log('articleService - updateAndSend')
+  const request = axios.put(`${baseUrl}/send/${id}`, newObject)
   return request.then(response => response.data)
 }
 
@@ -43,6 +48,7 @@ const articleServices = {
   getOneEdit,
   create,
   update,
+  updateAndSend,
   deleteObj
 }
 
