@@ -1,6 +1,7 @@
 const logger = require('../config/logger')
 const nodemailer = require('nodemailer')
 const fs = require('fs')
+const path = require('path')
 const showdown = require('showdown')
 const Email = require('../models/email')
 
@@ -106,14 +107,15 @@ const sendArticle = async (request, response, next) => {
   const emailsObjects = await Email.find({})
   const emails = emailsObjects.map(obj => obj.email)
     
-  const unsubscribeURL = 'http://localhost:3000/unsubscribe'
   const bcc = emails
   const from = 'welcome@newsletter.com'
   const subject = `Newsletter - ${request.body.title}`
-  const html = converter.makeHtml(request.body.content)
-  console.log('sendArticle - html', html)
+  
+  let htmlBody = converter.makeHtml(request.body.content)
+  const articleFooter = fs.readFileSync(path.resolve(`${process.env.FILE_PATH}/communication/`, 'articleFooter.html'), 'utf-8')
+  html = htmlBody.concat(articleFooter)
   const text = htmlToPlainText(html)
-  console.log('sendArticle - text', text)
+
   const testMessage = {
     bcc: bcc,
     from: from,
@@ -147,14 +149,15 @@ const sendArticle = async (request, response, next) => {
     }
   })
 
-  // transporter.sendMail(testMessage, (err, info) => {
-  //   if (err) {
-  //     logger.error('Error:', err)
-  //   } else {
-  //     logger.info('Message sent')
-  //     transporter.close()
-  //   }
-  // })  
+  transporter.sendMail(testMessage, (err, info) => {
+    if (err) {
+      logger.error('Error:', err)
+    } else {
+      logger.info('Message sent')
+      transporter.close()
+    }
+  })  
+
 }
 
 module.exports = {
