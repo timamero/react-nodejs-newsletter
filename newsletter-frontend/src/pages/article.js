@@ -56,7 +56,8 @@ const Article = ({handleLikeClick, handleUnpublishClick, handleSendSubmit, ...pr
             }}>
             <Button>Edit</Button> 
           </Link>
-          {props.location && !article.isEmailed
+          {/* {props.location */}
+          {props.location && !article.isEmailed   
             && <Button 
               handleBtnClick={handleSendSubmit(article.id, article.title, history)} 
               btnType="primary" 

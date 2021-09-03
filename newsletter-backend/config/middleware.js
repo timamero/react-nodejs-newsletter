@@ -86,67 +86,75 @@ Go to ${unsubscribeURL} to unsubscribe
   })
 }
 
-const sendArticle = async (request, response, next) => {
-  // Each article will be emailed only once when it is first published
-  const isPublished = request.body.isPublished
-  const isEmailed = request.body.isEmailed
-
-  if (isPublished && !isEmailed) {
-    console.log('start sendArticle')
-    const emailsObjects = await Email.find({})
-    const emails = emailsObjects.map(obj => obj.email)
-      
-    console.log('sendArticles - emails', emails)
-    const unsubscribeURL = 'http://localhost:3000/unsubscribe'
-    const bcc = emails
-    const from = 'welcome@newsletter.com'
-    const subject = `Newsletter - ${request.body.title}`
-    const html = converter.makeHtml(request.body.content)
-
-    const testMessage = {
-      bcc: bcc,
-      from: from,
-      subject: subject,
-      html: html,
-    }
+const htmlToPlainText = html => {
+  const openingTagRegex = /<\w+>/ig
+  const closingTagRegex = /<\/\w+>/ig
+  const emptyTag = /<(\w+)(\s*)(\/)>/g
+  const imageTagRegex = /(<img\ssrc=")((http)(s*)(:\/\/)(.+?))("\salt=")(.+?)(".+?\/>)/ig
+  const linkTagRegex = /(<a\shref=")((http)(s*)(:\/\/)(.+?))(">)(.+?<\/a>)/ig
+  
+  return html
+    .replace(emptyTag, "")
+    .replace(linkTagRegex, '$2')
+    .replace(imageTagRegex, '$8 - $2')
+    .replace(openingTagRegex, "")
+    .replace(closingTagRegex, "\n")
     
-    let transporter = nodemailer.createTransport({
-      pool: true,
-      maxConnections: 2,
-      maxMessages: 5,
-      host: process.env.HOST,
-      port: process.env.EMAIL_PORT,
-      secure: false,
-      auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASSWORD,
-      },
-      tls: {
-        rejectUnauthorized: false
-      }
-    })
+}
 
-    // verify connection configuration
-    transporter.verify((error, success) => {
-      if (error) {
-        logger.error('Error::', error)
-      } else {
-        logger.info('Ready to send messages...')
-      }
-    })
-
-    transporter.sendMail(testMessage, (err, info) => {
-      if (err) {
-        logger.error('Error:', err)
-      } else {
-        logger.info('Message sent')
-        transporter.close()
-      }
-    })
-
+const sendArticle = async (request, response, next) => {
+  const emailsObjects = await Email.find({})
+  const emails = emailsObjects.map(obj => obj.email)
+    
+  const unsubscribeURL = 'http://localhost:3000/unsubscribe'
+  const bcc = emails
+  const from = 'welcome@newsletter.com'
+  const subject = `Newsletter - ${request.body.title}`
+  const html = converter.makeHtml(request.body.content)
+  console.log('sendArticle - html', html)
+  const text = htmlToPlainText(html)
+  console.log('sendArticle - text', text)
+  const testMessage = {
+    bcc: bcc,
+    from: from,
+    subject: subject,
+    text: text,
+    html: html,
   }
   
-  
+  let transporter = nodemailer.createTransport({
+    pool: true,
+    maxConnections: 2,
+    maxMessages: 5,
+    host: process.env.HOST,
+    port: process.env.EMAIL_PORT,
+    secure: false,
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASSWORD,
+    },
+    tls: {
+      rejectUnauthorized: false
+    }
+  })
+
+  // verify connection configuration
+  transporter.verify((error, success) => {
+    if (error) {
+      logger.error('Error::', error)
+    } else {
+      logger.info('Ready to send messages...')
+    }
+  })
+
+  // transporter.sendMail(testMessage, (err, info) => {
+  //   if (err) {
+  //     logger.error('Error:', err)
+  //   } else {
+  //     logger.info('Message sent')
+  //     transporter.close()
+  //   }
+  // })  
 }
 
 module.exports = {
