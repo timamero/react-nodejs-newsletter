@@ -17,7 +17,8 @@
     "mongoose": "^5.13.8",
     "mongoose-unique-validator": "^2.0.3",
     "nodemailer": "^6.6.3",
-    "showdown": "^1.9.1"
+    "showdown": "^1.9.1",
+    "xss": "^1.0.9"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",

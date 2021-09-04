@@ -12,7 +12,6 @@ import Unsubscribe from './pages/unsubscribe';
 
 const App = () => {
   const [ articles, setArticles] = useState([])
-  console.log('articles', articles)
   const mainLinks = [
     {
       label: 'Home',
@@ -40,12 +39,15 @@ const App = () => {
   ]
 
   useEffect(() => {
-    // Get all the articles
+    // Get all the articles when app is first opened
     articleServices.getAll()
       .then(initialArticles => setArticles(initialArticles))
   }, [])
 
-  //// problem with save action, not updating in database, check all other actions
+  const getOneArticle = (id) => {
+    return articleServices.getOne(id)
+  }
+
   const handleSaveSubmit = (action, id, title, authors, content, history) => {
     // action choices:
     //  save - save changes
@@ -106,11 +108,9 @@ const App = () => {
               history.goBack()
             } else {
               history.push('/')
-            }
-            
+            }     
           }
         }  
-
       } else {
         // Add new article
         const articleObject = {
@@ -128,7 +128,7 @@ const App = () => {
       }      
     }
   }
-  // console.log(articles)
+  // console.log('app - articles', articles)
 
   const handleUnpublishClick = (id, history) => {
     return () => {
@@ -216,7 +216,6 @@ const App = () => {
     return () => {
       if (window.confirm(`This article will be sent to all subscribers and can only be done once for this article. Are you sure you want to send the article: ${title}?`)) {
         const article = articles.find(article => article.id === id)
-        console.log('article to send', article)
         articleServices.updateAndSend(id, article)
           .then(result => window.alert('Email sent to all subscribers.'))
           .catch(error => window.alert(`Error sending email: ${error}`))
@@ -235,6 +234,8 @@ const App = () => {
           path={`/article/:slug`}
           render={(props) => 
             <Article 
+              getOneArticle={getOneArticle}
+              articles={articles}
               handleLikeClick={handleLikeClick}
               handleUnpublishClick={handleUnpublishClick}
               handleSendSubmit={handleSendSubmit} 

@@ -1,6 +1,7 @@
 const articlesRouter = require('express').Router()
 const Article = require('../models/article')
 const showdown = require('showdown')
+const xss = require('xss')
 const sendArticle = require('../config/middleware').sendArticle
 
 const converter = new showdown.Converter()
@@ -11,7 +12,30 @@ converter.setOption('headerLevelStart', '2');
 
 articlesRouter.get('/', (request, response, next) => {
   Article.find({})
-    .then(articles => response.json(articles))
+    .then(articles => (
+      articles.map(article => {
+        const convertedArticleContent = converter.makeHtml(article.content)
+        const cleanedArticleContent = xss(convertedArticleContent)
+
+        const articleObjectToReturn = {
+          id: article._id.toString(),
+          title: article.title,
+          slug: article.slug,
+          creationDate: article.creationDate,
+          lastUpdateDate: article.lastUpdateDate,
+          publishDate: article.publishDate,
+          authors:article.authors,
+          content: cleanedArticleContent,
+          isPublished: article.isPublished,
+          isEmailed: article.isEmailed,
+          likes: article.likes
+        }
+        return articleObjectToReturn
+      })
+    ))
+    .then(convertedArticles => {
+      response.json(convertedArticles)
+    })
     .catch(error => next(error))
 })
 
@@ -20,6 +44,9 @@ articlesRouter.get('/:id', (request, response, next) => {
   
   const article = Article.findById(id)
     .then(article => {
+      const convertedArticleContent = converter.makeHtml(article.content)
+      const cleanedArticleContent = xss(convertedArticleContent)
+
       const formattedContentArticle = {
         id: article._id.toString(),
         title: article.title,
@@ -28,7 +55,7 @@ articlesRouter.get('/:id', (request, response, next) => {
         lastUpdateDate: article.lastUpdateDate,
         publishDate: article.publishDate,
         authors:article.authors,
-        content: converter.makeHtml(article.content),
+        content: cleanedArticleContent,
         isPublished: article.isPublished,
         isEmailed: article.isEmailed,
         likes: article.likes

@@ -143,7 +143,7 @@ const sendArticle = async (request, response, next) => {
   // verify connection configuration
   transporter.verify((error, success) => {
     if (error) {
-      logger.error('Error::', error)
+      logger.error('Error:', error)
     } else {
       logger.info('Ready to send messages...')
     }
