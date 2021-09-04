@@ -38,6 +38,8 @@ const App = () => {
     },
   ]
 
+  console.log('render app')
+
   useEffect(() => {
     // Get all the articles when app is first opened
     articleServices.getAll()
