@@ -5,7 +5,7 @@ import Button from "../components/button"
 import './articleForm.css'
 import { useHistory } from "react-router"
 
-const ArticleForm = ({handleSaveSubmit, handleDeleteClick, handleSaveAndPublishClick, ...props}) => {
+const ArticleForm = ({deleteArticle, handleSaveSubmit, handleSaveAndPublishClick, ...props}) => {
   const history = useHistory()
   
   const dateOptions = { 
@@ -50,20 +50,33 @@ const ArticleForm = ({handleSaveSubmit, handleDeleteClick, handleSaveAndPublishC
     
   }, [props.location])
  
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value)
-  }
+  // const handleTitleChange = (event) => {
+  //   setTitle(event.target.value)
+  // }
 
-  const handleAuthorsChange = (event) => {
-    setAuthors(event.target.value)
-  }
+  // const handleAuthorsChange = (event) => {
+  //   setAuthors(event.target.value)
+  // }
 
-  const handleContentChange = (event) => {
-    setContent(event.target.value)
-  }
+  // const handleContentChange = (event) => {
+  //   setContent(event.target.value)
+  // }
 
   const handleCancelClick = () => {
     history.goBack()
+  }
+
+  const handleDeleteClick = () => {
+    if (window.confirm(`Are you sure you want to delete the article: '${title}'?`)) {
+      deleteArticle(article.id)
+      if (article.isPublished) {
+        // If deleted article was published, go back to Home page
+        history.push('/')
+      } else {
+        // If deleted article is unpublished, go back to Drafts page
+        history.push('/drafts')
+      }
+    }
   }
 
   return (
@@ -86,20 +99,20 @@ const ArticleForm = ({handleSaveSubmit, handleDeleteClick, handleSaveAndPublishC
         >
         <div className="fieldWrapper">
           <label>Title:</label>
-          <input value={title} onChange={handleTitleChange} required/>
+          <input value={title} onChange={({target}) => setTitle(target.value)} required/>
         </div>
         <div className="fieldWrapper">
           <label>Author(s):</label>
           <input 
             value={authors} 
-            onChange={handleAuthorsChange} 
+            onChange={({target}) => setAuthors(target.value)} 
             placeholder="Separate multiple authors with a comma" 
             required
           />
         </div>
         <div className="contentWrapper">
           <label>Content</label>
-          <textarea value={content} onChange={handleContentChange} required></textarea>
+          <textarea value={content} onChange={({target}) => setContent(target.value)} required></textarea>
         </div>
 
         <div className="btnContainer">
@@ -125,7 +138,7 @@ const ArticleForm = ({handleSaveSubmit, handleDeleteClick, handleSaveAndPublishC
           </Button>
           {props.location 
             && <Button 
-              handleBtnClick={handleDeleteClick(article.id, title, history)} 
+              handleBtnClick={handleDeleteClick} 
               btnType="danger" 
               type="button"
               >

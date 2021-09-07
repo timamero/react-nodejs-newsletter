@@ -66,6 +66,11 @@ const App = () => {
     return articleServices.updateAndSend(articleToSend.id, articleToSend)
   }
 
+  const deleteArticle = (id) => {
+    articleServices.deleteObj(id)
+      .then(response => setArticles(articles.filter(article => article.id !== id)))
+  }
+
   const handleSaveSubmit = (action, id, title, authors, content, history) => {
     // action choices:
     //  save - save changes
@@ -147,24 +152,6 @@ const App = () => {
     }
   }
 
-  const handleDeleteClick = (id, title, history) => {
-    return () => {
-      if (window.confirm(`Are you sure you want to delete the article: '${title}'?`)) {
-        const isPublished = articles.find(article => article.id === id).isPublished
-        articleServices.deleteObj(id)
-          .then(response => setArticles(articles.filter(article => article.id !== id)))
-        
-        if (isPublished) {
-          // If deleted article was published, go back to Home page
-          history.push('/')
-        } else {
-          // If deleted article is unpublished, go back to Drafts page
-          history.push('/drafts')
-        }
-      }
-    } 
-  }
-
   const handleSubscribeSubmit = (event) => {
     event.preventDefault()
     const emailObject = {
@@ -226,8 +213,8 @@ const App = () => {
           path={`/update/:slug`}
           render={(props) => 
             <ArticleForm 
+              deleteArticle={deleteArticle}
               handleSaveSubmit={handleSaveSubmit}
-              handleDeleteClick={handleDeleteClick}
               {...props}
             />} 
         />
