@@ -7,7 +7,7 @@ import './article.css'
 import { Link } from "react-router-dom"
 import { useHistory } from "react-router"
 
-const Article = ({getOneArticle, articles, handleLikeClick, handleUnpublishClick, handleSendSubmit, ...props}) => {
+const Article = ({getOneArticle, updateArticle, updateAndSendArticle, handleLikeClick, ...props}) => {
   const history = useHistory()
   const [article, setArticle] = useState(null)
   
@@ -21,8 +21,29 @@ const Article = ({getOneArticle, articles, handleLikeClick, handleUnpublishClick
     getOneArticle(props.location.state.article.id)
       .then(retrievedArticle => setArticle(retrievedArticle))
   }, [getOneArticle, props.location.state.article.id])
-  
-  // console.log('render article')
+
+  const handleUnpublishClick = () => {
+    const updatedArticle = {
+      ...article,
+      isPublished: false
+    }
+
+    if (window.confirm('Are you sure you want to unpublish this article?')) {
+      updateArticle(updatedArticle)
+      history.push('/drafts')
+    } 
+  }
+
+  const handleSendSubmit = () => {
+    if (window.confirm(`This article will be sent to all subscribers and can only be done once for this article. Are you sure you want to send the article: ${article.title}?`)) {
+      console.log('will send')
+      updateAndSendArticle(article)
+        .then(result => window.alert('Email sent to all subscribers.'))
+        .catch(error => window.alert(`Error sending email: ${error}`))
+        history.go(0)
+    }
+  }
+
   const createMarkup = () => {
     return {__html: article.content}
   }
@@ -59,7 +80,7 @@ const Article = ({getOneArticle, articles, handleLikeClick, handleUnpublishClick
           {/* {props.location */}
           {props.location && !article.isEmailed   
             && <Button 
-                handleBtnClick={handleSendSubmit(article.id, article.title, history)} 
+                handleBtnClick={handleSendSubmit} 
                 btnType="primary" 
                 type="button"
               >
@@ -67,7 +88,7 @@ const Article = ({getOneArticle, articles, handleLikeClick, handleUnpublishClick
               </Button>
           }
           <Button 
-            handleBtnClick={handleUnpublishClick(article.id, history)}
+            handleBtnClick={handleUnpublishClick}
           >
             Unpublish
           </Button>

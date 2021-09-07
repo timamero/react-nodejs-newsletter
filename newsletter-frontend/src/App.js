@@ -38,7 +38,7 @@ const App = () => {
     },
   ]
 
-  console.log('render app')
+  // console.log('render app')
 
   useEffect(() => {
     // Get all the articles when app is first opened
@@ -48,6 +48,22 @@ const App = () => {
 
   const getOneArticle = (id) => {
     return articleServices.getOne(id)
+  }
+
+  const updateArticle = (updatedArticle) => {
+    articleServices.update(updatedArticle.id, updatedArticle)
+      .then(returnedArticle => {
+        setArticles(articles.map(article => {
+          if (article.id !== updatedArticle.id) {
+            return article
+          }
+          return returnedArticle
+        }))
+      })
+  }
+
+  const updateAndSendArticle = (articleToSend) => {
+    return articleServices.updateAndSend(articleToSend.id, articleToSend)
   }
 
   const handleSaveSubmit = (action, id, title, authors, content, history) => {
@@ -130,31 +146,6 @@ const App = () => {
       }      
     }
   }
-  // console.log('app - articles', articles)
-
-  const handleUnpublishClick = (id, history) => {
-    return () => {
-      const article = articles.find(article => article.id === id)
-      const articleUpdated = {
-        ...article,
-        isPublished: false
-      }
-
-      if (window.confirm('Are you sure you want to unpublish this article?')) {
-        articleServices.update(article.id, articleUpdated)
-          .then(returnedArticle => {
-            setArticles(articles.map(article => {
-              if (article.id !== id) {
-                return article
-              }
-              return returnedArticle
-            }))
-          })
-        
-        history.push('/drafts')
-      }   
-    }  
-  }
 
   const handleDeleteClick = (id, title, history) => {
     return () => {
@@ -214,18 +205,6 @@ const App = () => {
     
   }
 
-  const handleSendSubmit = (id, title, history) => {
-    return () => {
-      if (window.confirm(`This article will be sent to all subscribers and can only be done once for this article. Are you sure you want to send the article: ${title}?`)) {
-        const article = articles.find(article => article.id === id)
-        articleServices.updateAndSend(id, article)
-          .then(result => window.alert('Email sent to all subscribers.'))
-          .catch(error => window.alert(`Error sending email: ${error}`))
-          history.go(0)
-      }
-    } 
-  }
-
   return (
     <Router>
       <Nav links={authorLinks} type="author"/>
@@ -237,10 +216,9 @@ const App = () => {
           render={(props) => 
             <Article 
               getOneArticle={getOneArticle}
-              articles={articles}
-              handleLikeClick={handleLikeClick}
-              handleUnpublishClick={handleUnpublishClick}
-              handleSendSubmit={handleSendSubmit} 
+              updateArticle={updateArticle}
+              updateAndSendArticle={updateAndSendArticle}
+              handleLikeClick={handleLikeClick} 
               {...props}/>}
         />
         <Route
