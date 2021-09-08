@@ -29,7 +29,7 @@ const Article = ({getOneArticle, updateArticle, updateAndSendArticle, handleLike
     }
 
     if (window.confirm('Are you sure you want to unpublish this article?')) {
-      updateArticle(updatedArticle)
+      updateArticle(article.id, updatedArticle)
       history.push('/drafts')
     } 
   }

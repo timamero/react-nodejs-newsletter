@@ -5,7 +5,7 @@ import Button from "../components/button"
 import './articleForm.css'
 import { useHistory } from "react-router"
 
-const ArticleForm = ({deleteArticle, handleSaveSubmit, handleSaveAndPublishClick, ...props}) => {
+const ArticleForm = ({deleteArticle, updateArticle, createArticle,...props}) => {
   const history = useHistory()
   
   const dateOptions = { 
@@ -46,21 +46,8 @@ const ArticleForm = ({deleteArticle, handleSaveSubmit, handleSaveAndPublishClick
       setAuthors('')
       setContent('')
     }
-
     
   }, [props.location])
- 
-  // const handleTitleChange = (event) => {
-  //   setTitle(event.target.value)
-  // }
-
-  // const handleAuthorsChange = (event) => {
-  //   setAuthors(event.target.value)
-  // }
-
-  // const handleContentChange = (event) => {
-  //   setContent(event.target.value)
-  // }
 
   const handleCancelClick = () => {
     history.goBack()
@@ -76,6 +63,66 @@ const ArticleForm = ({deleteArticle, handleSaveSubmit, handleSaveAndPublishClick
         // If deleted article is unpublished, go back to Drafts page
         history.push('/drafts')
       }
+    }
+  }
+
+  const handleSaveSubmit = (action) => {
+    // action choices:
+    //  save - save changes
+    //  publish - save and publish, first time to be published
+    //  republish - save and republish, not the first time to be published
+
+    return (event) => {
+      event.preventDefault()
+      const authorList = authors.split(',').map(author => author.replace(/^\s|\s$/g, ''))
+
+      if (article.id) {
+        const articleObject = {
+          title: title,
+          creationDate: article.creationDate,
+          lastUpdateDate: new Date(),
+          publishDate: action === 'publish' || action === 'republish' 
+            ? new Date() : article.publishDate,
+          authors: authorList,
+          content: content,
+          isPublished: action === 'publish' || action === 'republish'
+            ? true : article.isPublished,
+          isEmailed: article.isEmailed,
+          likes: article.likes
+        }
+        if (action === 'save' && !article.isPublished) {
+          updateArticle(article.id, articleObject)
+            .then(response => history.push('/drafts'))
+            .catch(error => window.alert('Title must be unique'))
+
+        } else {
+          const message = action === 'save'
+            ? `Are you sure you want to make changes to the article: '${title}'?`
+            : action === 'publish'
+            ? `Are you sure you want to publish and mail the article: '${title}'?`
+            : action === 'republish'
+            && `Are you sure you want to publish the article: '${title}'?`
+          if (window.confirm(message)) {
+            updateArticle(article.id, articleObject)
+            if (action === 'save') {
+              history.goBack()
+            } else {
+              history.push('/')
+            }     
+          }
+        }  
+      } else {
+        // Add new article
+        const articleObject = {
+          title: title,
+          authors: authorList,
+          content: content,
+        }
+
+        createArticle(articleObject)
+
+        history.push('/drafts')
+      }      
     }
   }
 

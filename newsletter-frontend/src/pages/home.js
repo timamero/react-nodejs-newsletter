@@ -7,7 +7,17 @@ import EmailForm from '../components/emailForm';
 import './home.css'
 import { Link } from "react-router-dom";
 
-const Home = ({articles, handleSubscribeSubmit, handleLikeClick}) => {
+const Home = ({articles, subscribe, handleLikeClick}) => {
+  const handleSubscribeSubmit = (event) => {
+    event.preventDefault()
+    const emailObject = {
+      email: event.target.elements.subscribeEmail.value
+    }
+    subscribe(emailObject)
+      .then(response => window.alert('Thank you for subscribing!'))
+      .catch(error => window.alert('You have already subscribed'))
+  }
+  
   const sortedArticles = articles.sort((a, b) => {
     if (new Date(a.publishDate) < new Date(b.publishDate)) {
       return 1

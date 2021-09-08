@@ -38,8 +38,6 @@ const App = () => {
     },
   ]
 
-  // console.log('render app')
-
   useEffect(() => {
     // Get all the articles when app is first opened
     articleServices.getAll()
@@ -50,11 +48,11 @@ const App = () => {
     return articleServices.getOne(id)
   }
 
-  const updateArticle = (updatedArticle) => {
-    articleServices.update(updatedArticle.id, updatedArticle)
+  const updateArticle = (id, updatedArticle) => {
+    return articleServices.update(id, updatedArticle)
       .then(returnedArticle => {
         setArticles(articles.map(article => {
-          if (article.id !== updatedArticle.id) {
+          if (article.id !== id) {
             return article
           }
           return returnedArticle
@@ -71,106 +69,19 @@ const App = () => {
       .then(response => setArticles(articles.filter(article => article.id !== id)))
   }
 
-  const handleSaveSubmit = (action, id, title, authors, content, history) => {
-    // action choices:
-    //  save - save changes
-    //  publish - save and publish, first time to be published
-    //  republish - save and republish, not the first time to be published
-
-    return (event) => {
-      event.preventDefault()
-      const article = id ? articles.find(article => article.id === id) : null
-      const authorList = authors.split(',').map(author => author.replace(/^\s|\s$/g, ''))
-
-      if (id) {
-        const articleObject = {
-          title: title,
-          creationDate: article.creationDate,
-          lastUpdateDate: new Date(),
-          publishDate: action === 'publish' || action === 'republish' 
-            ? new Date() : article.publishDate,
-          authors: authorList,
-          content: content,
-          isPublished: action === 'publish' || action === 'republish'
-            ? true : article.isPublished,
-          isEmailed: article.isEmailed,
-          likes: article.likes
-        }
-
-        if (action === 'save' && !article.isPublished) {
-          articleServices.update(id, articleObject)
-            .then(returnedArticle => {
-              setArticles(articles.map(article => {
-                if (article.id !== id) {
-                  return article
-                }
-                return returnedArticle
-              }))
-            })
-            .then(response => history.push('/drafts'))
-            .catch(error => window.alert('Title must be unique'))
-
-        } else {
-          const message = action === 'save'
-            ? `Are you sure you want to make changes to the article: '${title}'?`
-            : action === 'publish'
-            ? `Are you sure you want to publish and mail the article: '${title}'?`
-            : action === 'republish'
-            && `Are you sure you want to publish the article: '${title}'?`
-          if (window.confirm(message)) {
-            articleServices.update(id, articleObject)
-              .then(returnedArticle => {
-                setArticles(articles.map(article => {
-                  if (article.id !== id) {
-                    return article
-                  }
-                  return returnedArticle
-                }))
-              })
-            if (action === 'save') {
-              history.goBack()
-            } else {
-              history.push('/')
-            }     
-          }
-        }  
-      } else {
-        // Add new article
-        const articleObject = {
-          title: title,
-          authors: authorList,
-          content: content,
-        }
-
-        articleServices.create(articleObject)
-          .then(returnedArticle => {
-            setArticles(articles.concat(returnedArticle))
-          })
-
-        history.push('/drafts')
-      }      
-    }
+  const createArticle = (newArticle) => {
+    articleServices.create(newArticle)
+      .then(returnedArticle => {
+        setArticles(articles.concat(returnedArticle))
+      })
   }
 
-  const handleSubscribeSubmit = (event) => {
-    event.preventDefault()
-    const emailObject = {
-      email: event.target.elements.subscribeEmail.value
-    }
-    emailServices
-      .create(emailObject)
-      .then(response => window.alert('Thank you for subscribing!'))
-      .catch(error => window.alert('You have already subscribed'))
+  const subscribe = (emailToAdd) => {
+    return emailServices.create(emailToAdd)
   }
 
-  const handleUnsubscribeSubmit = (event) => {
-    event.preventDefault()
-
-    const emailToDelete = event.target.elements.unsubscribeEmail.value
-
-    emailServices.deleteObj(emailToDelete, emailToDelete.replace(/[@\\.]/g,'-'))
-      .then(result => window.alert('You have unsubscribed to the newsletter.'))
-      .catch(error => window.alert('That email does not exist or it was already deleted.'))
+  const unsubscribe = (emailToDelete) => {
+    return emailServices.deleteObj(emailToDelete)
   }
 
   const handleLikeClick = (id) => {
@@ -214,7 +125,7 @@ const App = () => {
           render={(props) => 
             <ArticleForm 
               deleteArticle={deleteArticle}
-              handleSaveSubmit={handleSaveSubmit}
+              updateArticle={updateArticle}
               {...props}
             />} 
         />
@@ -222,11 +133,14 @@ const App = () => {
           <Drafts articles={articles} />
         </Route>
         <Route path="/create">
-          <ArticleForm handleSaveSubmit={handleSaveSubmit}/>
+          <ArticleForm 
+            updateArticle={updateArticle} 
+            createArticle={createArticle}
+          />
         </Route>
         <Route exact path="/unsubscribe">
           <Unsubscribe
-            handleUnsubscribeSubmit={handleUnsubscribeSubmit}
+            unsubscribe={unsubscribe}
           />
         </Route> 
         <Route path="/about">
@@ -235,7 +149,7 @@ const App = () => {
         <Route exact path="/">
           <Home
             articles={articles}
-            handleSubscribeSubmit={handleSubscribeSubmit}
+            subscribe={subscribe}
             handleLikeClick={handleLikeClick}
           />
         </Route> 
