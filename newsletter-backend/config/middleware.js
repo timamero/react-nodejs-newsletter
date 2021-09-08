@@ -6,10 +6,10 @@ const showdown = require('showdown')
 const Email = require('../models/email')
 
 const converter = new showdown.Converter()
-converter.setFlavor('github');
-converter.setOption('simpleLineBreaks', 'true');
-converter.setOption('noHeaderId', 'true');
-converter.setOption('headerLevelStart', '2');
+converter.setFlavor('github')
+converter.setOption('simpleLineBreaks', 'true')
+converter.setOption('noHeaderId', 'true')
+converter.setOption('headerLevelStart', '2')
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
@@ -21,10 +21,10 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
   } else if (error.name === 'ValidationError') {
-    return response.status(400).send({ error: `Validation Error: ${error.message}`})
+    return response.status(400).send({ error: `Validation Error: ${error.message}` })
   } else if (error.name === 'MongoError') {
-    return response.status(400).send({ error: `Mongo Error: ${error.message}`})
-  } 
+    return response.status(400).send({ error: `Mongo Error: ${error.message}` })
+  }
 
   next(error)
 }
@@ -40,7 +40,7 @@ Go to ${unsubscribeURL} to unsubscribe
   const htmlStream = fs.createReadStream(`${process.env.FILE_PATH}/communication/welcome.html`)
   htmlStream.on('error', () => {
     logger.error('htmlStream error')
-  });
+  })
 
   const welcomeMessage = {
     from: from,
@@ -48,7 +48,7 @@ Go to ${unsubscribeURL} to unsubscribe
     text: text,
     html: htmlStream,
   }
-  
+
   let transporter = nodemailer.createTransport({
     host: process.env.HOST,
     port: process.env.EMAIL_PORT,
@@ -93,27 +93,27 @@ const htmlToPlainText = html => {
   const emptyTag = /<(\w+)(\s*)(\/)>/g
   const imageTagRegex = /(<img\ssrc=")((http)(s*)(:\/\/)(.+?))("\salt=")(.+?)(".+?\/>)/ig
   const linkTagRegex = /(<a\shref=")((http)(s*)(:\/\/)(.+?))(">)(.+?<\/a>)/ig
-  
+
   return html
-    .replace(emptyTag, "")
+    .replace(emptyTag, '')
     .replace(linkTagRegex, '$2')
     .replace(imageTagRegex, '$8 - $2')
-    .replace(openingTagRegex, "")
-    .replace(closingTagRegex, "\n")
-    
+    .replace(openingTagRegex, '')
+    .replace(closingTagRegex, '\n')
+
 }
 
 const sendArticle = async (request, response, next) => {
   const emailsObjects = await Email.find({})
   const emails = emailsObjects.map(obj => obj.email)
-    
+
   const bcc = emails
   const from = 'welcome@newsletter.com'
   const subject = `Newsletter - ${request.body.title}`
-  
+
   let htmlBody = converter.makeHtml(request.body.content)
   const articleFooter = fs.readFileSync(path.resolve(`${process.env.FILE_PATH}/communication/`, 'articleFooter.html'), 'utf-8')
-  html = htmlBody.concat(articleFooter)
+  const html = htmlBody.concat(articleFooter)
   const text = htmlToPlainText(html)
 
   const testMessage = {
@@ -123,7 +123,7 @@ const sendArticle = async (request, response, next) => {
     text: text,
     html: html,
   }
-  
+
   let transporter = nodemailer.createTransport({
     pool: true,
     maxConnections: 2,
@@ -156,7 +156,7 @@ const sendArticle = async (request, response, next) => {
       logger.info('Message sent')
       transporter.close()
     }
-  })  
+  })
 
 }
 

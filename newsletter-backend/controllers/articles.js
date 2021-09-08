@@ -5,10 +5,10 @@ const xss = require('xss')
 const sendArticle = require('../config/middleware').sendArticle
 
 const converter = new showdown.Converter()
-converter.setFlavor('github');
-converter.setOption('simpleLineBreaks', 'true');
-converter.setOption('noHeaderId', 'true');
-converter.setOption('headerLevelStart', '2');
+converter.setFlavor('github')
+converter.setOption('simpleLineBreaks', 'true')
+converter.setOption('noHeaderId', 'true')
+converter.setOption('headerLevelStart', '2')
 
 articlesRouter.get('/', (request, response, next) => {
   Article.find({})
@@ -41,8 +41,8 @@ articlesRouter.get('/', (request, response, next) => {
 
 articlesRouter.get('/:id', (request, response, next) => {
   const id = request.params.id
-  
-  const article = Article.findById(id)
+
+  Article.findById(id)
     .then(article => {
       const convertedArticleContent = converter.makeHtml(article.content)
       const cleanedArticleContent = xss(convertedArticleContent)
@@ -61,25 +61,26 @@ articlesRouter.get('/:id', (request, response, next) => {
         likes: article.likes
       }
 
-    if (article) {
-      response.json(formattedContentArticle)
-    } else {
-      response.status(404).end()
-    }
-  })
-  .catch(error => next(error))
+      if (article) {
+        response.json(formattedContentArticle)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 articlesRouter.get('/edit/:id', (request, response, next) => {
   const id = request.params.id
-  const article = Article.findById(id).then(article => {
-    if (article) {
-      response.json(article)
-    } else {
-      response.status(404).end()
-    } 
-  })
-  .catch(error => next(error))
+  Article.findById(id)
+    .then(article => {
+      if (article) {
+        response.json(article)
+      } else {
+        response.status(404).end()
+      }
+    })
+    .catch(error => next(error))
 })
 
 articlesRouter.post('/', (request, response, next) => {
@@ -97,7 +98,7 @@ articlesRouter.post('/', (request, response, next) => {
     isEmailed: false,
     likes: 0
   })
-  
+
   article.save()
     .then(savedArticle => response.json(savedArticle))
     .catch(error => next(error))
@@ -128,9 +129,7 @@ articlesRouter.put('/:id', (request, response, next) => {
 })
 
 articlesRouter.put('/send/:id', (request, response, next) => {
-  console.log('start put send')
   const body = request.body
-  console.log('received article to send', body)
 
   const updatedArticle = {
     title: body.title,
@@ -153,7 +152,7 @@ articlesRouter.put('/send/:id', (request, response, next) => {
     .catch(error => next(error))
 }, sendArticle)
 
-articlesRouter.delete('/:id', (request, response) => {
+articlesRouter.delete('/:id', (request, response, next) => {
   Article.findByIdAndRemove(request.params.id)
     .then(result => response.status(204).end())
     .catch(error => next(error))

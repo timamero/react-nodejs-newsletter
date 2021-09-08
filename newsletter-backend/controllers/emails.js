@@ -23,9 +23,9 @@ emailsRouter.post('/', (request, response, next) => {
     .catch(error => next(error))
 }, sendWelcomeMessage)
 
-emailsRouter.delete('/', (request, response) => {
-  Email.findOneAndRemove({ email: request.body.email})
-    .then(result => { 
+emailsRouter.delete('/', (request, response, next) => {
+  Email.findOneAndRemove({ email: request.body.email })
+    .then(result => {
       if (!result) {
         return response.status(400).end()
       }

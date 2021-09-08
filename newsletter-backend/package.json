@@ -6,6 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "lint": "eslint .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Fatima Camero",
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
+    "eslint": "^7.32.0",
     "nodemon": "^2.0.12"
   }
 }
