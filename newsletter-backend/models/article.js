@@ -26,7 +26,11 @@ const articleSchema = new mongoose.Schema({
   },
   isPublished: Boolean,
   isEmailed: Boolean,
-  likes: Number
+  likes: Number,
+  authorUser: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'AuthorUser'
+  }
 })
 
 articleSchema.plugin(uniqueValidator)
