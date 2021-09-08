@@ -4,6 +4,7 @@ Card props to set:
     primary - no border, white background
     dashed - dashed border, gray background
 */
+import React from 'react'
 import './card.css'
 
 const Card = ({children, type="primary"}) => {

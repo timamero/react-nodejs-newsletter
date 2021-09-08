@@ -5,6 +5,7 @@ Grid props to set:
   classname (default = '')
     centered - sets justify-content:0
 */
+import React from 'react'
 import './grid.css'
 
 const Grid = ({numOfItems = '1', rowGap = '1rem', className='', children}) => {

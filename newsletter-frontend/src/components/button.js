@@ -4,6 +4,7 @@ Button props to set:
     primary - normal button
     danger - red button
 */
+import React from 'react'
 import './button.css'
 
 const Button = ({children, btnType="primary", handleBtnClick, ...props}) => {

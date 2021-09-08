@@ -14,22 +14,22 @@ const EmailForm = ({id, submitValue, handleEmailSubmit}) => {
     setEmail('')
   }
   return (
-  <form 
-    className="emailForm" 
-    onSubmit={(event) => {handleEmailSubmit(event); handleSubmit(event)}}
-  >
-    <div className="fieldWrapper">
-      <input
-        type="email" 
-        placeholder="Type your email..." 
-        value={email} 
-        onChange={handleEmailChange} 
-        id={id}
-        required
-      />
-      <input type="submit" value={submitValue}/>
-    </div>
-  </form>
+    <form 
+      className="emailForm" 
+      onSubmit={(event) => {handleEmailSubmit(event); handleSubmit(event)}}
+    >
+      <div className="fieldWrapper">
+        <input
+          type="email" 
+          placeholder="Type your email..." 
+          value={email} 
+          onChange={handleEmailChange} 
+          id={id}
+          required
+        />
+        <input type="submit" value={submitValue}/>
+      </div>
+    </form>
 )}
 
 export default EmailForm
