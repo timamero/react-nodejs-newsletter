@@ -1,5 +1,6 @@
 const articlesRouter = require('express').Router()
 const Article = require('../models/article')
+const AuthorUser = require('../models/authorUser')
 const showdown = require('showdown')
 const xss = require('xss')
 const sendArticle = require('../config/middleware').sendArticle
@@ -28,7 +29,8 @@ articlesRouter.get('/', (request, response, next) => {
           content: cleanedArticleContent,
           isPublished: article.isPublished,
           isEmailed: article.isEmailed,
-          likes: article.likes
+          likes: article.likes,
+          authorUser: article.authorUser
         }
         return articleObjectToReturn
       })
@@ -58,7 +60,8 @@ articlesRouter.get('/:id', (request, response, next) => {
         content: cleanedArticleContent,
         isPublished: article.isPublished,
         isEmailed: article.isEmailed,
-        likes: article.likes
+        likes: article.likes,
+        authorUser: article.authorUser
       }
 
       if (article) {
@@ -86,22 +89,32 @@ articlesRouter.get('/edit/:id', (request, response, next) => {
 articlesRouter.post('/', (request, response, next) => {
   const body = request.body
 
-  const article = new Article({
-    title: body.title,
-    slug: body.title.toLowerCase().split(' ').join('-'),
-    creationDate: new Date(),
-    lastUpdateDate: null,
-    publishDate: null,
-    authors: body.authors,
-    content: body.content,
-    isPublished: false,
-    isEmailed: false,
-    likes: 0
-  })
+  AuthorUser.findById(body.userId)
+    .then(returnedAuthorUser => {
+      const article = new Article({
+        title: body.title,
+        slug: body.title.toLowerCase().split(' ').join('-'),
+        creationDate: new Date(),
+        lastUpdateDate: null,
+        publishDate: null,
+        authors: body.authors,
+        content: body.content,
+        isPublished: false,
+        isEmailed: false,
+        likes: 0,
+        authorUser: returnedAuthorUser._id
+      })
 
-  article.save()
-    .then(savedArticle => response.json(savedArticle))
-    .catch(error => next(error))
+      article.save()
+        .then(savedArticle => {
+          returnedAuthorUser.articles = returnedAuthorUser.articles.concat(savedArticle._id)
+          returnedAuthorUser.save()
+          return response.json(savedArticle)
+        })
+        .catch(error => next(error))
+    })
+
+
 
 })
 
