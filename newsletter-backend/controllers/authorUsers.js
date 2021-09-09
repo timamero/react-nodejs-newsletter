@@ -20,4 +20,9 @@ authorUsersRouter.post('/', (request, response, next) => {
     })
 })
 
+authorUsersRouter.get('/', (request, response) => {
+  AuthorUser.find({})
+    .then(authorUsers => response.json(authorUsers))
+})
+
 module.exports = authorUsersRouter
