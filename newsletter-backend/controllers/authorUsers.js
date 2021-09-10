@@ -22,6 +22,7 @@ authorUsersRouter.post('/', (request, response, next) => {
 
 authorUsersRouter.get('/', (request, response) => {
   AuthorUser.find({})
+    .populate('articles', { title: 1 , authorUser: 1 })
     .then(authorUsers => response.json(authorUsers))
 })
 
