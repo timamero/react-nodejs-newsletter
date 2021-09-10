@@ -1,7 +1,7 @@
-GET http://localhost:3001/api/articles/612427a4324aeb09585af910
+GET http://localhost:3001/api/articles/6139767a81320d4d80798438
 
 ###
-GET http://localhost:3001/api/articles/edit/612427a4324aeb09585af910
+GET http://localhost:3001/api/articles/edit/6139767a81320d4d80798438
 
 ###
 # malformatted id

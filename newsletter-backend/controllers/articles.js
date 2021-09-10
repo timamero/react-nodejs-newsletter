@@ -45,6 +45,7 @@ articlesRouter.get('/:id', (request, response, next) => {
   const id = request.params.id
 
   Article.findById(id)
+    .populate('authorUser', { username: 1, name: 1 })
     .then(article => {
       const convertedArticleContent = converter.makeHtml(article.content)
       const cleanedArticleContent = xss(convertedArticleContent)
@@ -76,6 +77,7 @@ articlesRouter.get('/:id', (request, response, next) => {
 articlesRouter.get('/edit/:id', (request, response, next) => {
   const id = request.params.id
   Article.findById(id)
+    .populate('authorUser', { username: 1, name: 1 })
     .then(article => {
       if (article) {
         response.json(article)
