@@ -1,6 +1,7 @@
 const articlesRouter = require('express').Router()
 const Article = require('../models/article')
 const AuthorUser = require('../models/authorUser')
+const jwt = require('jsonwebtoken')
 const showdown = require('showdown')
 const xss = require('xss')
 const sendArticle = require('../config/middleware').sendArticle
@@ -10,6 +11,14 @@ converter.setFlavor('github')
 converter.setOption('simpleLineBreaks', 'true')
 converter.setOption('noHeaderId', 'true')
 converter.setOption('headerLevelStart', '2')
+
+const getTokenFrom = request => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    return authorization.substring(7)
+  }
+  return null
+}
 
 articlesRouter.get('/', (request, response, next) => {
   Article.find({})
@@ -91,7 +100,13 @@ articlesRouter.get('/edit/:id', (request, response, next) => {
 articlesRouter.post('/', (request, response, next) => {
   const body = request.body
 
-  AuthorUser.findById(body.userId)
+  const token = getTokenFrom(request)
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+
+  AuthorUser.findById(decodedToken.id)
     .then(returnedAuthorUser => {
       const article = new Article({
         title: body.title,

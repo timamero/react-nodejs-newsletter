@@ -1,9 +1,10 @@
 POST http://localhost:3001/api/articles
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im9saWsiLCJpZCI6IjYxM2MxNzFlOTQ0NDg3NTc5ODRhZDViMCIsImlhdCI6MTYzMTM4MzQ0M30.yNPTq3Q8-YR9izK8-KyvwRAi73k2Wa2xMJioP8rEbE4
 
 {
-  "title": "Corrected Schema",
-  "authors": ["Oli C", "Raya D"],
+  "title": "With Authorization",
+  "authors": ["Oli K", "Helen Y"],
   "content": "## Lorem ipsum dolor sit amet",
-  "userId": "61396fd208fc2d2a1051a346"
+  "userId": "613c171e94448757984ad5b0"
 }
