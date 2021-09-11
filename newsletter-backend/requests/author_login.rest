@@ -1,0 +1,17 @@
+POST http://localhost:3001/api/authorlogin
+Content-Type: application/json
+
+{
+  "username": "olik",
+  "password": "oliksecret"
+}
+
+###
+# Wrong password
+POST http://localhost:3001/api/authorlogin
+Content-Type: application/json
+
+{
+  "username": "olik",
+  "password": "incorrect"
+}

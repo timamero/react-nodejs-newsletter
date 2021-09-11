@@ -7,11 +7,11 @@ authorUsersRouter.post('/', (request, response, next) => {
 
   const saltRounds = 10
   bcrypt.hash(body.password, saltRounds)
-    .then(hash => {
+    .then(passwordHash => {
       const authorUser = new AuthorUser({
         username: body.username,
         name: body.name,
-        hash
+        passwordHash
       })
 
       authorUser.save()
