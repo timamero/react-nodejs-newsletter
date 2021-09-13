@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import articleServices from './services/articles'
 import emailServices from './services/emails'
+import authorLoginServices from './services/authorLogin'
 import Nav from './components/nav'
 import Home from './pages/home'
 import About from './pages/about'
@@ -12,8 +13,9 @@ import Unsubscribe from './pages/unsubscribe'
 
 const App = () => {
   const [articles, setArticles] = useState([])
-  // const [username, setUsername] = useState('')
-  // const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [authorUser, setAuthorUser] = useState(null)
 
   const mainLinks = [
     {
@@ -45,6 +47,14 @@ const App = () => {
     // Get all the articles when app is first opened
     articleServices.getAll()
       .then(initialArticles => setArticles(initialArticles))
+  }, [])
+
+  useEffect(() => {
+    const loggedInAuthorUserJSON = window.localStorage.getItem('loggedInAuthorUser')
+    if (loggedInAuthorUserJSON) {
+      const loggedInAuthorUser = JSON.parse(loggedInAuthorUserJSON)
+      setAuthorUser(loggedInAuthorUser)
+    }
   }, [])
 
   const getOneArticle = (id) => {
@@ -106,15 +116,41 @@ const App = () => {
 
   }
 
-  // const handleLogin = (event) => {
-  //   event.preventDefault()
-  //   console.log(`logging in ${username} with password ${password}`)
-  // }
+  const handleLogin = (event) => {
+    event.preventDefault()
+    authorLoginServices.authorLogin({ username, password })
+      .then(returnedUser => {
+        window.localStorage.setItem('loggedInAuthorUser', JSON.stringify(returnedUser))
+        setAuthorUser(returnedUser)
+        setUsername('')
+        setPassword('')
+      })
+  }
 
   return (
     <Router>
-      <Nav links={authorLinks} type="author"/>
+      {authorUser && <Nav links={authorLinks} type="author"/>}
       <Nav links={mainLinks} type="main"/>
+      <form onSubmit={handleLogin}>
+        <div className="fieldWrapper">
+          <label>Username:</label>
+          <input
+            value={username}
+            onChange={({ target }) => setUsername(target.value)}
+            required
+          />
+        </div>
+        <div className="fieldWrapper">
+          <label>Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={({ target }) => setPassword(target.value)}
+            required
+          />
+        </div>
+        <button type="submit">Log In</button>
+      </form>
       <Switch>
         <Route
           exact
