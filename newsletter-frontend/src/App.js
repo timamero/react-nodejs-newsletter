@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import articleServices from './services/articles';
-import emailServices from './services/emails';
-import Nav from './components/nav';
-import Home from './pages/home';
-import About from './pages/about';
-import Article from './pages/article';
-import Drafts from './pages/drafts';
-import ArticleForm from './pages/articleForm';
+import React, { useState, useEffect } from 'react'
+import articleServices from './services/articles'
+import emailServices from './services/emails'
+import Nav from './components/nav'
+import Home from './pages/home'
+import About from './pages/about'
+import Article from './pages/article'
+import Drafts from './pages/drafts'
+import ArticleForm from './pages/articleForm'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import Unsubscribe from './pages/unsubscribe';
+import Unsubscribe from './pages/unsubscribe'
 
 const App = () => {
-  const [ articles, setArticles] = useState([])
+  const [articles, setArticles] = useState([])
+  // const [username, setUsername] = useState('')
+  // const [password, setPassword] = useState('')
+
   const mainLinks = [
     {
       label: 'Home',
@@ -87,10 +90,10 @@ const App = () => {
   const handleLikeClick = (id) => {
     const article = articles.find(article => article.id === id)
     const articleUpdated = {
-        ...article,
-        likes: article.likes + 1
-      }
-    
+      ...article,
+      likes: article.likes + 1
+    }
+
     articleServices.update(id, articleUpdated)
       .then(returnedArticle => {
         setArticles(articles.map(article => {
@@ -100,8 +103,13 @@ const App = () => {
           return returnedArticle
         }))
       })
-    
+
   }
+
+  // const handleLogin = (event) => {
+  //   event.preventDefault()
+  //   console.log(`logging in ${username} with password ${password}`)
+  // }
 
   return (
     <Router>
@@ -110,31 +118,31 @@ const App = () => {
       <Switch>
         <Route
           exact
-          path={`/article/:slug`}
-          render={(props) => 
-            <Article 
+          path={'/article/:slug'}
+          render={(props) =>
+            <Article
               getOneArticle={getOneArticle}
               updateArticle={updateArticle}
               updateAndSendArticle={updateAndSendArticle}
-              handleLikeClick={handleLikeClick} 
+              handleLikeClick={handleLikeClick}
               {...props}/>}
         />
         <Route
           exact
-          path={`/update/:slug`}
-          render={(props) => 
-            <ArticleForm 
+          path={'/update/:slug'}
+          render={(props) =>
+            <ArticleForm
               deleteArticle={deleteArticle}
               updateArticle={updateArticle}
               {...props}
-            />} 
+            />}
         />
         <Route path="/drafts">
           <Drafts articles={articles} />
         </Route>
         <Route path="/create">
-          <ArticleForm 
-            updateArticle={updateArticle} 
+          <ArticleForm
+            updateArticle={updateArticle}
             createArticle={createArticle}
           />
         </Route>
@@ -142,7 +150,7 @@ const App = () => {
           <Unsubscribe
             unsubscribe={unsubscribe}
           />
-        </Route> 
+        </Route>
         <Route path="/about">
           <About />
         </Route>
@@ -152,10 +160,10 @@ const App = () => {
             subscribe={subscribe}
             handleLikeClick={handleLikeClick}
           />
-        </Route> 
+        </Route>
       </Switch>
     </Router>
   )
 }
 
-export default App;
+export default App

@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react"
-import Container from "../components/container"
-import Grid from "../components/grid"
-import Likes from "../components/likes"
-import Button from "../components/button"
+import React, { useState, useEffect } from 'react'
+import Container from '../components/container'
+import Grid from '../components/grid'
+import Likes from '../components/likes'
+import Button from '../components/button'
 import './article.css'
-import { Link } from "react-router-dom"
-import { useHistory } from "react-router"
+import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router'
 
-const Article = ({getOneArticle, updateArticle, updateAndSendArticle, handleLikeClick, ...props}) => {
+const Article = ({ getOneArticle, updateArticle, updateAndSendArticle, handleLikeClick, ...props }) => {
   const history = useHistory()
   const [article, setArticle] = useState(null)
-  
-  const dateOptions = { 
-    year: 'numeric', 
-    month: 'long', 
+
+  const dateOptions = {
+    year: 'numeric',
+    month: 'long',
     day: 'numeric'
   }
 
@@ -31,7 +31,7 @@ const Article = ({getOneArticle, updateArticle, updateAndSendArticle, handleLike
     if (window.confirm('Are you sure you want to unpublish this article?')) {
       updateArticle(article.id, updatedArticle)
       history.push('/drafts')
-    } 
+    }
   }
 
   const handleSendSubmit = () => {
@@ -40,12 +40,12 @@ const Article = ({getOneArticle, updateArticle, updateAndSendArticle, handleLike
       updateAndSendArticle(article)
         .then(result => window.alert('Email sent to all subscribers.'))
         .catch(error => window.alert(`Error sending email: ${error}`))
-        history.go(0)
+      history.go(0)
     }
   }
 
   const createMarkup = () => {
-    return {__html: article.content}
+    return { __html: article.content }
   }
 
   if (article) {
@@ -54,7 +54,7 @@ const Article = ({getOneArticle, updateArticle, updateAndSendArticle, handleLike
         <h1>{article.title}</h1>
 
         <Grid rowGap="0.5rem" numOfItems="3" className="centered">
-          {article.isPublished 
+          {article.isPublished
             ? <p>{new Date(article.publishDate).toLocaleDateString('en-us', dateOptions)}</p>
             : <p>Created on {new Date(article.creationDate).toLocaleDateString('en-us', dateOptions)}</p>}
           <p>Author{article.authors.length > 1 ? 's' : ''}: {' '}
@@ -72,27 +72,27 @@ const Article = ({getOneArticle, updateArticle, updateAndSendArticle, handleLike
           <div className="articleContent" dangerouslySetInnerHTML={createMarkup()} />
           <Link to={{
             pathname: `/update/${article.slug}`,
-            state: {article}
-            }}>
-            <Button>Edit</Button> 
+            state: { article }
+          }}>
+            <Button>Edit</Button>
           </Link>
-          
+
           {/* {props.location */}
-          {props.location && !article.isEmailed   
-            && <Button 
-                handleBtnClick={handleSendSubmit} 
-                btnType="primary" 
-                type="button"
-              >
+          {props.location && !article.isEmailed
+            && <Button
+              handleBtnClick={handleSendSubmit}
+              btnType="primary"
+              type="button"
+            >
                 Email to all Subscribers
-              </Button>
+            </Button>
           }
-          <Button 
+          <Button
             handleBtnClick={handleUnpublishClick}
           >
             Unpublish
           </Button>
-        </Grid>     
+        </Grid>
       </Container>
     )
   } else {
@@ -102,7 +102,7 @@ const Article = ({getOneArticle, updateArticle, updateAndSendArticle, handleLike
       </Container>
     )
   }
-  
+
 }
 
 export default Article

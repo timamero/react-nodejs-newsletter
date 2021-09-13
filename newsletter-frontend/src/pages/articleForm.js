@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react"
-import articleServices from "../services/articles"
-import Container from "../components/container"
-import Button from "../components/button"
+import React, { useState, useEffect } from 'react'
+import articleServices from '../services/articles'
+import Container from '../components/container'
+import Button from '../components/button'
 import './articleForm.css'
-import { useHistory } from "react-router"
+import { useHistory } from 'react-router'
 
-const ArticleForm = ({deleteArticle, updateArticle, createArticle,...props}) => {
+const ArticleForm = ({ deleteArticle, updateArticle, createArticle,...props }) => {
   const history = useHistory()
-  
-  const dateOptions = { 
+
+  const dateOptions = {
     year: 'numeric',
-    month: 'long', 
+    month: 'long',
     day: 'numeric'
   }
-  
+
   const [ title, setTitle ] = useState('')
   const [ authors, setAuthors] = useState('')
   const [ content, setContent] = useState('')
@@ -46,7 +46,7 @@ const ArticleForm = ({deleteArticle, updateArticle, createArticle,...props}) => 
       setAuthors('')
       setContent('')
     }
-    
+
   }, [props.location])
 
   const handleCancelClick = () => {
@@ -81,7 +81,7 @@ const ArticleForm = ({deleteArticle, updateArticle, createArticle,...props}) => 
           title: title,
           creationDate: article.creationDate,
           lastUpdateDate: new Date(),
-          publishDate: action === 'publish' || action === 'republish' 
+          publishDate: action === 'publish' || action === 'republish'
             ? new Date() : article.publishDate,
           authors: authorList,
           content: content,
@@ -99,8 +99,8 @@ const ArticleForm = ({deleteArticle, updateArticle, createArticle,...props}) => 
           const message = action === 'save'
             ? `Are you sure you want to make changes to the article: '${title}'?`
             : action === 'publish'
-            ? `Are you sure you want to publish and mail the article: '${title}'?`
-            : action === 'republish'
+              ? `Are you sure you want to publish and mail the article: '${title}'?`
+              : action === 'republish'
             && `Are you sure you want to publish the article: '${title}'?`
           if (window.confirm(message)) {
             updateArticle(article.id, articleObject)
@@ -108,9 +108,9 @@ const ArticleForm = ({deleteArticle, updateArticle, createArticle,...props}) => 
               history.goBack()
             } else {
               history.push('/')
-            }     
+            }
           }
-        }  
+        }
       } else {
         // Add new article
         const articleObject = {
@@ -122,7 +122,7 @@ const ArticleForm = ({deleteArticle, updateArticle, createArticle,...props}) => 
         createArticle(articleObject)
 
         history.push('/drafts')
-      }      
+      }
     }
   }
 
@@ -136,61 +136,61 @@ const ArticleForm = ({deleteArticle, updateArticle, createArticle,...props}) => 
       {article.lastUpdateDate
         ? <p className="dateMessage">Last updated on {`${new Date(article.lastUpdateDate).toLocaleDateString('en-us', dateOptions)}`}</p>
         : article.creationDate
-        ? <p className="dateMessage">Created on {`${new Date(article.creationDate).toLocaleDateString('en-us', dateOptions)}`}</p>
-        : null
+          ? <p className="dateMessage">Created on {`${new Date(article.creationDate).toLocaleDateString('en-us', dateOptions)}`}</p>
+          : null
       }
-      
-      <form 
+
+      <form
         className="articleForm"
-        onSubmit={handleSaveSubmit("save", article.id, title, authors, content, history)}
-        >
+        onSubmit={handleSaveSubmit('save', article.id, title, authors, content, history)}
+      >
         <div className="fieldWrapper">
           <label>Title:</label>
-          <input value={title} onChange={({target}) => setTitle(target.value)} required/>
+          <input value={title} onChange={({ target }) => setTitle(target.value)} required/>
         </div>
         <div className="fieldWrapper">
           <label>Author(s):</label>
-          <input 
-            value={authors} 
-            onChange={({target}) => setAuthors(target.value)} 
-            placeholder="Separate multiple authors with a comma" 
+          <input
+            value={authors}
+            onChange={({ target }) => setAuthors(target.value)}
+            placeholder="Separate multiple authors with a comma"
             required
           />
         </div>
         <div className="contentWrapper">
           <label>Content</label>
-          <textarea value={content} onChange={({target}) => setContent(target.value)} required></textarea>
+          <textarea value={content} onChange={({ target }) => setContent(target.value)} required></textarea>
         </div>
 
         <div className="btnContainer">
           <Button btnType="primary" type="submit">Save</Button>
           {props.location && !article.isPublished
-            && <Button 
+            && <Button
               handleBtnClick={!article.publishDate
-                ? handleSaveSubmit("publish", article.id, title, authors, content, history)
-                : handleSaveSubmit("republish", article.id, title, authors, content, history)
-              } 
-              btnType="primary" 
+                ? handleSaveSubmit('publish', article.id, title, authors, content, history)
+                : handleSaveSubmit('republish', article.id, title, authors, content, history)
+              }
+              btnType="primary"
               type="button"
-              >
+            >
                 Save and Publish
-              </Button>
+            </Button>
           }
-          <Button 
-            btnType="primary" 
+          <Button
+            btnType="primary"
             type="button"
             handleBtnClick={handleCancelClick}
           >
             Cancel
           </Button>
-          {props.location 
-            && <Button 
-              handleBtnClick={handleDeleteClick} 
-              btnType="danger" 
+          {props.location
+            && <Button
+              handleBtnClick={handleDeleteClick}
+              btnType="danger"
               type="button"
-              >
+            >
                 Delete
-              </Button>}
+            </Button>}
         </div>
       </form>
     </Container>

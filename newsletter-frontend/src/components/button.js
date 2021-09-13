@@ -7,14 +7,14 @@ Button props to set:
 import React from 'react'
 import './button.css'
 
-const Button = ({children, btnType="primary", handleBtnClick, ...props}) => {
-  const classes = btnType === "danger"
-    ? "btn danger"
-    : "btn primary"
+const Button = ({ children, btnType='primary', handleBtnClick, ...props }) => {
+  const classes = btnType === 'danger'
+    ? 'btn danger'
+    : 'btn primary'
   return (
-    <button 
-      className={classes} 
-      onClick={handleBtnClick} 
+    <button
+      className={classes}
+      onClick={handleBtnClick}
       {...props}
     >
       {children}
