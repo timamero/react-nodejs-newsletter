@@ -8,7 +8,7 @@ Grid props to set:
 import React from 'react'
 import './grid.css'
 
-const Grid = ({ numOfItems = '1', rowGap = '1rem', className='', children }) => {
+const Grid = ({ numOfItems = '1', rowGap = '1rem', className='', children, ...props }) => {
   const style = {
     display: 'grid',
     gridTemplateRows: `repeat(${numOfItems}, auto)`,

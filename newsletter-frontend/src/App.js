@@ -9,12 +9,15 @@ import Article from './pages/article'
 import Drafts from './pages/drafts'
 import ArticleForm from './pages/articleForm'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+// import { useHistory } from 'react-router'
 import Unsubscribe from './pages/unsubscribe'
 
 const App = () => {
+  // const history = useHistory()
+
   const [articles, setArticles] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  // const [username, setUsername] = useState('')
+  // const [password, setPassword] = useState('')
   const [authorUser, setAuthorUser] = useState(null)
 
   const mainLinks = [
@@ -36,11 +39,7 @@ const App = () => {
     {
       label: 'Drafts',
       url: '/drafts'
-    },
-    {
-      label: 'Log Out',
-      url: '/#'
-    },
+    }
   ]
 
   useEffect(() => {
@@ -97,6 +96,20 @@ const App = () => {
     return emailServices.deleteObj(emailToDelete)
   }
 
+  const authorLogin = (user) => {
+    authorLoginServices.login(user)
+      .then(returnedUser => {
+        window.localStorage.setItem('loggedInAuthorUser', JSON.stringify(returnedUser))
+        setAuthorUser(returnedUser)
+      })
+  }
+
+  const authorLogout = (history) => {
+    window.localStorage.removeItem('loggedInAuthorUser')
+    history.push('/')
+    history.go(0)
+  }
+
   const handleLikeClick = (id) => {
     const article = articles.find(article => article.id === id)
     const articleUpdated = {
@@ -116,41 +129,21 @@ const App = () => {
 
   }
 
-  const handleLogin = (event) => {
-    event.preventDefault()
-    authorLoginServices.authorLogin({ username, password })
-      .then(returnedUser => {
-        window.localStorage.setItem('loggedInAuthorUser', JSON.stringify(returnedUser))
-        setAuthorUser(returnedUser)
-        setUsername('')
-        setPassword('')
-      })
-  }
+  // const handleLogin = (event) => {
+  //   event.preventDefault()
+  //   authorLoginServices.authorLogin({ username, password })
+  //     .then(returnedUser => {
+  //       window.localStorage.setItem('loggedInAuthorUser', JSON.stringify(returnedUser))
+  //       setAuthorUser(returnedUser)
+  //       setUsername('')
+  //       setPassword('')
+  //     })
+  // }
 
   return (
     <Router>
-      {authorUser && <Nav links={authorLinks} type="author"/>}
+      {authorUser && <Nav links={authorLinks} type="author" authorLogout={authorLogout}/>}
       <Nav links={mainLinks} type="main"/>
-      <form onSubmit={handleLogin}>
-        <div className="fieldWrapper">
-          <label>Username:</label>
-          <input
-            value={username}
-            onChange={({ target }) => setUsername(target.value)}
-            required
-          />
-        </div>
-        <div className="fieldWrapper">
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Log In</button>
-      </form>
       <Switch>
         <Route
           exact
@@ -195,6 +188,8 @@ const App = () => {
             articles={articles}
             subscribe={subscribe}
             handleLikeClick={handleLikeClick}
+            authorUser={authorUser}
+            authorLogin={authorLogin}
           />
         </Route>
       </Switch>

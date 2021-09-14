@@ -1,3 +1,40 @@
 .articleLink {
   width: max-content;
 }
+
+.homeBtn {
+  padding: 0.25rem;
+  margin: 0.5rem;
+  border-radius: 0.25rem;
+  border: none;
+  transition: all 0.2s linear;
+  background-color: var(--lightest-gray);
+  font-family: 'Lato', sans-serif;
+}
+
+.homeBtn:hover {
+  background-color: var(--light-orange);
+}
+
+.authorLoginForm .fieldWrapper {
+  margin: 0.25rem auto;
+  display: grid; 
+  grid-template-columns: 30% auto;
+  column-gap: 0.25rem;
+  align-items: center;
+  font-size: 0.75rem;
+}
+
+.authorLoginForm .fieldWrapper label {
+  width: 100%;
+  text-align: right;
+}
+
+.authorLoginForm .fieldWrapper input {
+  padding: 0.2rem;
+  outline: none;
+  border: 2px solid var(--dark);
+  border-radius: 0.25rem;
+  background-color: var(--light-gray);
+  font-family: 'Lato', sans-serif;
+}

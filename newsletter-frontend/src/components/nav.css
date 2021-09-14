@@ -14,34 +14,38 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
+  align-items: center;
 }
 
 .navWrapper li {
   margin: 0 1rem;
 }
 
-.navWrapper a {
+.navWrapper a, 
+.navWrapper button {
   padding: 0.25rem;
   text-decoration: none;
   border-radius: 0.25rem;
   transition: all 0.2s linear;
+  font-size: 1rem;
+  font-family: 'Lato', sans-serif;
 }
 
 .navWrapper.main a {
   background-color: var(--lightest-gray);
-  /* border: 1px solid var(--light-gray); */
 }
 
 .navWrapper.main a:hover {
   background-color: var(--light-purple);
 }
 
-.navWrapper.author a {
+.navWrapper.author a, 
+.navWrapper.author button {
   border: 1px dashed var(--dark);
   color: var(--dark)
 }
 
-.navWrapper.author a:hover {
+.navWrapper.author a:hover,
+.navWrapper.author button:hover {
   background-color: var(--light-orange);
-  /* border: 1px solid var(--light-gray); */
 }

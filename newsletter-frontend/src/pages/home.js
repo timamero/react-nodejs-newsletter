@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Container from '../components/container'
 import Card from '../components/card'
 import Grid from '../components/grid'
@@ -7,7 +7,15 @@ import EmailForm from '../components/emailForm'
 import './home.css'
 import { Link } from 'react-router-dom'
 
-const Home = ({ articles, subscribe, handleLikeClick }) => {
+const Home = ({ articles, subscribe, handleLikeClick, authorUser, authorLogin }) => {
+
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [loginVisible, setLoginVisible] = useState(false)
+
+  const loginFormStyle = loginVisible ? { display: '' } : { display: 'none' }
+  const loginBtnStyle = !loginVisible ? { display: '' } : { display: 'none' }
+
   const handleSubscribeSubmit = (event) => {
     event.preventDefault()
     const emailObject = {
@@ -16,6 +24,13 @@ const Home = ({ articles, subscribe, handleLikeClick }) => {
     subscribe(emailObject)
       .then(response => window.alert('Thank you for subscribing!'))
       .catch(error => window.alert('You have already subscribed'))
+  }
+
+  const handleAuthorLogin = (event) => {
+    event.preventDefault()
+    authorLogin({ username, password })
+    setUsername('')
+    setPassword('')
   }
 
   const sortedArticles = articles.sort((a, b) => {
@@ -32,7 +47,6 @@ const Home = ({ articles, subscribe, handleLikeClick }) => {
     year: 'numeric',
     month: 'long',
     day: 'numeric' }
-  //article.publishDate.toLocaleDateString('en-us', dateOptions)
 
   const numOfArticles = articles.filter(article => article.isPublished).length
 
@@ -75,6 +89,46 @@ const Home = ({ articles, subscribe, handleLikeClick }) => {
             submitValue="Subscribe"
           />
         </Grid>
+        {!authorUser &&
+          <Grid className="centered">
+            <form className="authorLoginForm" onSubmit={handleAuthorLogin} style={loginFormStyle}>
+              <div className="fieldWrapper">
+                <label>Username:</label>
+                <input
+                  value={username}
+                  onChange={({ target }) => setUsername(target.value)}
+                  required
+                />
+              </div>
+              <div className="fieldWrapper">
+                <label>Password:</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={({ target }) => setPassword(target.value)}
+                  required
+                />
+              </div>
+              <button className="submitLoginBtn homeBtn" type="submit">Log In</button>
+              <button
+                className="closeLoginBtn homeBtn"
+                type="button"
+                onClick={() => setLoginVisible(false)}
+              >
+              Close
+              </button>
+            </form>
+            <button
+              className="loginBtn homeBtn"
+              style={loginBtnStyle}
+              type="button"
+              onClick={() => setLoginVisible(true)}
+            >
+              Author Login
+            </button>
+          </Grid>
+        }
+
       </Grid>
     </Container>
   )
