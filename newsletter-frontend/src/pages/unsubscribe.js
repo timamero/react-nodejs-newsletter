@@ -16,7 +16,7 @@ const Unsubscribe = ({ unsubscribe }) => {
   return (
     <Container>
       <h1>Update Email Settings</h1>
-      <Grid rowGap="2rem" numOfItems="2" className="centered">
+      <Grid rowGap="2rem" className="centered">
         <p>{'Are you sure you want to unsubscribe from all newsletters?'}</p>
         <EmailForm
           id="unsubscribeEmail"

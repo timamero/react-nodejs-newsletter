@@ -48,13 +48,11 @@ const Home = ({ articles, subscribe, handleLikeClick, authorUser, authorLogin })
     month: 'long',
     day: 'numeric' }
 
-  const numOfArticles = articles.filter(article => article.isPublished).length
-
   return (
     <Container>
       <h1>Newsletter</h1>
-      <Grid rowGap="4rem" numOfItems="2">
-        <Grid rowGap="1rem" numOfItems={numOfArticles}>
+      <Grid rowGap="4rem">
+        <Grid rowGap="1rem">
           {sortedArticles.map(article => {
             if (article.isPublished) {
               return (
@@ -128,7 +126,6 @@ const Home = ({ articles, subscribe, handleLikeClick, authorUser, authorLogin })
             </button>
           </Grid>
         }
-
       </Grid>
     </Container>
   )

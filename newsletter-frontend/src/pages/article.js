@@ -53,7 +53,7 @@ const Article = ({ getOneArticle, updateArticle, updateAndSendArticle, handleLik
       <Container>
         <h1>{article.title}</h1>
 
-        <Grid rowGap="0.5rem" numOfItems="3" className="centered">
+        <Grid rowGap="0.5rem" className="centered">
           {article.isPublished
             ? <p>{new Date(article.publishDate).toLocaleDateString('en-us', dateOptions)}</p>
             : <p>Created on {new Date(article.creationDate).toLocaleDateString('en-us', dateOptions)}</p>}

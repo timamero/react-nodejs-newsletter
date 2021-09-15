@@ -20,14 +20,13 @@ const Drafts = ({ articles, authorUser }) => {
     year: 'numeric',
     month: 'long',
     day: 'numeric' }
-  const numOfArticles = articles.filter(article => article.isPublished).length
 
   return (
     <Container>
       {authorUser ?
         <div>
           <h1>Drafts</h1>
-          <Grid rowGap="1rem" numOfItems={numOfArticles}>
+          <Grid rowGap="1rem">
             {sortedArticles.map(article => {
               if (!article.isPublished) {
                 return (

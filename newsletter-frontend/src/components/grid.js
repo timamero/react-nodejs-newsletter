@@ -1,6 +1,5 @@
 /*
 Grid props to set:
-  numOfItems - (default = '1') number of children elements in grid
   rowGap - (default = '1rem') gap between elements
   classname (default = '')
     centered - sets justify-content:0
@@ -8,10 +7,10 @@ Grid props to set:
 import React from 'react'
 import './grid.css'
 
-const Grid = ({ numOfItems = '1', rowGap = '1rem', className='', children, ...props }) => {
+const Grid = ({ rowGap = '1rem', className='', children, ...props }) => {
   const style = {
     display: 'grid',
-    gridTemplateRows: `repeat(${numOfItems}, auto)`,
+    gridTemplateRows: 'auto',
     rowGap: `${rowGap}`,
   }
 
