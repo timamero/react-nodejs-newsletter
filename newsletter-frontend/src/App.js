@@ -9,15 +9,10 @@ import Article from './pages/article'
 import Drafts from './pages/drafts'
 import ArticleForm from './pages/articleForm'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-// import { useHistory } from 'react-router'
 import Unsubscribe from './pages/unsubscribe'
 
 const App = () => {
-  // const history = useHistory()
-
   const [articles, setArticles] = useState([])
-  // const [username, setUsername] = useState('')
-  // const [password, setPassword] = useState('')
   const [authorUser, setAuthorUser] = useState(null)
 
   const mainLinks = [
@@ -52,6 +47,7 @@ const App = () => {
     const loggedInAuthorUserJSON = window.localStorage.getItem('loggedInAuthorUser')
     if (loggedInAuthorUserJSON) {
       const loggedInAuthorUser = JSON.parse(loggedInAuthorUserJSON)
+      articleServices.getToken(loggedInAuthorUser.token)
       setAuthorUser(loggedInAuthorUser)
     }
   }, [])
@@ -100,6 +96,7 @@ const App = () => {
     authorLoginServices.login(user)
       .then(returnedUser => {
         window.localStorage.setItem('loggedInAuthorUser', JSON.stringify(returnedUser))
+        articleServices.getToken(returnedUser.token)
         setAuthorUser(returnedUser)
       })
   }
@@ -126,19 +123,7 @@ const App = () => {
           return returnedArticle
         }))
       })
-
   }
-
-  // const handleLogin = (event) => {
-  //   event.preventDefault()
-  //   authorLoginServices.authorLogin({ username, password })
-  //     .then(returnedUser => {
-  //       window.localStorage.setItem('loggedInAuthorUser', JSON.stringify(returnedUser))
-  //       setAuthorUser(returnedUser)
-  //       setUsername('')
-  //       setPassword('')
-  //     })
-  // }
 
   return (
     <Router>
@@ -154,6 +139,7 @@ const App = () => {
               updateArticle={updateArticle}
               updateAndSendArticle={updateAndSendArticle}
               handleLikeClick={handleLikeClick}
+              authorUser={authorUser}
               {...props}/>}
         />
         <Route
@@ -163,16 +149,21 @@ const App = () => {
             <ArticleForm
               deleteArticle={deleteArticle}
               updateArticle={updateArticle}
+              authorUser={authorUser}
               {...props}
             />}
         />
         <Route path="/drafts">
-          <Drafts articles={articles} />
+          <Drafts
+            articles={articles}
+            authorUser={authorUser}
+          />
         </Route>
         <Route path="/create">
           <ArticleForm
             updateArticle={updateArticle}
             createArticle={createArticle}
+            authorUser={authorUser}
           />
         </Route>
         <Route exact path="/unsubscribe">

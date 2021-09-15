@@ -7,7 +7,7 @@ import './article.css'
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router'
 
-const Article = ({ getOneArticle, updateArticle, updateAndSendArticle, handleLikeClick, ...props }) => {
+const Article = ({ getOneArticle, updateArticle, updateAndSendArticle, handleLikeClick, authorUser, ...props }) => {
   const history = useHistory()
   const [article, setArticle] = useState(null)
 
@@ -68,30 +68,35 @@ const Article = ({ getOneArticle, updateArticle, updateAndSendArticle, handleLik
           </p>
           <Likes article={article} handleLikeClick={handleLikeClick} />
         </Grid>
+
         <Grid>
           <div className="articleContent" dangerouslySetInnerHTML={createMarkup()} />
-          <Link to={{
-            pathname: `/update/${article.slug}`,
-            state: { article }
-          }}>
-            <Button>Edit</Button>
-          </Link>
+          {authorUser &&
+            <Grid>
+              <Link to={{
+                pathname: `/update/${article.slug}`,
+                state: { article }
+              }}>
+                <Button>Edit</Button>
+              </Link>
 
-          {/* {props.location */}
-          {props.location && !article.isEmailed
-            && <Button
-              handleBtnClick={handleSendSubmit}
-              btnType="primary"
-              type="button"
-            >
-                Email to all Subscribers
-            </Button>
+              {/* {props.location */}
+              {props.location && !article.isEmailed
+              && <Button
+                handleBtnClick={handleSendSubmit}
+                btnType="primary"
+                type="button"
+              >
+                  Email to all Subscribers
+              </Button>
+              }
+              <Button
+                handleBtnClick={handleUnpublishClick}
+              >
+              Unpublish
+              </Button>
+            </Grid>
           }
-          <Button
-            handleBtnClick={handleUnpublishClick}
-          >
-            Unpublish
-          </Button>
         </Grid>
       </Container>
     )

@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react'
 import articleServices from '../services/articles'
 import Container from '../components/container'
 import Button from '../components/button'
+import Unauthorized from '../components/unauthorized'
 import './articleForm.css'
 import { useHistory } from 'react-router'
 
-const ArticleForm = ({ deleteArticle, updateArticle, createArticle,...props }) => {
+const ArticleForm = ({ deleteArticle, updateArticle, createArticle, authorUser, ...props }) => {
   const history = useHistory()
 
   const dateOptions = {
@@ -128,71 +129,77 @@ const ArticleForm = ({ deleteArticle, updateArticle, createArticle,...props }) =
 
   return (
     <Container>
-      {!props.location
-        ?<h1>Create Article</h1>
-        :<h1>Update Article</h1>
-      }
-
-      {article.lastUpdateDate
-        ? <p className="dateMessage">Last updated on {`${new Date(article.lastUpdateDate).toLocaleDateString('en-us', dateOptions)}`}</p>
-        : article.creationDate
-          ? <p className="dateMessage">Created on {`${new Date(article.creationDate).toLocaleDateString('en-us', dateOptions)}`}</p>
-          : null
-      }
-
-      <form
-        className="articleForm"
-        onSubmit={handleSaveSubmit('save', article.id, title, authors, content, history)}
-      >
-        <div className="fieldWrapper">
-          <label>Title:</label>
-          <input value={title} onChange={({ target }) => setTitle(target.value)} required/>
-        </div>
-        <div className="fieldWrapper">
-          <label>Author(s):</label>
-          <input
-            value={authors}
-            onChange={({ target }) => setAuthors(target.value)}
-            placeholder="Separate multiple authors with a comma"
-            required
-          />
-        </div>
-        <div className="contentWrapper">
-          <label>Content</label>
-          <textarea value={content} onChange={({ target }) => setContent(target.value)} required></textarea>
-        </div>
-
-        <div className="btnContainer">
-          <Button btnType="primary" type="submit">Save</Button>
-          {props.location && !article.isPublished
-            && <Button
-              handleBtnClick={!article.publishDate
-                ? handleSaveSubmit('publish', article.id, title, authors, content, history)
-                : handleSaveSubmit('republish', article.id, title, authors, content, history)
-              }
-              btnType="primary"
-              type="button"
-            >
-                Save and Publish
-            </Button>
+      {authorUser ?
+        <div>
+          {!props.location
+            ?<h1>Create Article</h1>
+            :<h1>Update Article</h1>
           }
-          <Button
-            btnType="primary"
-            type="button"
-            handleBtnClick={handleCancelClick}
+
+          {article.lastUpdateDate
+            ? <p className="dateMessage">Last updated on {`${new Date(article.lastUpdateDate).toLocaleDateString('en-us', dateOptions)}`}</p>
+            : article.creationDate
+              ? <p className="dateMessage">Created on {`${new Date(article.creationDate).toLocaleDateString('en-us', dateOptions)}`}</p>
+              : null
+          }
+
+          <form
+            className="articleForm"
+            onSubmit={handleSaveSubmit('save', article.id, title, authors, content, history)}
           >
-            Cancel
-          </Button>
-          {props.location
-            && <Button
-              handleBtnClick={handleDeleteClick}
-              btnType="danger"
-              type="button"
-            >
-                Delete
-            </Button>}
+            <div className="fieldWrapper">
+              <label>Title:</label>
+              <input value={title} onChange={({ target }) => setTitle(target.value)} required/>
+            </div>
+            <div className="fieldWrapper">
+              <label>Author(s):</label>
+              <input
+                value={authors}
+                onChange={({ target }) => setAuthors(target.value)}
+                placeholder="Separate multiple authors with a comma"
+                required
+              />
+            </div>
+            <div className="contentWrapper">
+              <label>Content</label>
+              <textarea value={content} onChange={({ target }) => setContent(target.value)} required></textarea>
+            </div>
+
+            <div className="btnContainer">
+              <Button btnType="primary" type="submit">Save</Button>
+              {props.location && !article.isPublished
+              && <Button
+                handleBtnClick={!article.publishDate
+                  ? handleSaveSubmit('publish', article.id, title, authors, content, history)
+                  : handleSaveSubmit('republish', article.id, title, authors, content, history)
+                }
+                btnType="primary"
+                type="button"
+              >
+                  Save and Publish
+              </Button>
+              }
+              <Button
+                btnType="primary"
+                type="button"
+                handleBtnClick={handleCancelClick}
+              >
+              Cancel
+              </Button>
+              {props.location
+              && <Button
+                handleBtnClick={handleDeleteClick}
+                btnType="danger"
+                type="button"
+              >
+                  Delete
+              </Button>}
+            </div>
+          </form>
         </div>
-      </form>
+        :
+        <Unauthorized />
+      }
     </Container>
   )
 }
