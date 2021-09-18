@@ -14,16 +14,20 @@ Newsletter website and subscription application. Authors can create and edit art
 
 ### Front-end Dependencies
 - [react-router-dom](https://reactrouter.com/web/guides/quick-start)
+- [axios](https://axios-http.com/docs/intro)
 
 ### Back-end Dependencies
+- [mongoose](https://mongoosejs.com/docs/)
 - [nodemailer](https://nodemailer.com/about/)
 - [showdown](https://github.com/showdownjs/showdown)
+- [bcrypt](https://www.npmjs.com/package/bcrypt)
+- [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken)
 
 ## Getting Started
 1. Clone this repository
-  '''
+  ```
   git clone https://github.com/timamero/react-nodejs-newsletter.git
-  '''
+  ```
 2. Install backend dependencies
   ```
   cd react-nodejs-newsletter/newsletter-backend
@@ -35,7 +39,7 @@ Newsletter website and subscription application. Authors can create and edit art
   cd newsletter-frontend
   npm install
   ```
-4. Add .env file in the folder newsletter-backend (don't forget to add this to your .gitignore file)
+4. Add .env file in the folder newsletter-backend (don't forget to add this file to your .gitignore file)
 5. Set the following environment variables in your .env file
     - MONGODB_URI
       - The address to your MongoDB connection
@@ -76,7 +80,7 @@ Newsletter website and subscription application. Authors can create and edit art
 7. Start the back-end server. Go to the folder newsletter-backend and run the following command.
   ```
   npm run dev
-  ``
+  ```
 8. Open a new terminal and go to folder newsletter-frontend. Run the following command.
   ```
   npm run start
