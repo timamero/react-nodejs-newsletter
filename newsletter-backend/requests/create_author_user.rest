@@ -1,9 +1,0 @@
-POST http://localhost:3001/api/authorusers
-Content-Type: application/json
-
-{
-  "articles": [],
-  "username": "olik",
-  "name": "oli k",
-  "password": "oliksecret"
-}
