@@ -36,33 +36,21 @@ Newsletter website and subscription application. Authors can create and edit art
   npm install
   ```
 4. Add .env file in the folder newsletter-backend (don't forget to add this to your .gitignore file)
-5. Set the following environment variables to your .env file
+5. Set the following environment variables in your .env file
     - MONGODB_URI
       - The address to your MongoDB connection
       - You'll need to [create an account with MongoDB](https://www.mongodb.com/cloud/atlas)
       - Create a cluster and connect ([see the procedure here](https://docs.mongodb.com/guides/cloud/connectionstring/))
     - PORT
-      - Backend server port
+      - Backend server port number (e.g. 3001)
     - SECRET
       - Can be any string
       - Used by jsonwebtoken to [create digital signatures](https://www.npmjs.com/package/jsonwebtoken#usage)
     - FILE_PATH
       - Absolute file path to newletter-backend
-      - To see usage, see file newletter-backend/config/middleware.js
-      - Example post request to create an new author user using VS CODE REST client: 
-        ```
-        POST http://localhost:3001/api/authorusers
-        Content-Type: application/json
+      - To see usage of this variable, see file newletter-backend/config/middleware.js
 
-        {
-          "articles": [],
-          "username": "admin",
-          "name": "Admin",
-          "password": "adminsecret"
-        }
-        ```
-
-    The following variables are required for Nodemailer. [See the Nodemailer documentation.](https://nodemailer.com/smtp/). If you want to start the project without mailing functionality, you can comment out the code in newsletter-backend/config/middleware.js
+    The following variables are required for Nodemailer. [See the Nodemailer documentation.](https://nodemailer.com/smtp/). If you want to start the project without mailing functionality, you can comment out the code that use these variables in newsletter-backend/config/middleware.js
     - HOST
       - Email host or IP address to connect to
     - EMAIL_PORT
@@ -80,9 +68,9 @@ Newsletter website and subscription application. Authors can create and edit art
 
       {
         "articles": [],
-        "username": "olik",
-        "name": "oli k",
-        "password": "oliksecret"
+        "username": "admin",
+        "name": "Admin",
+        "password": "adminsecret"
       }
       ```
 7. Start the back-end server. Go to the folder newsletter-backend and run the following command.
