@@ -8,7 +8,6 @@ import './home.css'
 import { Link } from 'react-router-dom'
 
 const Home = ({ articles, subscribe, handleLikeClick, authorUser, authorLogin }) => {
-
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [loginVisible, setLoginVisible] = useState(false)
@@ -52,34 +51,39 @@ const Home = ({ articles, subscribe, handleLikeClick, authorUser, authorLogin })
     <Container>
       <h1>Newsletter</h1>
       <Grid rowGap="4rem">
-        <Grid rowGap="1rem">
-          {sortedArticles.map(article => {
-            if (article.isPublished) {
-              return (
-                <Card key={article.id} type="primary">
-                  <Link className="articleLink" to={{
-                    pathname: `/article/${article.slug}`,
-                    state: { article }
-                  }}>
-                    <h2>{article.title}</h2>
-                  </Link>
-                  <p>{new Date(article.publishDate).toLocaleDateString('en-us', dateOptions)}</p>
-                  <p>Author{article.authors.length > 1 ? 's' : ''}: {' '}
-                    {article.authors.map((author, index) => {
-                      if (index === article.authors.length - 1) {
-                        return <span key={author}>{author}</span>
-                      } else {
-                        return <span key={author}>{author}, </span>
-                      }
-                    })}
-                  </p>
-                  <Likes article={article} handleLikeClick={handleLikeClick} />
-                </Card>
-              )}
-            return null
-          }
-          )}
-        </Grid>
+        {sortedArticles.filter(article => article.isPublished === true).length !== 0
+          ?
+          <Grid rowGap="1rem">
+            {sortedArticles.map(article => {
+              if (article.isPublished) {
+                return (
+                  <Card key={article.id} type="primary">
+                    <Link className="articleLink" to={{
+                      pathname: `/article/${article.slug}`,
+                      state: { article }
+                    }}>
+                      <h2>{article.title}</h2>
+                    </Link>
+                    <p>{new Date(article.publishDate).toLocaleDateString('en-us', dateOptions)}</p>
+                    <p>Author{article.authors.length > 1 ? 's' : ''}: {' '}
+                      {article.authors.map((author, index) => {
+                        if (index === article.authors.length - 1) {
+                          return <span key={author}>{author}</span>
+                        } else {
+                          return <span key={author}>{author}, </span>
+                        }
+                      })}
+                    </p>
+                    <Likes article={article} handleLikeClick={handleLikeClick} />
+                  </Card>
+                )}
+              return null
+            }
+            )}
+          </Grid>
+          :
+          <p style={{ textAlign: 'center' }}>There are no articles.</p>
+        }
         <Grid className="centered">
           <EmailForm
             id="subscribeEmail"

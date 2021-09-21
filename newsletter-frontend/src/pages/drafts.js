@@ -5,8 +5,11 @@ import Grid from '../components/grid'
 import Button from '../components/button'
 import Unauthorized from '../components/unauthorized'
 import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router'
 
 const Drafts = ({ articles, authorUser }) => {
+  const history = useHistory()
+
   const sortedArticles = articles.sort((a, b) => {
     if (a.creationDate < b.creationDate) {
       return 1
@@ -26,34 +29,42 @@ const Drafts = ({ articles, authorUser }) => {
       {authorUser ?
         <div>
           <h1>Drafts</h1>
-          <Grid rowGap="1rem">
-            {sortedArticles.map(article => {
-              if (!article.isPublished) {
-                return (
-                  <Card key={article.id} type="dashed">
-                    <h2>{article.title}</h2>
-                    <p>Created on {new Date(article.creationDate).toLocaleDateString('en-us', dateOptions)}</p>
-                    <p>Author{article.authors.length > 1 ? 's' : ''}: {' '}
-                      {article.authors.map((author, index) => {
-                        if (index === article.authors.length - 1) {
-                          return <span key={author}>{author}</span>
-                        } else {
-                          return <span key={author}>{author}, </span>
-                        }
-                      })}
-                    </p>
-                    <Link to={{
-                      pathname: `/update/${article.slug}`,
-                      state: { article }
-                    }}>
-                      <Button>Edit</Button>
-                    </Link>
-                  </Card>
-                )}
-              return null
-            }
-            )}
-          </Grid>
+          {sortedArticles.filter(article => article.isPublished === false).length !== 0
+            ?
+            <Grid rowGap="1rem">
+              {sortedArticles.map(article => {
+                if (!article.isPublished) {
+                  return (
+                    <Card key={article.id} type="dashed">
+                      <h2>{article.title}</h2>
+                      <p>Created on {new Date(article.creationDate).toLocaleDateString('en-us', dateOptions)}</p>
+                      <p>Author{article.authors.length > 1 ? 's' : ''}: {' '}
+                        {article.authors.map((author, index) => {
+                          if (index === article.authors.length - 1) {
+                            return <span key={author}>{author}</span>
+                          } else {
+                            return <span key={author}>{author}, </span>
+                          }
+                        })}
+                      </p>
+                      <Link to={{
+                        pathname: `/update/${article.slug}`,
+                        state: { article }
+                      }}>
+                        <Button>Edit</Button>
+                      </Link>
+                    </Card>
+                  )}
+                return null
+              }
+              )}
+            </Grid>
+            :
+            <Grid className="centered">
+              <p>You have no drafts.</p>
+              <Button handleBtnClick={() => history.push('/create')}>Create an article</Button>
+            </Grid>
+          }
         </div>
 
         :
