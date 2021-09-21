@@ -99,6 +99,9 @@ const App = () => {
         articleServices.getToken(returnedUser.token)
         setAuthorUser(returnedUser)
       })
+      .catch(error => {
+        window.alert('Wrong credentials.')
+      })
   }
 
   const authorLogout = (history) => {
