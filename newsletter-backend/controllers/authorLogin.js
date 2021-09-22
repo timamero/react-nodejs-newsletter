@@ -14,14 +14,14 @@ authorLoginRouter.post('/', async (request, response, next) => {
         })
       }
 
-      if (!returnedUser.passwordHash) {
-        return response.status(401).json({
-          error: 'invalid username or password'
-        })
-      }
-
       bcrypt.compare(body.password, returnedUser.passwordHash)
         .then(result => {
+          if (!result) {
+            return response.status(401).json({
+              error: 'invalid username or password'
+            })
+          }
+
           const authorUserForToken = {
             username: returnedUser.username,
             id: returnedUser._id
