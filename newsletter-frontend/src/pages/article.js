@@ -37,7 +37,7 @@ const Article = ({ getOneArticle, updateArticle, updateAndSendArticle, handleLik
   const handleSendSubmit = () => {
     if (window.confirm(`This article will be sent to all subscribers and can only be done once for this article. Are you sure you want to send the article: ${article.title}?`)) {
       console.log('will send')
-      updateAndSendArticle(article)
+      updateAndSendArticle(article.id)
         .then(result => window.alert('Email sent to all subscribers.'))
         .catch(error => window.alert(`Error sending email: ${error}`))
       history.go(0)

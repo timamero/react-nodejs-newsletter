@@ -4,6 +4,7 @@ const fs = require('fs')
 const path = require('path')
 const showdown = require('showdown')
 const Email = require('../models/email')
+const Article = require('../models/article')
 
 const converter = new showdown.Converter()
 converter.setFlavor('github')
@@ -104,21 +105,23 @@ const htmlToPlainText = html => {
     .replace(imageTagRegex, '$8 - $2')
     .replace(openingTagRegex, '')
     .replace(closingTagRegex, '\n')
-
 }
 
 const sendArticle = async (request, response, next) => {
+  const articleObject = await Article.findById(request.params.id)
+
   const emailsObjects = await Email.find({})
   const emails = emailsObjects.map(obj => obj.email)
-
   const bcc = emails
   const from = 'welcome@newsletter.com'
-  const subject = `Newsletter - ${request.body.title}`
+  const subject = `Newsletter - ${articleObject.title}`
 
-  let htmlBody = converter.makeHtml(request.body.content)
+  let htmlBody = converter.makeHtml(articleObject.content)
   const articleFooter = fs.readFileSync(path.resolve(`${process.env.FILE_PATH}/communication/`, 'articleFooter.html'), 'utf-8')
   const html = htmlBody.concat(articleFooter)
   const text = htmlToPlainText(html)
+
+  // console.log('test html', html)
 
   const testMessage = {
     bcc: bcc,
@@ -161,7 +164,6 @@ const sendArticle = async (request, response, next) => {
       transporter.close()
     }
   })
-
 }
 
 module.exports = {

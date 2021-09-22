@@ -68,8 +68,15 @@ const App = () => {
       })
   }
 
-  const updateAndSendArticle = (articleToSend) => {
-    return articleServices.updateAndSend(articleToSend.id, articleToSend)
+  const updateAndSendArticle = (id) => {
+    return articleServices.updateAndSend(id)
+      .then(returnedArticle => {
+        const updatedArticle = {
+          ...returnedArticle,
+          isEmailed: true,
+        }
+        updateArticle(id, updatedArticle)
+      })
   }
 
   const deleteArticle = (id) => {

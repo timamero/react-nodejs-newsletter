@@ -130,9 +130,6 @@ articlesRouter.post('/', (request, response, next) => {
         })
         .catch(error => next(error))
     })
-
-
-
 })
 
 articlesRouter.put('/:id', (request, response, next) => {
@@ -159,28 +156,14 @@ articlesRouter.put('/:id', (request, response, next) => {
 })
 
 articlesRouter.put('/send/:id', (request, response, next) => {
-  const body = request.body
-
-  const updatedArticle = {
-    title: body.title,
-    slug: body.title.toLowerCase().split(' ').join('-'),
-    creationDate: body.creationDate,
-    lastUpdateDate: new Date(),
-    publishDate: body.publishDate,
-    authors: body.authors,
-    content: body.content,
-    isPublished: body.isPublished,
-    isEmailed: true,
-    likes: body.likes
-  }
-
-  Article.findByIdAndUpdate(request.params.id, updatedArticle, { new: true })
+  Article.findById(request.params.id)
     .then(returnedArticle => {
       response.json(returnedArticle)
       next()
     })
     .catch(error => next(error))
 }, sendArticle)
+
 
 articlesRouter.delete('/:id', (request, response, next) => {
   Article.findByIdAndRemove(request.params.id)
