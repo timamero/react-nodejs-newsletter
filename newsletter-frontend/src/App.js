@@ -56,6 +56,10 @@ const App = () => {
     return articleServices.getOne(id)
   }
 
+  const getOneArticleToEdit = (id) => {
+    return articleServices.getOneEdit(id)
+  }
+
   const updateArticle = (id, updatedArticle) => {
     return articleServices.update(id, updatedArticle)
       .then(returnedArticle => {
@@ -157,6 +161,7 @@ const App = () => {
           path={'/update/:slug'}
           render={(props) =>
             <ArticleForm
+              getArticle={getOneArticleToEdit}
               deleteArticle={deleteArticle}
               updateArticle={updateArticle}
               authorUser={authorUser}

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import articleServices from '../services/articles'
 import Container from '../components/container'
 import Button from '../components/button'
 import Unauthorized from '../components/unauthorized'
 import './articleForm.css'
 import { useHistory } from 'react-router'
 
-const ArticleForm = ({ deleteArticle, updateArticle, createArticle, authorUser, ...props }) => {
+const ArticleForm = ({ getArticle, deleteArticle, updateArticle, createArticle, authorUser, ...props }) => {
   const history = useHistory()
 
   const dateOptions = {
@@ -29,7 +28,7 @@ const ArticleForm = ({ deleteArticle, updateArticle, createArticle, authorUser, 
 
   useEffect(() => {
     if (props.location) {
-      articleServices.getOneEdit(props.location.state.article.id)
+      getArticle(props.location.state.article.id)
         .then(returnedArticle => {
           setArticle(returnedArticle)
           setTitle(returnedArticle.title)
