@@ -5,7 +5,11 @@
   margin-right: auto;
 }
 
-.articleContent h2, .articleContent h3, .articleContent h3 {
+.articleContent h2, 
+.articleContent h3, 
+.articleContent h4, 
+.articleContent h5, 
+.articleContent h6 {
   text-align: center;
   margin: 1rem auto;
 }
@@ -16,4 +20,16 @@
 
 .articleContent ul {
   list-style-type: square;
+}
+
+.articleContent img {
+  width: 400px;
+}
+
+.articleContent blockquote {
+  background-color: rgb(243, 244, 245);
+  padding: 8px;
+  border-radius: 0.5rem;
+  width: max-content;
+  font-style: italic;
 }
