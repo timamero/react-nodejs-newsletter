@@ -215,6 +215,7 @@ const App = () => {
             updateArticle={updateArticle}
             createArticle={createArticle}
             authorUser={authorUser}
+            createAuthorsList={createAuthorsList}
           />
         </Route>
         <Route exact path="/unsubscribe">

@@ -44,6 +44,9 @@ const ArticleForm = ({ getArticle, deleteArticle, updateArticle, createArticle, 
                   setAuthors(returnedPreviewArticle.authors.join(''))
                 }
               })
+              .then(result => {
+                return deletePreview(props.location.state.previewId)
+              })
           } else {
             setTitle(returnedArticle.title)
             setContent(returnedArticle.content)
