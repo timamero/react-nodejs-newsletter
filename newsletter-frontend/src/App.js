@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import articleServices from './services/articles'
+import previewServices from './services/preview'
 import emailServices from './services/emails'
 import authorLoginServices from './services/authorLogin'
 import Nav from './components/nav'
@@ -95,6 +96,22 @@ const App = () => {
       })
   }
 
+  const createPreview = (article) => {
+    return previewServices.create(article)
+  }
+
+  const getPreview = (id) => {
+    return previewServices.getOne(id)
+  }
+
+  const getPreviewToEdit = (id) => {
+    return previewServices.getOneEdit(id)
+  }
+
+  const deletePreview = (id) => {
+    return previewServices.deleteObj(id)
+  }
+
   const subscribe = (emailToAdd) => {
     return emailServices.create(emailToAdd)
   }
@@ -139,6 +156,10 @@ const App = () => {
       })
   }
 
+  const createAuthorsList = (authorsString) => {
+    return authorsString.split(',').map(author => author.replace(/^\s|\s$/g, ''))
+  }
+
   return (
     <Router>
       {authorUser && <Nav links={authorLinks} type="author" authorLogout={authorLogout}/>}
@@ -164,9 +185,24 @@ const App = () => {
               getArticle={getOneArticleToEdit}
               deleteArticle={deleteArticle}
               updateArticle={updateArticle}
+              getPreviewToEdit={getPreviewToEdit}
+              deletePreview={deletePreview}
               authorUser={authorUser}
+              createAuthorsList={createAuthorsList}
               {...props}
             />}
+        />
+        <Route
+          exact
+          path={'/preview/:slug'}
+          render={(props) =>
+            <Article
+              getOneArticle={getOneArticle}
+              createPreview={createPreview}
+              getPreview={getPreview}
+              authorUser={authorUser}
+              createAuthorsList={createAuthorsList}
+              {...props}/>}
         />
         <Route path="/drafts">
           <Drafts

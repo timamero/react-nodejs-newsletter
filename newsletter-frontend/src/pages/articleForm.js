@@ -3,9 +3,10 @@ import Container from '../components/container'
 import Button from '../components/button'
 import Unauthorized from '../components/unauthorized'
 import './articleForm.css'
+import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router'
 
-const ArticleForm = ({ getArticle, deleteArticle, updateArticle, createArticle, authorUser, ...props }) => {
+const ArticleForm = ({ getArticle, deleteArticle, updateArticle, createArticle, getPreviewToEdit, deletePreview, authorUser, createAuthorsList,...props }) => {
   const history = useHistory()
 
   const dateOptions = {
@@ -15,8 +16,8 @@ const ArticleForm = ({ getArticle, deleteArticle, updateArticle, createArticle, 
   }
 
   const [ title, setTitle ] = useState('')
-  const [ authors, setAuthors] = useState('')
-  const [ content, setContent] = useState('')
+  const [ authors, setAuthors ] = useState('')
+  const [ content, setContent ] = useState('')
 
   const [ article, setArticle ] =useState({
     id: null,
@@ -31,12 +32,26 @@ const ArticleForm = ({ getArticle, deleteArticle, updateArticle, createArticle, 
       getArticle(props.location.state.article.id)
         .then(returnedArticle => {
           setArticle(returnedArticle)
-          setTitle(returnedArticle.title)
-          setContent(returnedArticle.content)
-          if (returnedArticle.authors.length > 1) {
-            setAuthors(returnedArticle.authors.join(', '))
+
+          if (props.location.state.previewId) {
+            return getPreviewToEdit(props.location.state.previewId)
+              .then(returnedPreviewArticle => {
+                setTitle(returnedPreviewArticle.title)
+                setContent(returnedPreviewArticle.content)
+                if (returnedPreviewArticle.authors.length > 1) {
+                  setAuthors(returnedPreviewArticle.authors.join(', '))
+                } else {
+                  setAuthors(returnedPreviewArticle.authors.join(''))
+                }
+              })
           } else {
-            setAuthors(returnedArticle.authors.join(''))
+            setTitle(returnedArticle.title)
+            setContent(returnedArticle.content)
+            if (returnedArticle.authors.length > 1) {
+              setAuthors(returnedArticle.authors.join(', '))
+            } else {
+              setAuthors(returnedArticle.authors.join(''))
+            }
           }
         })
 
@@ -48,6 +63,13 @@ const ArticleForm = ({ getArticle, deleteArticle, updateArticle, createArticle, 
     }
 
   }, [props.location])
+
+  // useEffect(() => {
+  //   if (props.location.state.previewId) {
+  //     console.log('deleting preview')
+  //     deletePreview(props.location.state.previewId)
+  //   }
+  // })
 
   const handleCancelClick = () => {
     history.goBack()
@@ -74,7 +96,6 @@ const ArticleForm = ({ getArticle, deleteArticle, updateArticle, createArticle, 
 
     return (event) => {
       event.preventDefault()
-      const authorList = authors.split(',').map(author => author.replace(/^\s|\s$/g, ''))
 
       if (article.id) {
         const articleObject = {
@@ -83,7 +104,7 @@ const ArticleForm = ({ getArticle, deleteArticle, updateArticle, createArticle, 
           lastUpdateDate: new Date(),
           publishDate: action === 'publish' || action === 'republish'
             ? new Date() : article.publishDate,
-          authors: authorList,
+          authors: createAuthorsList(authors),
           content: content,
           isPublished: action === 'publish' || action === 'republish'
             ? true : article.isPublished,
@@ -115,7 +136,7 @@ const ArticleForm = ({ getArticle, deleteArticle, updateArticle, createArticle, 
         // Add new article
         const articleObject = {
           title: title,
-          authors: authorList,
+          authors: createAuthorsList(authors),
           content: content,
         }
 
@@ -125,6 +146,8 @@ const ArticleForm = ({ getArticle, deleteArticle, updateArticle, createArticle, 
       }
     }
   }
+
+  // console.log('articleForm article', article)
 
   return (
     <Container>
@@ -167,16 +190,29 @@ const ArticleForm = ({ getArticle, deleteArticle, updateArticle, createArticle, 
             <div className="btnContainer">
               <Button btnType="primary" type="submit">Save</Button>
               {props.location && !article.isPublished
-              && <Button
-                handleBtnClick={!article.publishDate
-                  ? handleSaveSubmit('publish', article.id, title, authors, content, history)
-                  : handleSaveSubmit('republish', article.id, title, authors, content, history)
-                }
-                btnType="primary"
-                type="button"
-              >
-                  Save and Publish
-              </Button>
+              &&
+                <Button
+                  handleBtnClick={!article.publishDate
+                    ? handleSaveSubmit('publish', article.id, title, authors, content, history)
+                    : handleSaveSubmit('republish', article.id, title, authors, content, history)
+                  }
+                  btnType="primary"
+                  type="button"
+                >
+                      Save and Publish
+                </Button>
+              }
+              {props.location && !article.isPublished
+              &&
+                <Link to={{
+                  pathname: `/preview/${article.slug}`,
+                  state: {
+                    previewArticle: { article: article, title: title, authors: authors, content: content },
+                    preview: true,
+                  }
+                }}>
+                  <Button>Preview</Button>
+                </Link>
               }
               <Button
                 btnType="primary"

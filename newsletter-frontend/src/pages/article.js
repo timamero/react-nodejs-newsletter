@@ -7,9 +7,17 @@ import './article.css'
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router'
 
-const Article = ({ getOneArticle, updateArticle, updateAndSendArticle, handleLikeClick, authorUser, ...props }) => {
+const Article = ({ getOneArticle, createPreview, getPreview, updateArticle, updateAndSendArticle, handleLikeClick, authorUser, createAuthorsList,...props }) => {
   const history = useHistory()
   const [article, setArticle] = useState(null)
+  const [previewId, setPreviewId] = useState('')
+
+  const previewGridStyle = {
+    textAlign: 'center',
+    backgroundColor: '#eae9ec',
+    padding: '0.5rem',
+    borderRadius: '0.25rem'
+  }
 
   const dateOptions = {
     year: 'numeric',
@@ -18,9 +26,40 @@ const Article = ({ getOneArticle, updateArticle, updateAndSendArticle, handleLik
   }
 
   useEffect(() => {
-    getOneArticle(props.location.state.article.id)
-      .then(retrievedArticle => setArticle(retrievedArticle))
-  }, [getOneArticle, props.location.state.article.id])
+    if (!props.location.state.preview) {
+      getOneArticle(props.location.state.article.id)
+        .then(retrievedArticle => {
+          setArticle(retrievedArticle)
+        })
+    } else {
+      const articleTemp = {
+        title: props.location.state.previewArticle.title,
+        slug: props.location.state.previewArticle.article.slug,
+        authors: createAuthorsList(props.location.state.previewArticle.authors),
+        content: props.location.state.previewArticle.content,
+      }
+      createPreview(articleTemp)
+        .then(returnedArticle => {
+          setPreviewId(returnedArticle.id)
+        })
+    }
+  }, [getOneArticle, props.location.state.article])
+
+  useEffect(() => {
+    if (previewId) {
+      getPreview(previewId)
+        .then(retrievedArticle => {
+          const articleToPreview = {
+            ...retrievedArticle,
+            publishDate: new Date(),
+            likes: 0,
+            isEmailed: false,
+            isPublished: true
+          }
+          setArticle(articleToPreview)
+        })
+    }
+  }, [previewId])
 
   const handleUnpublishClick = () => {
     const updatedArticle = {
@@ -36,7 +75,6 @@ const Article = ({ getOneArticle, updateArticle, updateAndSendArticle, handleLik
 
   const handleSendSubmit = () => {
     if (window.confirm(`This article will be sent to all subscribers and can only be done once for this article. Are you sure you want to send the article: ${article.title}?`)) {
-      console.log('will send')
       updateAndSendArticle(article.id)
         .then(result => window.alert('Email sent to all subscribers.'))
         .catch(error => window.alert(`Error sending email: ${error}`))
@@ -51,6 +89,25 @@ const Article = ({ getOneArticle, updateArticle, updateAndSendArticle, handleLik
   if (article) {
     return (
       <Container>
+        {props.location.state.preview
+        &&
+          <Grid rowGap="0.5rem" className="centered" style={previewGridStyle}>
+            <p>In preview mode</p>
+            <Link
+              to={{
+                pathname: `/update/${article.slug}`,
+                state: {
+                  article: {
+                    ...props.location.state.previewArticle.article,
+                  },
+                  previewId: previewId
+                }
+              }}
+            >
+              <Button>Go Back To Editing</Button>
+            </Link>
+          </Grid>
+        }
         <h1>{article.title}</h1>
 
         <Grid rowGap="0.5rem" className="centered">
@@ -66,12 +123,12 @@ const Article = ({ getOneArticle, updateArticle, updateAndSendArticle, handleLik
               }
             })}
           </p>
-          <Likes article={article} handleLikeClick={handleLikeClick} />
+          <Likes article={article} handleLikeClick={handleLikeClick} disabled={previewId && true}/>
         </Grid>
 
         <Grid>
           <div className="articleContent" dangerouslySetInnerHTML={createMarkup()} />
-          {authorUser &&
+          {authorUser && !props.location.state.preview &&
             <Grid>
               <Link to={{
                 pathname: `/update/${article.slug}`,
@@ -80,7 +137,6 @@ const Article = ({ getOneArticle, updateArticle, updateAndSendArticle, handleLik
                 <Button>Edit</Button>
               </Link>
 
-              {/* {props.location */}
               {props.location && !article.isEmailed
               && <Button
                 handleBtnClick={handleSendSubmit}

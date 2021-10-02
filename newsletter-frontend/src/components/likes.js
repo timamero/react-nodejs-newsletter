@@ -1,18 +1,21 @@
 import React, { useState } from 'react'
 import './likes.css'
 
-const Likes = ({ article, handleLikeClick }) => {
+const Likes = ({ article, handleLikeClick, disabled = false }) => {
   const [ likes, setLikes ] = useState(article.likes)
 
   const handleClick = () => {
-    setLikes(likes + 1)
+    if (!disabled) {
+      setLikes(likes + 1)
+      handleLikeClick(article.id)
+    }
   }
 
   return (
     <div className="likesContainer">
       {/*Heart SVG*/}
       <svg
-        onClick={() => {handleClick(); handleLikeClick(article.id)}}
+        onClick={handleClick}
         className={article.likes > 0 ? 'likesIcon hasLikes' : 'likesIcon noLikes'}
         viewBox="0 0 54.596 48.128">
         <g transform="matrix(.1125 0 0 .1125 0 -3.2344)">

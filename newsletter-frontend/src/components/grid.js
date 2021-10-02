@@ -7,17 +7,18 @@ Grid props to set:
 import React from 'react'
 import './grid.css'
 
-const Grid = ({ rowGap = '1rem', className='', children, ...props }) => {
-  const style = {
+const Grid = ({ rowGap = '1rem', className='', children, style, ...props }) => {
+  const gridStyle = {
     display: 'grid',
     gridTemplateRows: 'auto',
     rowGap: `${rowGap}`,
+    ...style
   }
 
   return (
     <div
       className={className}
-      style={style}
+      style={gridStyle}
     >
       {children}
     </div>
