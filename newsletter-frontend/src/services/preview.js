@@ -2,6 +2,12 @@ import axios from 'axios'
 
 const baseUrl = 'http://localhost:3001/api/preview'
 
+let token
+
+const getToken = newToken => {
+  token = `bearer ${newToken}`
+}
+
 const getOne = (id) => {
   const request = axios.get(`${baseUrl}/${id}`)
   return request.then(response => {
@@ -15,7 +21,10 @@ const getOneEdit = (id) => {
 }
 
 const create = (newObject) => {
-  const request = axios.post(baseUrl, newObject)
+  const config = {
+    headers: { Authorization: token },
+  }
+  const request = axios.post(baseUrl, newObject, config)
   return request.then(response => response.data)
 }
 
@@ -23,11 +32,20 @@ const deleteObj = (id) => {
   return axios.delete(`${baseUrl}/${id}`)
 }
 
+const deleteAll = () => {
+  const config = {
+    headers: { Authorization: token },
+  }
+  return axios.delete(`${baseUrl}/`, config)
+}
+
 const previewServices = {
   getOne,
   getOneEdit,
   create,
-  deleteObj
+  deleteObj,
+  deleteAll,
+  getToken
 }
 
 export default previewServices

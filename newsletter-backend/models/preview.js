@@ -19,9 +19,10 @@ const previewSchema = new mongoose.Schema({
     type: String,
     required: [true, '`Content` is required']
   },
-  // likes: Number,
-  // isPublished: Boolean,
-  // isEmailed: Boolean,
+  authorUser: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'AuthorUser'
+  }
 })
 
 // https://mongoosejs.com/docs/api.html#document_Document-toObject

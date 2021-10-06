@@ -97,6 +97,8 @@ const App = () => {
   }
 
   const createPreview = (article) => {
+    const loggedInAuthorUser = JSON.parse(window.localStorage.getItem('loggedInAuthorUser'))
+    previewServices.getToken(loggedInAuthorUser.token)
     return previewServices.create(article)
   }
 
@@ -110,6 +112,12 @@ const App = () => {
 
   const deletePreview = (id) => {
     return previewServices.deleteObj(id)
+  }
+
+  const deleteAllPreviews = () => {
+    const loggedInAuthorUser = JSON.parse(window.localStorage.getItem('loggedInAuthorUser'))
+    previewServices.getToken(loggedInAuthorUser.token)
+    return previewServices.deleteAll()
   }
 
   const subscribe = (emailToAdd) => {
@@ -187,6 +195,7 @@ const App = () => {
               updateArticle={updateArticle}
               getPreviewToEdit={getPreviewToEdit}
               deletePreview={deletePreview}
+              deleteAllPreviews={deleteAllPreviews}
               authorUser={authorUser}
               createAuthorsList={createAuthorsList}
               {...props}

@@ -1,5 +1,7 @@
 const previewRouter = require('express').Router()
 const Preview = require('../models/preview')
+const AuthorUser = require('../models/authorUser')
+const jwt = require('jsonwebtoken')
 const showdown = require('showdown')
 const xss = require('xss')
 
@@ -9,21 +11,41 @@ converter.setOption('simpleLineBreaks', 'true')
 converter.setOption('noHeaderId', 'true')
 converter.setOption('headerLevelStart', '2')
 
+const getTokenFrom = request => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    return authorization.substring(7)
+  }
+  return null
+}
+
 previewRouter.post('/', (request, response, next) => {
   const body = request.body
 
-  const preview = new Preview({
-    title: body.title,
-    slug: body.slug,
-    authors: body.authors,
-    content: body.content,
-  })
+  const token = getTokenFrom(request)
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
 
-  preview.save()
-    .then(savedPreview => {
-      return response.json(savedPreview)
+  AuthorUser.findById(decodedToken.id)
+    .then(returnedAuthor => {
+
+      const preview = new Preview({
+        title: body.title,
+        slug: body.slug,
+        authors: body.authors,
+        content: body.content,
+        authorUser: returnedAuthor
+      })
+
+      preview.save()
+        .then(savedPreview => {
+          return response.json(savedPreview)
+        })
+        .catch(error => next(error))
     })
-    .catch(error => next(error))
+
 })
 
 previewRouter.get('/', (request, response, next) => {
@@ -40,7 +62,6 @@ previewRouter.get('/', (request, response, next) => {
 
 previewRouter.get('/:id', (request, response, next) => {
 
-
   Preview.findById(request.params.id)
     .then(preview => {
       if (preview) {
@@ -52,6 +73,7 @@ previewRouter.get('/:id', (request, response, next) => {
           slug: preview.slug,
           authors: preview.authors,
           content: cleanedArticleContent,
+          authorUser: preview.authorUser
         }
 
         response.json(formattedContentPreview)
@@ -63,7 +85,6 @@ previewRouter.get('/:id', (request, response, next) => {
 })
 
 previewRouter.get('/edit/:id', (request, response, next) => {
-
 
   Preview.findById(request.params.id)
     .then(preview => {
@@ -80,6 +101,29 @@ previewRouter.delete('/:id', (request, response, next) => {
   Preview.findByIdAndRemove(request.params.id)
     .then(result => response.status(204).end())
     .catch(error => next(error))
+})
+
+previewRouter.delete('/', (request, response, next) => {
+  console.log('inside delete preview::')
+
+  const token = getTokenFrom(request)
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({ error: 'token missing or invalid' })
+  }
+
+  AuthorUser.findById(decodedToken.id)
+    .then(authorUser => {
+      const id = authorUser._id.toString()
+      Preview.find({})
+        .then(previews => {
+          previews.forEach(preview => {
+            if (preview.authorUser.toString() === id) {
+              preview.remove()
+            }
+          })
+        })
+    })
 })
 
 module.exports = previewRouter

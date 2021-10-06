@@ -6,7 +6,7 @@ import './articleForm.css'
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router'
 
-const ArticleForm = ({ getArticle, deleteArticle, updateArticle, createArticle, getPreviewToEdit, deletePreview, authorUser, createAuthorsList,...props }) => {
+const ArticleForm = ({ getArticle, deleteArticle, updateArticle, createArticle, getPreviewToEdit, deletePreview, deleteAllPreviews, authorUser, createAuthorsList,...props }) => {
   const history = useHistory()
 
   const dateOptions = {
@@ -55,9 +55,9 @@ const ArticleForm = ({ getArticle, deleteArticle, updateArticle, createArticle, 
             } else {
               setAuthors(returnedArticle.authors.join(''))
             }
+            return deleteAllPreviews()
           }
         })
-
     } else {
       // When navigating from /update/:id to /create, need to clear form data
       setTitle('')
@@ -66,13 +66,6 @@ const ArticleForm = ({ getArticle, deleteArticle, updateArticle, createArticle, 
     }
 
   }, [props.location])
-
-  // useEffect(() => {
-  //   if (props.location.state.previewId) {
-  //     console.log('deleting preview')
-  //     deletePreview(props.location.state.previewId)
-  //   }
-  // })
 
   const handleCancelClick = () => {
     history.goBack()
