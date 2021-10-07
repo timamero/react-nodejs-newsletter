@@ -23,13 +23,6 @@ const Drafts = ({ articles, authorUser }) => {
     return 0
   })
 
-  sortedArticles.forEach(article => {
-    if (!article.isPublished) {
-      console.log('article title: ', article.title)
-      console.log('article author: ', article.authorUser.username)
-      console.log('is logged in author? ', article.authorUser.username === authorUser.username)
-    }
-  })
   const dateOptions = {
     year: 'numeric',
     month: 'long',
