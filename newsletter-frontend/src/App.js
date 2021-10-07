@@ -39,10 +39,9 @@ const App = () => {
   ]
 
   useEffect(() => {
-    // Get all the articles when app is first opened
     articleServices.getAll()
       .then(initialArticles => setArticles(initialArticles))
-  }, [])
+  }, [articles])
   console.log('initial articles', articles)
   useEffect(() => {
     const loggedInAuthorUserJSON = window.localStorage.getItem('loggedInAuthorUser')
