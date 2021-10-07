@@ -43,7 +43,7 @@ const App = () => {
     articleServices.getAll()
       .then(initialArticles => setArticles(initialArticles))
   }, [])
-
+  console.log('initial articles', articles)
   useEffect(() => {
     const loggedInAuthorUserJSON = window.localStorage.getItem('loggedInAuthorUser')
     if (loggedInAuthorUserJSON) {

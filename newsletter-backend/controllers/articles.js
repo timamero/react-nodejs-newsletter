@@ -22,6 +22,7 @@ const getTokenFrom = request => {
 
 articlesRouter.get('/', (request, response, next) => {
   Article.find({})
+    .populate('authorUser', { username: 1, name: 1 }) //new
     .then(articles => (
       articles.map(article => {
         const convertedArticleContent = converter.makeHtml(article.content)
@@ -41,6 +42,7 @@ articlesRouter.get('/', (request, response, next) => {
           likes: article.likes,
           authorUser: article.authorUser
         }
+
         return articleObjectToReturn
       })
     ))

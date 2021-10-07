@@ -10,6 +10,7 @@ import { useHistory } from 'react-router'
 const Article = ({ getOneArticle, createPreview, getPreview, updateArticle, updateAndSendArticle, handleLikeClick, authorUser, createAuthorsList,...props }) => {
   const history = useHistory()
   const [article, setArticle] = useState(null)
+  const [articleAuthorUser, setArticleAuthorUser] = useState(null)
   const [previewId, setPreviewId] = useState('')
 
   const previewGridStyle = {
@@ -24,12 +25,15 @@ const Article = ({ getOneArticle, createPreview, getPreview, updateArticle, upda
     month: 'long',
     day: 'numeric'
   }
-
+  console.log('article Author', articleAuthorUser)
+  console.log('current user', authorUser)
   useEffect(() => {
     if (!props.location.state.preview) {
       getOneArticle(props.location.state.article.id)
         .then(retrievedArticle => {
           setArticle(retrievedArticle)
+          console.log('retrieved',retrievedArticle)
+          setArticleAuthorUser(retrievedArticle.authorUser) //new
         })
     } else {
       const articleTemp = {
@@ -128,7 +132,7 @@ const Article = ({ getOneArticle, createPreview, getPreview, updateArticle, upda
 
         <Grid>
           <div className="articleContent" dangerouslySetInnerHTML={createMarkup()} />
-          {authorUser && !props.location.state.preview &&
+          {authorUser && articleAuthorUser && authorUser.username === articleAuthorUser.username && !props.location.state.preview &&
             <Grid>
               <Link to={{
                 pathname: `/update/${article.slug}`,

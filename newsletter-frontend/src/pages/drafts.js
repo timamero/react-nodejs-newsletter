@@ -9,7 +9,10 @@ import { useHistory } from 'react-router'
 
 const Drafts = ({ articles, authorUser }) => {
   const history = useHistory()
+  console.log('articles', articles)
+  console.log('authorUser', authorUser)
 
+  // console.log('authorUser.username', authorUser.username)
   const sortedArticles = articles.sort((a, b) => {
     if (a.creationDate < b.creationDate) {
       return 1
@@ -18,6 +21,14 @@ const Drafts = ({ articles, authorUser }) => {
       return -1
     }
     return 0
+  })
+
+  sortedArticles.forEach(article => {
+    if (!article.isPublished) {
+      console.log('article title: ', article.title)
+      console.log('article author: ', article.authorUser.username)
+      console.log('is logged in author? ', article.authorUser.username === authorUser.username)
+    }
   })
   const dateOptions = {
     year: 'numeric',
@@ -33,7 +44,7 @@ const Drafts = ({ articles, authorUser }) => {
             ?
             <Grid rowGap="1rem">
               {sortedArticles.map(article => {
-                if (!article.isPublished) {
+                if (!article.isPublished && article.authorUser.username === authorUser.username) {
                   return (
                     <Card key={article.id} type="dashed">
                       <h2>{article.title}</h2>

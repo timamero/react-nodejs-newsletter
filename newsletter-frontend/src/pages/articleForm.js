@@ -68,7 +68,11 @@ const ArticleForm = ({ getArticle, deleteArticle, updateArticle, createArticle, 
   }, [props.location])
 
   const handleCancelClick = () => {
-    history.goBack()
+    if (props.location.state.previewId) {
+      history.push('/drafts')
+    } else {
+      history.goBack()
+    }
   }
 
   const handleDeleteClick = () => {
