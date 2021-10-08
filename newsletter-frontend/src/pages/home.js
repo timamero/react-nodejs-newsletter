@@ -117,7 +117,7 @@ const Home = ({ articles, subscribe, handleLikeClick, authorUser, authorLogin })
                 type="button"
                 onClick={() => setLoginVisible(false)}
               >
-              Close
+                Close
               </button>
             </form>
             <button

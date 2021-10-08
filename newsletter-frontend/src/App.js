@@ -42,7 +42,7 @@ const App = () => {
     articleServices.getAll()
       .then(initialArticles => setArticles(initialArticles))
   }, [articles])
-  console.log('initial articles', articles)
+
   useEffect(() => {
     const loggedInAuthorUserJSON = window.localStorage.getItem('loggedInAuthorUser')
     if (loggedInAuthorUserJSON) {
@@ -182,7 +182,9 @@ const App = () => {
               updateAndSendArticle={updateAndSendArticle}
               handleLikeClick={handleLikeClick}
               authorUser={authorUser}
-              {...props}/>}
+              {...props}
+            />
+          }
         />
         <Route
           exact
@@ -198,7 +200,8 @@ const App = () => {
               authorUser={authorUser}
               createAuthorsList={createAuthorsList}
               {...props}
-            />}
+            />
+          }
         />
         <Route
           exact
@@ -210,7 +213,9 @@ const App = () => {
               getPreview={getPreview}
               authorUser={authorUser}
               createAuthorsList={createAuthorsList}
-              {...props}/>}
+              {...props}
+            />
+          }
         />
         <Route path="/drafts">
           <Drafts

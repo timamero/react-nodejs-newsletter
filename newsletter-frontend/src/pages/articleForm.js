@@ -6,7 +6,19 @@ import './articleForm.css'
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router'
 
-const ArticleForm = ({ getArticle, deleteArticle, updateArticle, createArticle, getPreviewToEdit, deletePreview, deleteAllPreviews, authorUser, createAuthorsList,...props }) => {
+const ArticleForm = (
+  {
+    getArticle,
+    deleteArticle,
+    updateArticle,
+    createArticle,
+    getPreviewToEdit,
+    deletePreview,
+    deleteAllPreviews,
+    authorUser,
+    createAuthorsList,
+    ...props
+  }) => {
   const history = useHistory()
 
   const dateOptions = {
@@ -147,24 +159,21 @@ const ArticleForm = ({ getArticle, deleteArticle, updateArticle, createArticle, 
     }
   }
 
-  // console.log('articleForm article', article)
-
   return (
     <Container>
-      {authorUser ?
+      {authorUser
+        ?
         <div>
           {!props.location
             ?<h1>Create Article</h1>
             :<h1>Update Article</h1>
           }
-
           {article.lastUpdateDate
             ? <p className="dateMessage">Last updated on {`${new Date(article.lastUpdateDate).toLocaleDateString('en-us', dateOptions)}`}</p>
             : article.creationDate
               ? <p className="dateMessage">Created on {`${new Date(article.creationDate).toLocaleDateString('en-us', dateOptions)}`}</p>
               : null
           }
-
           <form
             className="articleForm"
             onSubmit={handleSaveSubmit('save', article.id, title, authors, content, history)}
@@ -186,49 +195,53 @@ const ArticleForm = ({ getArticle, deleteArticle, updateArticle, createArticle, 
               <label>Content</label>
               <textarea value={content} onChange={({ target }) => setContent(target.value)} required></textarea>
             </div>
-
             <div className="btnContainer">
               <Button btnType="primary" type="submit">Save</Button>
-              {props.location && !article.isPublished
-              &&
-                <Button
-                  handleBtnClick={!article.publishDate
-                    ? handleSaveSubmit('publish', article.id, title, authors, content, history)
-                    : handleSaveSubmit('republish', article.id, title, authors, content, history)
-                  }
-                  btnType="primary"
-                  type="button"
-                >
-                      Save and Publish
-                </Button>
+              {props.location
+                && !article.isPublished
+                &&
+                  <Button
+                    handleBtnClick={!article.publishDate
+                      ? handleSaveSubmit('publish', article.id, title, authors, content, history)
+                      : handleSaveSubmit('republish', article.id, title, authors, content, history)
+                    }
+                    btnType="primary"
+                    type="button"
+                  >
+                    Save and Publish
+                  </Button>
               }
-              {props.location && !article.isPublished
-              &&
-                <Link to={{
-                  pathname: `/preview/${article.slug}`,
-                  state: {
-                    previewArticle: { article: article, title: title, authors: authors, content: content },
-                    preview: true,
-                  }
-                }}>
-                  <Button>Preview</Button>
-                </Link>
+              {props.location
+                && !article.isPublished
+                &&
+                  <Link to={{
+                    pathname: `/preview/${article.slug}`,
+                    state: {
+                      previewArticle: { article: article, title: title, authors: authors, content: content },
+                      preview: true,
+                    }
+                  }}
+                  >
+                    <Button>Preview</Button>
+                  </Link>
               }
               <Button
                 btnType="primary"
                 type="button"
                 handleBtnClick={handleCancelClick}
               >
-              Cancel
+                Cancel
               </Button>
               {props.location
-              && <Button
-                handleBtnClick={handleDeleteClick}
-                btnType="danger"
-                type="button"
-              >
-                  Delete
-              </Button>}
+                &&
+                  <Button
+                    handleBtnClick={handleDeleteClick}
+                    btnType="danger"
+                    type="button"
+                  >
+                      Delete
+                  </Button>
+              }
             </div>
           </form>
         </div>

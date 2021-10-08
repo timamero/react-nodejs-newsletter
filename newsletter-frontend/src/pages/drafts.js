@@ -9,10 +9,7 @@ import { useHistory } from 'react-router'
 
 const Drafts = ({ articles, authorUser }) => {
   const history = useHistory()
-  console.log('articles', articles)
-  console.log('authorUser', authorUser)
 
-  // console.log('authorUser.username', authorUser.username)
   const sortedArticles = articles.sort((a, b) => {
     if (a.creationDate < b.creationDate) {
       return 1
@@ -30,7 +27,8 @@ const Drafts = ({ articles, authorUser }) => {
 
   return (
     <Container>
-      {authorUser ?
+      {authorUser
+        ?
         <div>
           <h1>Drafts</h1>
           {sortedArticles.filter(article => article.isPublished === false).length !== 0
@@ -54,7 +52,8 @@ const Drafts = ({ articles, authorUser }) => {
                       <Link to={{
                         pathname: `/update/${article.slug}`,
                         state: { article }
-                      }}>
+                      }}
+                      >
                         <Button>Edit</Button>
                       </Link>
                     </Card>
@@ -70,7 +69,6 @@ const Drafts = ({ articles, authorUser }) => {
             </Grid>
           }
         </div>
-
         :
         <Unauthorized />
       }

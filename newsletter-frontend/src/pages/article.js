@@ -7,7 +7,18 @@ import './article.css'
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router'
 
-const Article = ({ getOneArticle, createPreview, getPreview, updateArticle, updateAndSendArticle, handleLikeClick, authorUser, createAuthorsList,...props }) => {
+const Article = (
+  {
+    getOneArticle,
+    createPreview,
+    getPreview,
+    updateArticle,
+    updateAndSendArticle,
+    handleLikeClick,
+    authorUser,
+    createAuthorsList,
+    ...props
+  }) => {
   const history = useHistory()
   const [article, setArticle] = useState(null)
   const [articleAuthorUser, setArticleAuthorUser] = useState(null)
@@ -25,15 +36,13 @@ const Article = ({ getOneArticle, createPreview, getPreview, updateArticle, upda
     month: 'long',
     day: 'numeric'
   }
-  console.log('article Author', articleAuthorUser)
-  console.log('current user', authorUser)
+
   useEffect(() => {
     if (!props.location.state.preview) {
       getOneArticle(props.location.state.article.id)
         .then(retrievedArticle => {
           setArticle(retrievedArticle)
-          console.log('retrieved',retrievedArticle)
-          setArticleAuthorUser(retrievedArticle.authorUser) //new
+          setArticleAuthorUser(retrievedArticle.authorUser)
         })
     } else {
       const articleTemp = {
@@ -94,7 +103,7 @@ const Article = ({ getOneArticle, createPreview, getPreview, updateArticle, upda
     return (
       <Container>
         {props.location.state.preview
-        &&
+          &&
           <Grid rowGap="0.5rem" className="centered" style={previewGridStyle}>
             <p>In preview mode</p>
             <Link
@@ -132,30 +141,36 @@ const Article = ({ getOneArticle, createPreview, getPreview, updateArticle, upda
 
         <Grid>
           <div className="articleContent" dangerouslySetInnerHTML={createMarkup()} />
-          {authorUser && articleAuthorUser && authorUser.username === articleAuthorUser.username && !props.location.state.preview &&
-            <Grid>
-              <Link to={{
-                pathname: `/update/${article.slug}`,
-                state: { article }
-              }}>
-                <Button>Edit</Button>
-              </Link>
-
-              {props.location && !article.isEmailed
-              && <Button
-                handleBtnClick={handleSendSubmit}
-                btnType="primary"
-                type="button"
-              >
-                  Email to all Subscribers
-              </Button>
-              }
-              <Button
-                handleBtnClick={handleUnpublishClick}
-              >
-              Unpublish
-              </Button>
-            </Grid>
+          {authorUser
+            && articleAuthorUser
+            && authorUser.username === articleAuthorUser.username
+            && !props.location.state.preview
+            &&
+              <Grid>
+                <Link to={{
+                  pathname: `/update/${article.slug}`,
+                  state: { article }
+                }}
+                >
+                  <Button>Edit</Button>
+                </Link>
+                {props.location
+                  && !article.isEmailed
+                  &&
+                  <Button
+                    handleBtnClick={handleSendSubmit}
+                    btnType="primary"
+                    type="button"
+                  >
+                    Email to all Subscribers
+                  </Button>
+                }
+                <Button
+                  handleBtnClick={handleUnpublishClick}
+                >
+                  Unpublish
+                </Button>
+              </Grid>
           }
         </Grid>
       </Container>
@@ -167,7 +182,6 @@ const Article = ({ getOneArticle, createPreview, getPreview, updateArticle, upda
       </Container>
     )
   }
-
 }
 
 export default Article
