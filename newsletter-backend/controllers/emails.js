@@ -1,6 +1,6 @@
 const emailsRouter = require('express').Router()
 const Email = require('../models/email')
-const sendWelcomeMessage = require('../config/middleware').sendWelcomeMessage
+const sendWelcomeMessage = require('../util/middleware').sendWelcomeMessage
 
 emailsRouter.get('/', (request, response, next) => {
   Email.find({})
