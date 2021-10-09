@@ -104,8 +104,6 @@ previewRouter.delete('/:id', (request, response, next) => {
 })
 
 previewRouter.delete('/', (request, response, next) => {
-  console.log('inside delete preview::')
-
   const token = getTokenFrom(request)
   const decodedToken = jwt.verify(token, process.env.SECRET)
   if (!token || !decodedToken.id) {
