@@ -4,6 +4,7 @@ const AuthorUser = require('../models/authorUser')
 const jwt = require('jsonwebtoken')
 const showdown = require('showdown')
 const xss = require('xss')
+const tokenExtractor = require('../util/middleware').tokenExtractor
 const sendArticle = require('../util/middleware').sendArticle
 
 const converter = new showdown.Converter()
@@ -11,14 +12,6 @@ converter.setFlavor('github')
 converter.setOption('simpleLineBreaks', 'true')
 converter.setOption('noHeaderId', 'true')
 converter.setOption('headerLevelStart', '2')
-
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    return authorization.substring(7)
-  }
-  return null
-}
 
 articlesRouter.get('/', (request, response, next) => {
   Article.find({})
@@ -102,7 +95,8 @@ articlesRouter.get('/edit/:id', (request, response, next) => {
 articlesRouter.post('/', (request, response, next) => {
   const body = request.body
 
-  const token = getTokenFrom(request)
+  // const token = getTokenFrom(request)
+  const token =  tokenExtractor(request)
   const decodedToken = jwt.verify(token, process.env.SECRET)
   if (!token || !decodedToken.id) {
     return response.status(401).json({ error: 'token missing or invalid' })
