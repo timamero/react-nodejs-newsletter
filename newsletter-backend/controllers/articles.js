@@ -4,7 +4,7 @@ const AuthorUser = require('../models/authorUser')
 const jwt = require('jsonwebtoken')
 const showdown = require('showdown')
 const xss = require('xss')
-const sendArticle = require('../config/middleware').sendArticle
+const sendArticle = require('../util/middleware').sendArticle
 
 const converter = new showdown.Converter()
 converter.setFlavor('github')

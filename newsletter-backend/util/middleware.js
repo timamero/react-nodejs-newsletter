@@ -1,4 +1,4 @@
-const logger = require('../config/logger')
+const logger = require('./logger')
 const nodemailer = require('nodemailer')
 const fs = require('fs')
 const path = require('path')
