@@ -2,15 +2,8 @@ const previewRouter = require('express').Router()
 const Preview = require('../models/preview')
 const AuthorUser = require('../models/authorUser')
 const jwt = require('jsonwebtoken')
-const showdown = require('showdown')
-const xss = require('xss')
 const tokenExtractor = require('../util/middleware').tokenExtractor
-
-const converter = new showdown.Converter()
-converter.setFlavor('github')
-converter.setOption('simpleLineBreaks', 'true')
-converter.setOption('noHeaderId', 'true')
-converter.setOption('headerLevelStart', '2')
+const convertMarkdownToHtml = require('../util/helper').convertMarkdownToHtml
 
 previewRouter.post('/', (request, response, next) => {
   const body = request.body
@@ -58,14 +51,12 @@ previewRouter.get('/:id', (request, response, next) => {
   Preview.findById(request.params.id)
     .then(preview => {
       if (preview) {
-        const convertedArticleContent = converter.makeHtml(preview.content)
-        const cleanedArticleContent = xss(convertedArticleContent)
 
         const formattedContentPreview = {
           title: preview.title,
           slug: preview.slug,
           authors: preview.authors,
-          content: cleanedArticleContent,
+          content: convertMarkdownToHtml(preview.content),
           authorUser: preview.authorUser
         }
 
