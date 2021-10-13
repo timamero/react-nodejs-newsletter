@@ -20,9 +20,12 @@
 }
 
 .card h2 {
-  width: max-content;
+  width: 100%;
+  max-width: 400px;
+  display: inline-block;
   font-size: 1.2rem;
   font-weight: 700;
+  word-break: break-word;
 }
 
 .card p {
