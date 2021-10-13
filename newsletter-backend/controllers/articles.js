@@ -2,24 +2,15 @@ const articlesRouter = require('express').Router()
 const Article = require('../models/article')
 const AuthorUser = require('../models/authorUser')
 const jwt = require('jsonwebtoken')
-const showdown = require('showdown')
-const xss = require('xss')
 const tokenExtractor = require('../util/middleware').tokenExtractor
 const sendArticle = require('../util/middleware').sendArticle
-
-const converter = new showdown.Converter()
-converter.setFlavor('github')
-converter.setOption('simpleLineBreaks', 'true')
-converter.setOption('noHeaderId', 'true')
-converter.setOption('headerLevelStart', '2')
+const convertMarkdownToHtml = require('../util/helper').convertMarkdownToHtml
 
 articlesRouter.get('/', (request, response, next) => {
   Article.find({})
     .populate('authorUser', { username: 1, name: 1 })
     .then(articles => (
       articles.map(article => {
-        const convertedArticleContent = converter.makeHtml(article.content)
-        const cleanedArticleContent = xss(convertedArticleContent)
 
         const articleObjectToReturn = {
           id: article._id.toString(),
@@ -29,7 +20,7 @@ articlesRouter.get('/', (request, response, next) => {
           lastUpdateDate: article.lastUpdateDate,
           publishDate: article.publishDate,
           authors:article.authors,
-          content: cleanedArticleContent,
+          content: convertMarkdownToHtml(article.content),
           isPublished: article.isPublished,
           isEmailed: article.isEmailed,
           likes: article.likes,
@@ -51,8 +42,6 @@ articlesRouter.get('/:id', (request, response, next) => {
   Article.findById(id)
     .populate('authorUser', { username: 1, name: 1 })
     .then(article => {
-      const convertedArticleContent = converter.makeHtml(article.content)
-      const cleanedArticleContent = xss(convertedArticleContent)
 
       const formattedContentArticle = {
         id: article._id.toString(),
@@ -62,7 +51,7 @@ articlesRouter.get('/:id', (request, response, next) => {
         lastUpdateDate: article.lastUpdateDate,
         publishDate: article.publishDate,
         authors:article.authors,
-        content: cleanedArticleContent,
+        content: convertMarkdownToHtml(article.content),
         isPublished: article.isPublished,
         isEmailed: article.isEmailed,
         likes: article.likes,
@@ -95,7 +84,6 @@ articlesRouter.get('/edit/:id', (request, response, next) => {
 articlesRouter.post('/', (request, response, next) => {
   const body = request.body
 
-  // const token = getTokenFrom(request)
   const token =  tokenExtractor(request)
   const decodedToken = jwt.verify(token, process.env.SECRET)
   if (!token || !decodedToken.id) {
