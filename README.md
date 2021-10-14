@@ -86,3 +86,11 @@ Newsletter website and subscription application. Authors can create and edit art
   npm run start
   ```
 9. Sign in as user created in step 6.
+
+## Screenshots
+![home](https://user-images.githubusercontent.com/54559570/137379001-2574a251-0914-4f68-a3b5-dd92291cfab9.jpg)
+![subscribeAndLoginHidden](https://user-images.githubusercontent.com/54559570/137379050-864d7833-5e05-42e9-8a02-819283bbac64.jpg)
+![subscribeAndLoginShown](https://user-images.githubusercontent.com/54559570/137379092-ed9d2956-8031-4cc2-a8f5-7392aad1db8b.jpg)
+![article](https://user-images.githubusercontent.com/54559570/137379132-5a111f15-ae04-449f-9106-17d37fb86e34.jpg)
+![update](https://user-images.githubusercontent.com/54559570/137379162-4249513f-1c5f-4497-9504-060ea8009c01.jpg)
+![create](https://user-images.githubusercontent.com/54559570/137379192-93eb3661-a14c-4c7b-9d2a-585ca0396778.jpg)
