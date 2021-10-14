@@ -20,7 +20,7 @@ articlesRouter.get('/', (request, response, next) => {
           lastUpdateDate: article.lastUpdateDate,
           publishDate: article.publishDate,
           authors:article.authors,
-          content: convertMarkdownToHtml(article.content),
+          content: article.content,
           isPublished: article.isPublished,
           isEmailed: article.isEmailed,
           likes: article.likes,
