@@ -94,7 +94,7 @@ Newsletter website and subscription application. Authors can create and edit art
 <br>
 <br>
 ![article](https://user-images.githubusercontent.com/54559570/137379132-5a111f15-ae04-449f-9106-17d37fb86e34.jpg)
-*Article page
+*Article page*
 <br>
 <br>
 <br>
@@ -120,3 +120,13 @@ Newsletter website and subscription application. Authors can create and edit art
 <br>
 ![create](https://user-images.githubusercontent.com/54559570/137379192-93eb3661-a14c-4c7b-9d2a-585ca0396778.jpg)
 *Create article form*
+<br>
+<br>
+<br>
+![welcomeEmail](https://user-images.githubusercontent.com/54559570/137795705-a4b5ec8e-5222-4946-80ef-d22fee68f987.jpg)  
+*Welcome email sent to user after they subscribe*
+<br>
+<br>
+<br>
+![emailedArticle](https://user-images.githubusercontent.com/54559570/137795792-f7476d71-d258-407c-8f7d-c19efa341355.jpg)  
+*Sample article sent to user*
