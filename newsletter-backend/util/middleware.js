@@ -115,6 +115,11 @@ const htmlToPlainText = html => {
     .replace(closingTagRegex, '\n')
 }
 
+const formatHtml = html => {
+  const imageTagRegex = /(<img\ssrc=")(http.+?)(\/>)/ig
+  return html.replace(imageTagRegex, '$1$2 style="width: 400px" $3')
+}
+
 const sendArticle = async (request, response, next) => {
   const articleObject = await Article.findById(request.params.id)
 
@@ -136,7 +141,7 @@ const sendArticle = async (request, response, next) => {
     from: from,
     subject: subject,
     text: text,
-    html: html,
+    html: formatHtml(html),
   }
 
   let transporter = nodemailer.createTransport({
