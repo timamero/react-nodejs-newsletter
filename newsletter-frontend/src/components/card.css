@@ -43,4 +43,5 @@
 .card.dashed {
   background-color: var(--light-gray);
   border: 1px dashed var(--gray);
+  color: var(--dark)
 }
