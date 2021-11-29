@@ -38,3 +38,19 @@
   background-color: var(--light-gray);
   font-family: 'Lato', sans-serif;
 }
+
+#unsubscribe a {
+  padding: 0.25rem;
+  color: var(--white);
+  text-decoration: none;
+  border-radius: 0.25rem;
+  border: 1px solid var(--white);
+  transition: all 0.2s linear;
+  font-size: 0.8rem;
+  font-family: 'Lato', sans-serif;
+}
+
+#unsubscribe a:hover {
+  background-color: var(--dark);
+  border: 1px solid var(--dark);
+}

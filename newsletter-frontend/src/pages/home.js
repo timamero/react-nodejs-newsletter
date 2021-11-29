@@ -84,12 +84,15 @@ const Home = ({ articles, subscribe, handleLikeClick, authorUser, authorLogin })
           :
           <p style={{ textAlign: 'center' }}>There are no articles.</p>
         }
-        <Grid className="centered">
+        <Grid className="centered" rowGap='4rem'>
           <EmailForm
             id="subscribeEmail"
             handleEmailSubmit={handleSubscribeSubmit}
             submitValue="Subscribe"
           />
+          <div id="unsubscribe">
+            <Link to='/unsubscribe'>Go here to unsubscribe</Link>
+          </div>
         </Grid>
         {!authorUser &&
           <Grid className="centered">
