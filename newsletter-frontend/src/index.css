@@ -6,12 +6,13 @@
   --light-gray: #eae9ec;
   --gray: #4a494d;
   --light-purple: #e1deee;
-  --dark-purple: #443f5a;
+  --purple: #9083CB;
+  --dark-purple: #2e2c3a;
   --light-red: #ee7777;
   --red: #e24949;
   --dark-red: #AC1515;
   --light-red: #a77e7e;
-  --light-orange: #dbbb96;
+  --light-blue: #C0E5EE;
 }
 
 html {
@@ -31,9 +32,9 @@ padding: 0px;
 }
 
 body {
-  background-color:ghostwhite;
+  background-color:var(--dark-purple);
   font-family: 'Lato', sans-serif;
-  color: var(--dark);
+  color: var(--white);
 }
 
 ul {
@@ -41,7 +42,7 @@ ul {
 }
 
 a {
-  text-decoration-color: var(--light-orange);
+  text-decoration-color: var(--light-blue);
   color: var(--dark-purple);
   transition: 0.5s;
 }
@@ -52,8 +53,11 @@ a:hover, a:active {
 }
 
 h1 {
+  font-family: 'DM Serif Display', serif;
+  letter-spacing: 0.1rem;
   text-align: center;
   margin: 1rem auto;
+  color: var(--white-2)
 }
 
 button {

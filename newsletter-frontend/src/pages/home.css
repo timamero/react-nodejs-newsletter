@@ -13,7 +13,7 @@
 }
 
 .homeBtn:hover {
-  background-color: var(--light-orange);
+  background-color: var(--light-blue);
 }
 
 .authorLoginForm .fieldWrapper {

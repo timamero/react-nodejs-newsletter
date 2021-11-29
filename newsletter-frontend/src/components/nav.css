@@ -47,5 +47,5 @@
 
 .navWrapper.author a:hover,
 .navWrapper.author button:hover {
-  background-color: var(--light-orange);
+  background-color: var(--light-blue);
 }

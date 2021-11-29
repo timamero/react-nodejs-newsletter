@@ -7,11 +7,12 @@
   grid-template-rows: repeat(3, auto);
   row-gap: 0.5rem;
   border-radius: 0.5rem;
+  color: var(--white);
 }
 
 .card a {
   text-decoration-color: transparent;
-  color: var(--dark)
+  color: var(--white);
 }
 
 .card a:hover {
@@ -23,6 +24,8 @@
   width: 100%;
   max-width: 400px;
   display: inline-block;
+  font-family: 'DM Serif Display', serif;
+  letter-spacing: 0.1rem;
   font-size: 1.2rem;
   font-weight: 700;
   word-break: break-word;
@@ -33,8 +36,8 @@
 }
 
 .card.primary {
-  background-color: var(--white-2);
-  box-shadow: 1px 2px 5px var(--gray);
+  background-color: var(--dark);
+  box-shadow: 0.05px 0.05px 3px var(--light-gray);
 }
 
 .card.dashed {
