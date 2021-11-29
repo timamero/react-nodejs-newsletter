@@ -98,6 +98,8 @@ Go to ${unsubscribeURL} to unsubscribe
   htmlStream.on('close', () => {
     logger.info('htmlStream closed')
   })
+
+  next()
 }
 
 const htmlToPlainText = html => {
@@ -177,6 +179,8 @@ const sendArticle = async (request, response, next) => {
       transporter.close()
     }
   })
+
+  next()
 }
 
 module.exports = {
