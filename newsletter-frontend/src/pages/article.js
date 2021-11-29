@@ -105,7 +105,7 @@ const Article = (
         {props.location.state.preview
           &&
           <Grid rowGap="0.5rem" className="centered" style={previewGridStyle}>
-            <p>In preview mode</p>
+            <p className="previewText">In preview mode</p>
             <Link
               to={{
                 pathname: `/update/${article.slug}`,
