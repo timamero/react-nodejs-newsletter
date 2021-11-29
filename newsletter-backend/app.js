@@ -22,6 +22,7 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
 
 app.use(cors())
 app.use(express.json())
+app.use(express.static('build'))
 
 app.use('/api/articles', articlesRouter)
 app.use('/api/preview', previewRouter)
