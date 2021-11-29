@@ -17,7 +17,7 @@
 }
 
 .likesIcon.noLikes {
-  fill: var(--dark);
+  fill: var(--white);
 }
 
 .likesIcon.hasLikes {
