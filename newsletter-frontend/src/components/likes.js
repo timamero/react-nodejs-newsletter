@@ -1,3 +1,5 @@
+//Bug: If you open article, add likes, then click the button `Email to Subscribers`, the number of likes is subtracted by 1
+
 import React, { useState } from 'react'
 import './likes.css'
 
